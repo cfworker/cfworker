@@ -8,6 +8,9 @@
   "license": "MIT",
   "private": true,
   "browserslist": "last 2 Chrome versions",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "cfworker build src/index.ts --out-file dist/index.js",
     "start": "cfworker run src/index.ts --watch",
