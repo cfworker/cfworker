@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/demo",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Web app demo",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -17,15 +17,15 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/cosmos": "^1.0.0",
-    "@cfworker/http-errors": "^1.0.0",
-    "@cfworker/jwt": "^1.0.0",
-    "@cfworker/sentry": "^1.0.0",
-    "@cfworker/web": "^1.0.0",
-    "@cfworker/web-router": "^1.0.0"
+    "@cfworker/cosmos": "^1.0.4",
+    "@cfworker/http-errors": "^1.0.4",
+    "@cfworker/jwt": "^1.0.4",
+    "@cfworker/sentry": "^1.0.4",
+    "@cfworker/web": "^1.0.4",
+    "@cfworker/web-router": "^1.0.4"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.0.0",
+    "@cfworker/dev": "^1.0.4",
     "typescript": "^3.7.4"
   }
 }
