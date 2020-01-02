@@ -16,7 +16,7 @@
     "test2": "cfworker test packages/*/test/**/*.spec.ts",
     "deploy": "yarn workspace @cfworker/demo run deploy",
     "deploy-dev": "yarn workspace @cfworker/demo run deploy-dev",
-    "clean": "rm yarn.lock & rm -rf node_modules & yarn workspaces run clean",
+    "clean": "yarn workspaces run clean",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\""
   },

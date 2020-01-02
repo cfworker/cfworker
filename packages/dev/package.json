@@ -14,8 +14,8 @@
     "node": ">=13.2.0"
   },
   "scripts": {
-    "build": "echo build",
-    "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
+    "build": "echo n/a",
+    "clean": "echo n/a",
     "test": "node --experimental-modules --experimental-json-modules --no-warnings test/index.js"
   },
   "dependencies": {
