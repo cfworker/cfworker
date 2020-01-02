@@ -1,3 +1,5 @@
+name: build
+
 on: [push, pull_request]
 
 jobs:
@@ -6,6 +8,10 @@ jobs:
     strategy:
       matrix:
         node-version: [13.x]
+    env:
+      COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
+      COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
+      COSMOS_DB_DATABASE: ${{ secrets.COSMOS_DB_DATABASE }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
@@ -14,8 +20,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Environment log
-        id: env
         run: |
+          node --version
           yarn --version
       - name: Install
         run: |
