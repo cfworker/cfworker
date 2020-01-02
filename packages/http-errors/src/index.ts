@@ -1,5 +1,3 @@
-/// <reference path="./declarations.d.ts" />
-
 export { BadGatewayError } from './BadGatewayError';
 export { BadRequestError } from './BadRequestError';
 export { ConflictError } from './ConflictError';

@@ -9,9 +9,9 @@
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --build",
     "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
-    "test": "cfworker test test/**/*.spec.ts"
+    "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
     "@cfworker/http-errors": "^1.0.0",

@@ -1,5 +1,3 @@
-/// <reference path="./declarations.d.ts" />
-
 export { decodeJwt } from './decode';
 export { getJwks } from './jwks';
 export { parseJwt } from './parse';

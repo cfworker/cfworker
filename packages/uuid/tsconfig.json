@@ -3,6 +3,9 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["esnext", "webworker"],
-    "types": ["chai", "mocha"]
-  }
+    "types": ["chai", "mocha"],
+    "outDir": "dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"]
 }
