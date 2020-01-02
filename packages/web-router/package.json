@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/web-router",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Router middleware based on koa-router",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -25,8 +25,8 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/http-errors": "^1.0.4",
-    "@cfworker/web": "^1.0.4",
+    "@cfworker/http-errors": "^1.0.5",
+    "@cfworker/web": "^1.0.5",
     "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {
