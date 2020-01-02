@@ -15,6 +15,13 @@
    CLOUDFLARE_EMAIL=xxxxx@xxxx.com
    CLOUDFLARE_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    CLOUDFLARE_ZONE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   CLOUDFLARE_ACCOUNT_ID=
+   CLOUDFLARE_WORKERS_DEV_PROJECT=
+
+   # Cosmos DB
+   COSMOS_DB_ORIGIN=https://xxxxxxxxxx.documents.azure.com
+   COSMOS_DB_MASTER_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   COSMOS_DB_DATABASE=xxxxxxxxx
 
    # auth0
    AUTH0_DOMAIN=xxxxxxxxxx.auth0.com
