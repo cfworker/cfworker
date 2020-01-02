@@ -328,4 +328,4 @@ describe('CosmosClient', () => {
       }
     });
   });
-});
+}).retries(1);
