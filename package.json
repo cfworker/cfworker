@@ -1,0 +1,33 @@
+{
+  "name": "cfworker",
+  "version": "1.0.0",
+  "description": "Packages optimized for CloudFlare Workers",
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "start": "yarn workspace @cfworker/demo run start",
+    "test": "yarn workspaces run test",
+    "test2": "cfworker test packages/*/test/**/*.spec.ts",
+    "deploy": "yarn workspace @cfworker/demo run deploy",
+    "deploy-dev": "yarn workspace @cfworker/demo run deploy-dev",
+    "clean": "rm yarn.lock & rm -rf node_modules & yarn workspaces run clean",
+    "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
+    "prettier": "prettier --write \"**/*.{ts,js,json,yml}\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "husky": "^3.1.0",
+    "prettier": "1.19.1",
+    "pretty-quick": "^2.0.1"
+  }
+}

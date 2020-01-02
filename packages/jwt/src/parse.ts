@@ -1,0 +1,75 @@
+import { decodeJwt } from './decode';
+import { getJwks } from './jwks';
+import { DecodedJwt, JsonWebKeyset, JwtParseResult } from './types';
+import { verifyJwtSignature } from './verify';
+
+/**
+ * Parse a JWT.
+ */
+export async function parseJwt(
+  encodedToken: string,
+  issuerOrigin: string,
+  audience: string
+): Promise<JwtParseResult> {
+  let decoded: DecodedJwt;
+  try {
+    decoded = decodeJwt(encodedToken);
+  } catch {
+    return { valid: false, reason: `Unable to decode JWT.` };
+  }
+  if (decoded.header.typ !== 'JWT') {
+    return {
+      valid: false,
+      reason: `Invalid JWT type "${decoded.header.typ}". Expected "JWT".`
+    };
+  }
+  if (decoded.header.alg !== 'RS256') {
+    return {
+      valid: false,
+      reason: `Invalid JWT algorithm "${decoded.header.alg}". Expected "RS256".`
+    };
+  }
+  if (decoded.payload.aud !== audience) {
+    return {
+      valid: false,
+      reason: `Invalid JWT audience "${decoded.payload.aud}". Expected "${audience}".`
+    };
+  }
+  const iss = new URL(decoded.payload.iss);
+  if (iss.origin !== issuerOrigin) {
+    return {
+      valid: false,
+      reason: `Invalid JWT issuer "${decoded.payload.iss}". Expected "${issuerOrigin}".`
+    };
+  }
+  const expiryDate = new Date(0);
+  expiryDate.setUTCSeconds(decoded.payload.exp);
+  const currentDate = new Date(Date.now());
+  const expired = expiryDate <= currentDate;
+  if (expired) {
+    return {
+      valid: false,
+      reason: `JWT is expired. Expiry date: ${expiryDate}; Current date: ${currentDate};`
+    };
+  }
+  let jwks: JsonWebKeyset;
+  try {
+    jwks = await getJwks(decoded.payload.iss);
+  } catch (err) {
+    return {
+      valid: false,
+      reason: `Error loading JWKS for JWT issuer "${decoded.payload.iss}".`
+    };
+  }
+  let signatureValid: boolean;
+  try {
+    signatureValid = await verifyJwtSignature(decoded, jwks);
+  } catch {
+    return { valid: false, reason: `Error verifying JWT signature.` };
+  }
+  if (!signatureValid) {
+    return { valid: false, reason: `JWT signature is invalid.` };
+  }
+  const payload = decoded.payload;
+  return { valid: true, payload };
+}

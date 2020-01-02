@@ -1,0 +1,31 @@
+{
+  "name": "@cfworker/demo",
+  "version": "1.0.0",
+  "description": "Web app demo",
+  "main": "dist/index.js",
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "browserslist": "last 2 Chrome versions",
+  "scripts": {
+    "build": "cfworker build src/index.ts --out-file dist/index.js",
+    "start": "cfworker run src/index.ts --watch",
+    "deploy-dev": "cfworker deploy-dev src/index.ts --project test",
+    "deploy": "cfworker deploy src/index.ts --name cumulus-care --route 'cumulus.care/*' --purge-cache",
+    "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
+    "test": "cfworker test test/**/*.spec.ts"
+  },
+  "dependencies": {
+    "@cfworker/cosmos": "^1.0.0",
+    "@cfworker/http-errors": "^1.0.0",
+    "@cfworker/jwt": "^1.0.0",
+    "@cfworker/sentry": "^1.0.0",
+    "@cfworker/web": "^1.0.0",
+    "@cfworker/web-router": "^1.0.0"
+  },
+  "devDependencies": {
+    "@cfworker/dev": "^1.0.0",
+    "typescript": "^3.7.4"
+  }
+}

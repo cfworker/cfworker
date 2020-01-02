@@ -1,0 +1,39 @@
+{
+  "name": "@cfworker/cosmos",
+  "version": "1.0.0",
+  "description": "Azure Cosmos DB client for CloudFlare Workers and service workers",
+  "keywords": [
+    "azure",
+    "cosmos",
+    "cosmosdb",
+    "cosmos-db",
+    "cloudflare",
+    "worker",
+    "workers",
+    "service-worker"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "source": "src/index.ts",
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/cosmos/README.md",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
+    "test": "cfworker test test/**/*.spec.ts",
+    "example": "cfworker run examples/worker.ts --watch"
+  },
+  "dependencies": {
+    "base64-arraybuffer": "0.2.0"
+  },
+  "devDependencies": {
+    "@cfworker/dev": "^1.0.0",
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "typescript": "^3.7.4"
+  }
+}

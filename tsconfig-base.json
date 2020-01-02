@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "removeComments": true,
+    "types": [],
+    "baseUrl": "./packages",
+    "paths": {
+      "@cfworker/*": ["./*/src"]
+    },
+    "noEmit": true
+  }
+}

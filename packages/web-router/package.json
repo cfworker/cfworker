@@ -1,0 +1,24 @@
+{
+  "name": "@cfworker/web-router",
+  "version": "1.0.0",
+  "description": "Router middleware based on koa-router",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "source": "src/index.ts",
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
+    "test": "cfworker test test/**/*.spec.ts"
+  },
+  "dependencies": {
+    "@cfworker/http-errors": "^1.0.0",
+    "@cfworker/web": "^1.0.0",
+    "path-to-regexp": "^6.1.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.4"
+  }
+}

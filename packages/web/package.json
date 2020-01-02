@@ -1,0 +1,27 @@
+{
+  "name": "@cfworker/web",
+  "version": "1.0.0",
+  "description": "Web framework ported from Koa",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "source": "src/index.ts",
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
+    "test": "cfworker test test/**/*.spec.ts"
+  },
+  "dependencies": {
+    "cookie": "^0.4.0",
+    "escape-html": "^1.0.3",
+    "statuses": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.3.2",
+    "@types/escape-html": "^0.0.20",
+    "@types/statuses": "^1.5.0",
+    "typescript": "^3.7.4"
+  }
+}
