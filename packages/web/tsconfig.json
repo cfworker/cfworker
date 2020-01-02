@@ -2,6 +2,10 @@
   "extends": "../../tsconfig-base",
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["esnext", "webworker"]
-  }
+    "lib": ["esnext", "webworker"],
+    "types": ["../worker-types"],
+    "outDir": "dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"]
 }

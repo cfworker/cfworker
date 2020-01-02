@@ -7,6 +7,7 @@ import { TestHost } from '../test-host.js';
  * @property {number} port
  * @property {boolean} watch
  * @property {boolean} inspect
+ * @property {boolean} check
  */
 
 export class TestCommand {
@@ -15,7 +16,12 @@ export class TestCommand {
    */
   constructor(args) {
     this.args = args;
-    this.bundler = new Bundler(args.globs, args.watch, ['mocha', 'chai']);
+    this.bundler = new Bundler(
+      args.globs,
+      args.watch,
+      ['mocha', 'chai'],
+      args.check
+    );
     this.testHost = new TestHost(args.port, args.inspect);
   }
 

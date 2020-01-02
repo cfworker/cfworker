@@ -3,7 +3,6 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["webworker", "esnext"],
-    "composite": false,
-    "types": ["../worker-types"]
+    "composite": false
   }
 }

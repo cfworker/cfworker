@@ -15,9 +15,6 @@ export class Bundler extends EventEmitter {
     plugins: [
       replace({ values: this.envReplacements() }),
       multiEntry({ exports: false }),
-      typescript({
-        include: ['*.ts', '**/*.ts', '../**/*.ts']
-      }),
       resolve(),
       commonjs(),
       json()
@@ -40,15 +37,23 @@ export class Bundler extends EventEmitter {
    * @param {string[]} globs
    * @param {boolean} watch
    * @param {string[]} external
+   * @param {boolean} check
    */
-  constructor(globs, watch, external = []) {
+  constructor(globs, watch, external = [], check = true) {
     super();
     this.inputOptions.input = globs;
     this.inputOptions.external = external;
-    // remove rollup-plugin-typescript2 when it's not required
-    if (!globs.find(g => /\.ts(?:$|,)/.test(g))) {
+    // add rollup-plugin-typescript2 when globs include typescript file extension
+    if (globs.find(g => /\.ts(?:$|,)/.test(g))) {
       // @ts-ignore
-      this.inputOptions.plugins.splice(2, 1);
+      this.inputOptions.plugins.splice(
+        2,
+        0,
+        typescript({
+          check,
+          include: ['*.ts', '**/*.ts', '../**/*.ts']
+        })
+      );
     }
     this.watch = watch;
     this.code = '';

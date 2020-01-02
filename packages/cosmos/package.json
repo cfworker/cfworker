@@ -20,7 +20,7 @@
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/cosmos/README.md",
   "license": "MIT",
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc --build",
     "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
     "test": "cfworker test test/**/*.spec.ts",
     "example": "cfworker run examples/worker.ts --watch"
