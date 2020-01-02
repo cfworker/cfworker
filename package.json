@@ -13,12 +13,12 @@
     "build": "yarn workspaces run build",
     "start": "yarn workspace @cfworker/demo run start",
     "test": "yarn workspaces run test",
-    "test2": "cfworker test packages/*/test/**/*.spec.ts",
     "deploy": "yarn workspace @cfworker/demo run deploy",
     "deploy-dev": "yarn workspace @cfworker/demo run deploy-dev",
     "clean": "yarn workspaces run clean",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
-    "prettier": "prettier --write \"**/*.{ts,js,json,yml}\""
+    "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
+    "prepublish": "yarn run lint && yarn run test && yarn run clean && yarn run build"
   },
   "commitlint": {
     "extends": [
