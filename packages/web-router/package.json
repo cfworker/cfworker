@@ -18,7 +18,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --build",
-    "clean": "rm -rf .cache & rm -rf dist & rm -rf node_modules",
+    "clean": "tsc --build --clean",
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
