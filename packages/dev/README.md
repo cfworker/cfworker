@@ -95,3 +95,27 @@ cfworker test --watch --inspect ./test/**/*.spec.ts
 ```
 
 Here's an example test file: [packages/base64url/test/index.spec.ts](/packages/base64url/test/index.spec.ts)
+
+## build
+
+Build/bundle a worker script and output the result to a file.
+
+Usage:
+
+```
+cfworker build [options] [input...]
+```
+
+Options:
+
+```
+  -o, --out-file <filename>  the output filename (default: "dist/worker.js")
+  -w, --watch                enable watch mode (default: false)
+  -h, --help                 output usage information
+```
+
+Examples:
+
+```
+cfworker build src/index.ts --out-file dist/index.js
+```
