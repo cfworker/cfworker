@@ -10,7 +10,7 @@ import {
 const endpoint = process.env.COSMOS_DB_ORIGIN;
 const masterKey = process.env.COSMOS_DB_MASTER_KEY;
 const dbId = process.env.COSMOS_DB_DATABASE;
-const collId = 'integration-test';
+const collId = 'integration-test-' + Date.now();
 const partitionKey: PartitionKeyDefinition = {
   paths: ['/_partitionKey'],
   kind: 'Hash'
