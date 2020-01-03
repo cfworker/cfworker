@@ -6,6 +6,7 @@
   "main": "src/index.js",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/dev/README.md",
   "license": "MIT",
   "bin": {
     "cfworker": "./src/cli/index.js"

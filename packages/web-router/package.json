@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/web-router",
   "version": "1.0.10",
-  "description": "Router middleware for @cfworker/web",
+  "description": "A router for Cloudflare Workers or service workers using path-to-regexp",
   "keywords": [
     "middleware",
     "router",
@@ -23,6 +23,7 @@
   ],
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/web-router/README.md",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
