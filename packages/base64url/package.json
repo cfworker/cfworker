@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/base64url",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "base64 URL encoding for Cloudflare Workers and service workers",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -26,7 +26,7 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.0.9",
+    "@cfworker/dev": "^1.0.10",
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",

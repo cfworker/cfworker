@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/web-router",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Router middleware for @cfworker/web",
   "keywords": [
     "middleware",
@@ -33,8 +33,8 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/http-errors": "^1.0.9",
-    "@cfworker/web": "^1.0.9",
+    "@cfworker/http-errors": "^1.0.10",
+    "@cfworker/web": "^1.0.10",
     "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {
