@@ -1,7 +1,15 @@
 {
   "name": "@cfworker/jwt",
   "version": "1.0.9",
-  "description": "Decode and verify JWTs",
+  "description": "Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs",
+  "keywords": [
+    "jwt",
+    "crypto",
+    "cloudflare",
+    "worker",
+    "workers",
+    "service-worker"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",

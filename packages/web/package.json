@@ -1,7 +1,14 @@
 {
   "name": "@cfworker/web",
   "version": "1.0.9",
-  "description": "Web framework ported from Koa",
+  "description": "Web framework for Cloudflare Workers and service workers, inspired by Koa",
+  "keywords": [
+    "middleware",
+    "cloudflare",
+    "worker",
+    "workers",
+    "service-worker"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",

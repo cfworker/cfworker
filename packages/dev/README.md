@@ -1,5 +1,6 @@
 # @cfworker/dev
 
+Run, test and deploy Cloudflare workers.
 Opinionated CLI for Cloudflare Worker development and deployment.
 Uses Rollup for clean packaging of code and dependencies and .env files for secret management.
 Supports JavaScript or TypeScript with `process.env.*` environment variable substitution with zero configuration.

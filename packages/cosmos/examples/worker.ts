@@ -1,4 +1,4 @@
-import { CosmosClient } from '../src/index';
+import { CosmosClient } from '@cfworker/cosmos';
 
 const endpoint = process.env.COSMOS_DB_ORIGIN;
 const masterKey = process.env.COSMOS_DB_MASTER_KEY;
@@ -55,6 +55,6 @@ function ensureCollection() {
 
 declare function addEventListener(
   type: 'fetch',
-  listener: (this: ServiceWorkerGlobalScope, ev: FetchEvent) => any,
+  listener: (this: any, ev: any) => any,
   options?: boolean | AddEventListenerOptions
 ): void;

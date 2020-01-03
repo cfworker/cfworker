@@ -9,6 +9,7 @@ import { WorkerHost } from '../worker-host.js';
  * @property {number} port
  * @property {boolean} watch
  * @property {boolean} inspect
+ * @property {boolean} check
  */
 
 /**
@@ -20,7 +21,7 @@ export class RunCommand {
    */
   constructor(args) {
     this.args = args;
-    this.bundler = new Bundler([args.entry], args.watch);
+    this.bundler = new Bundler([args.entry], args.watch, [], args.check);
     this.host = new WorkerHost(args.port, args.inspect);
   }
 

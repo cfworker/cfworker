@@ -1,7 +1,7 @@
 {
   "name": "cfworker",
   "version": "1.0.0",
-  "description": "Packages optimized for CloudFlare Workers",
+  "description": "Packages optimized for Cloudflare Workers",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "license": "MIT",

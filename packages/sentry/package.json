@@ -1,7 +1,15 @@
 {
   "name": "@cfworker/sentry",
   "version": "1.0.9",
-  "description": "Sentry",
+  "description": "Minimalist Sentry client for Cloudflare workers and service workers",
+  "keywords": [
+    "sentry",
+    "logging",
+    "cloudflare",
+    "worker",
+    "workers",
+    "service-worker"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",
