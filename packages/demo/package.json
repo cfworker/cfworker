@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/demo/README.md",
   "license": "MIT",
   "private": true,
   "browserslist": "last 2 Chrome versions",

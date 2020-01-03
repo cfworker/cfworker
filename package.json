@@ -4,6 +4,7 @@
   "description": "Packages optimized for Cloudflare Workers",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/README.md",
   "license": "MIT",
   "private": true,
   "workspaces": [

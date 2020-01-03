@@ -24,6 +24,7 @@
   ],
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/uuid/README.md",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
