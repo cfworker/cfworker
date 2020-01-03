@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/jwt",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs",
   "keywords": [
     "jwt",
@@ -34,10 +34,10 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/base64url": "^1.0.10"
+    "@cfworker/base64url": "^1.0.11"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.0.10",
+    "@cfworker/dev": "^1.0.11",
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
