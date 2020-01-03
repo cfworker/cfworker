@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/dev",
   "type": "module",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Dev utils",
   "main": "src/index.js",
   "repository": "https://github.com/cfworker/cfworker",

@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/http-errors",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Create HTTP errors",
   "main": "dist/index.js",
   "module": "dist/index.js",

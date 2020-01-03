@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/jwt",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Decode and verify JWTs",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -25,10 +25,10 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/base64url": "^1.0.7"
+    "@cfworker/base64url": "^1.0.8"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.0.7",
+    "@cfworker/dev": "^1.0.8",
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
