@@ -18,7 +18,7 @@
     "clean": "yarn workspaces run clean",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
-    "prepublish": "yarn run lint && yarn run test && yarn run clean && yarn run build"
+    "release": "yarn run lint && yarn run test && yarn run clean && yarn run build && lerna publish"
   },
   "commitlint": {
     "extends": [
