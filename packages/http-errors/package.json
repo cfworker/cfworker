@@ -1,7 +1,14 @@
 {
   "name": "@cfworker/http-errors",
   "version": "1.0.9",
-  "description": "Create HTTP errors",
+  "description": "A collection HTTP error classes for use with @cfworker/web",
+  "keywords": [
+    "http",
+    "cloudflare",
+    "worker",
+    "workers",
+    "service-worker"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",

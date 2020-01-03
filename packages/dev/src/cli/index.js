@@ -66,13 +66,15 @@ program
   .option('-p, --port <port>', 'set the port to serve on', parseInt, 7000)
   .option('-w, --watch', 'enable watch mode', false)
   .option('-i, --inspect', 'open browser window with devtools enabled', false)
+  .option('-n --nocheck', 'disable diagnostic checks on TypeScript code')
   .action((main, command) => {
     loadEnv();
     currentCommand = new RunCommand({
       entry: main[0],
       port: command.port,
       watch: command.watch,
-      inspect: command.inspect
+      inspect: command.inspect,
+      check: !command.nocheck
     });
     currentCommand.execute();
   });

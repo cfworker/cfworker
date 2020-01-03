@@ -2,7 +2,7 @@
   "name": "@cfworker/dev",
   "type": "module",
   "version": "1.0.9",
-  "description": "Dev utils",
+  "description": "Run, test and deploy Cloudflare workers",
   "main": "src/index.js",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",

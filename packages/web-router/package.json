@@ -1,7 +1,15 @@
 {
   "name": "@cfworker/web-router",
   "version": "1.0.9",
-  "description": "Router middleware based on koa-router",
+  "description": "Router middleware for @cfworker/web",
+  "keywords": [
+    "middleware",
+    "router",
+    "cloudflare",
+    "worker",
+    "workers",
+    "service-worker"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",

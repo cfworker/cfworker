@@ -1,6 +1,6 @@
 # @cfworker/cosmos
 
-Azure Cosmos DB client for CloudFlare Workers and web.
+Azure Cosmos DB client for Cloudflare Workers and web.
 Tiny package, [minimal dependencies](/packages/cosmos/package.json), streaming optimized.
 
 - [Getting started](#getting-started)
@@ -305,16 +305,13 @@ const metrics = res.headers.get('x-ms-documentdb-query-metrics');
 
 [Example Cloudflare Worker](/packages/cosmos/examples/worker.ts)
 
-To run this worker:
+To run this example:
 
 ```
-yarn workspace @cfworker/cosmos example
-```
-
-To debug this worker:
-
-```
-yarn workspace @cfworker/cosmos example --inspect
+git clone https://github.com/cfworker/cfworker
+cd cfworker
+yarn install
+yarn workspace @cfworker/cosmos cfworker run examples/worker.ts --watch
 ```
 
 ## Contributing

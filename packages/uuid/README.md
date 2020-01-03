@@ -1,6 +1,7 @@
 # @cfworker/uuid
 
-Fast uuid V4 generator with no dependencies.
+Fast UUID generator with no dependencies.
+Generate V4 compliant UUIDs using crypto.getRandomValues
 
 ## usage
 

@@ -11,7 +11,7 @@
    Create an `.env` and `.env.production` file with the following properties:
 
    ```
-   # CloudFlare
+   # Cloudflare
    CLOUDFLARE_EMAIL=xxxxx@xxxx.com
    CLOUDFLARE_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    CLOUDFLARE_ZONE_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
