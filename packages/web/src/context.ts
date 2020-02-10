@@ -1,6 +1,7 @@
 import { Accepts } from './accepts';
 import { Cookies } from './cookies';
 import { ResponseBuilder } from './response-builder';
+import { safeParse, Reviver } from 'secure-json-parse';
 
 export class Context {
   public readonly req: Request;
@@ -28,5 +29,10 @@ export class Context {
 
   public waitUntil(promise: Promise<any>) {
     this.event.waitUntil(promise);
+  }
+
+  public async safeJson(reviver?: Reviver) {
+    const json = await this.req.text();
+    return safeParse(json, reviver);
   }
 }
