@@ -1,5 +1,8 @@
-export { Application } from './application';
-export { Context } from './context';
-export { Cookies } from './cookies';
+export * from './accepts';
+export * from './application';
+export * from './context';
+export * from './cookies';
 export * from './middleware';
-export { ResponseBuilder } from './response-builder';
+export * from './response-builder';
+import escapeHTML from 'escape-html';
+export const escape = escapeHTML;
