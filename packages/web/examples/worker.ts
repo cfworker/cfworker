@@ -1,4 +1,4 @@
-import { Application, Middleware } from '@cfworker/web';
+import { Application, Middleware, escape } from '@cfworker/web';
 
 // Exception handler middleware example:
 const exceptionHandler: Middleware = async (context, next) => {
@@ -7,8 +7,10 @@ const exceptionHandler: Middleware = async (context, next) => {
     await next();
   } catch (err) {
     res.status = 500;
-    if (accepts.media('text/html')) {
-      res.body = `<h1>Internal Server Error</h1><p><pre><code>${err.stack}</code></pre></p>`;
+    if (accepts.type('text/html')) {
+      res.body = `<h1>Internal Server Error</h1><p><pre><code>${escape(
+        err.stack
+      )}</code></pre></p>`;
       res.headers.set('content-type', 'text/html');
     } else {
       res.body = `Internal Server Error\n${err.stack}`;
