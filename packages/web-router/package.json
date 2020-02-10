@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/web-router",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "description": "A router for Cloudflare Workers or service workers using path-to-regexp",
   "keywords": [
     "middleware",
@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@cfworker/http-errors": "^1.0.11",
-    "@cfworker/web": "^1.0.11",
+    "@cfworker/web": "^1.1.0",
     "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {

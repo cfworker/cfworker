@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/uuid",
-  "version": "1.0.11",
+  "version": "1.1.0",
   "description": "Fast UUID generator with no dependencies. Generate V4 compliant UUIDs using crypto.getRandomValues",
   "keywords": [
     "uuid",
@@ -35,7 +35,7 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.0.11",
+    "@cfworker/dev": "^1.1.0",
     "@types/chai": "^4.2.7",
     "@types/mocha": "^5.2.7",
     "chai": "^4.2.0",
