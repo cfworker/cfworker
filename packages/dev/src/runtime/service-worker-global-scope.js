@@ -1,4 +1,4 @@
-import { addEventListener } from './add-event-listener.js';
+import { addEventListener, dispatchEvent } from './add-event-listener.js';
 import { FetchEvent } from './fetch-event.js';
 
 export class ServiceWorkerGlobalScope {
@@ -17,6 +17,7 @@ export class ServiceWorkerGlobalScope {
     this.Date = Date;
     this.Error = Error;
     this.EvalError = EvalError;
+    this.Event = Event;
     this.FetchEvent = FetchEvent;
     this.Float32Array = Float32Array;
     this.Float64Array = Float64Array;
@@ -70,6 +71,7 @@ export class ServiceWorkerGlobalScope {
     this.crypto = crypto;
     this.decodeURI = decodeURI.bind(self);
     this.decodeURIComponent = decodeURIComponent.bind(self);
+    this.dispatchEvent = dispatchEvent;
     this.encodeURI = encodeURI.bind(self);
     this.encodeURIComponent = encodeURIComponent.bind(self);
     this.escape = escape.bind(self);
