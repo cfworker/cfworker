@@ -3,7 +3,6 @@ import statuses from 'statuses';
 export class ResponseBuilder {
   public readonly headers = new Headers();
   private _status = 404;
-  private _statusText = statuses[404]!;
   private _explicitStatus = false;
   private _body: BodyInit | null = null;
 
@@ -13,14 +12,13 @@ export class ResponseBuilder {
   set status(value) {
     this._explicitStatus = true;
     this._status = value;
-    this._statusText = statuses[value]!;
     if (this.body && statuses.empty[value]) {
       this.body = null;
     }
   }
 
   get statusText() {
-    return this._statusText;
+    return statuses[this._status]!;
   }
 
   get body() {
@@ -32,7 +30,7 @@ export class ResponseBuilder {
     // no content
     if (value === null) {
       if (!statuses.empty[this.status]) {
-        this.status = 204;
+        this._status = 204;
       }
       this.headers.delete('Content-Type');
       this.headers.delete('Content-Length');
@@ -42,7 +40,7 @@ export class ResponseBuilder {
 
     // set the status
     if (!this._explicitStatus) {
-      this.status = 200;
+      this._status = 200;
     }
 
     // todo: consider setting content type & length.

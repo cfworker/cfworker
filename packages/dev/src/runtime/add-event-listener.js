@@ -19,6 +19,15 @@ export function addEventListener(event, handler) {
   }
 }
 
+/**
+ * @param {Event} event
+ */
+export function dispatchEvent(event) {
+  if (event.type === 'fetch') {
+    fetchHandler(event);
+  }
+}
+
 export function resetFetchHandler() {
   fetchHandler = defaultFetchHandler;
 }
