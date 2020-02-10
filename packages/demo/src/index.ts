@@ -47,7 +47,7 @@ const exceptionHandler: Middleware = async (context, next) => {
       message = `Event ID: ${event_id}`;
     }
     res.status = 500;
-    if (context.accepts.media('text/html')) {
+    if (context.accepts.type('text/html')) {
       res.body = `<h1>Internal Server Error</h1><p><pre><code>${htmlEncode(
         message
       )}</code></pre></p>`;
@@ -86,7 +86,7 @@ const originAndReferrerValidation: Middleware = async (context, next) => {
 
 const notFoundPage: Middleware = async ({ res, url, accepts }, next) => {
   await next();
-  if (res.status === 404 && accepts.media('text/html')) {
+  if (res.status === 404 && accepts.type('text/html')) {
     res.status = 404; // explicit status
     res.body = `<h1>Not Found</h1><p>Where in the world is ${htmlEncode(
       url.pathname
@@ -100,7 +100,7 @@ const assertAuthenticated: Middleware = async (context, next) => {
     await next();
     return;
   }
-  if (context.accepts.media('text/html')) {
+  if (context.accepts.type('text/html')) {
     context.res.redirect(getAuthorizeUrl(context.url));
     return;
   }
