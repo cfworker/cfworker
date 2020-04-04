@@ -34,6 +34,6 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "devDependencies": {
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   }
 }
