@@ -158,7 +158,7 @@ export class WorkerHost extends EventEmitter {
       for (const method of methods) {
         const browser = console[method];
         /** @type {(...args: any[]) => void} */
-        console[method] = function(...args) {
+        console[method] = function (...args) {
           browser(...args);
           nodeConsoleLog(...args);
         };

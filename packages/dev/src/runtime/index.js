@@ -6,7 +6,7 @@ import { ServiceWorkerGlobalScope } from './service-worker-global-scope.js';
 
 wrapHeaders(Headers);
 
-const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 
 /**
  * @param {string} code The worker script.
