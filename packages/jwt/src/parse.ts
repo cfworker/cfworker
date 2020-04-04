@@ -1,6 +1,5 @@
 import { decodeJwt } from './decode';
-import { getJwks } from './jwks';
-import { DecodedJwt, JsonWebKeyset, JwtParseResult } from './types';
+import { DecodedJwt, JwtParseResult } from './types';
 import { verifyJwtSignature } from './verify';
 
 /**
@@ -52,18 +51,9 @@ export async function parseJwt(
       reason: `JWT is expired. Expiry date: ${expiryDate}; Current date: ${currentDate};`
     };
   }
-  let jwks: JsonWebKeyset;
-  try {
-    jwks = await getJwks(decoded.payload.iss);
-  } catch (err) {
-    return {
-      valid: false,
-      reason: `Error loading JWKS for JWT issuer "${decoded.payload.iss}".`
-    };
-  }
   let signatureValid: boolean;
   try {
-    signatureValid = await verifyJwtSignature(decoded, jwks);
+    signatureValid = await verifyJwtSignature(decoded);
   } catch {
     return { valid: false, reason: `Error verifying JWT signature.` };
   }
