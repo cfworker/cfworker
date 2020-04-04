@@ -140,7 +140,7 @@ program
 program
   .command('info')
   .description('Prints debugging information about the local environment')
-  .action(function() {
+  .action(function () {
     console.log(chalk.bold('\nEnvironment Info:'));
     envinfo
       .run({
@@ -164,7 +164,7 @@ program
     cmd.help();
   });
 
-program.on('--help', function() {
+program.on('--help', function () {
   console.log('');
   console.log(
     '  Run `' +

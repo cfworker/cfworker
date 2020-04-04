@@ -4,10 +4,7 @@
 export function encode(s: string): string {
   const escaped = encodeUnicode(s);
   const base64 = btoa(escaped);
-  return base64
-    .replace(/=/g, '')
-    .replace(/\//g, '_')
-    .replace(/\+/g, '-');
+  return base64.replace(/=/g, '').replace(/\//g, '_').replace(/\+/g, '-');
 }
 
 function encodeUnicode(s: string): string {

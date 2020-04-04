@@ -160,7 +160,9 @@ router
         <body>
           <h1>Demo</h1>
           <p>${getManagementToken().then(x => x.substr(0, 5))}</p>
-          <p>${fetch('https://example.com').then(response => response.body)}</p>
+          <p>
+            ${fetch('https://example.com').then(response => response.body)}
+          </p>
         </body>
       </html>
     `;
@@ -215,6 +217,21 @@ router
       document,
       partitionKey: 'test',
       isUpsert: true
+    });
+    const res = await client.queryDocuments({
+      query: 'select x.id from ROOT x',
+      partitionKey: 'test',
+      parameters: [{ name: '@a', value: 'f' }]
+    });
+    ctx.res.body = JSON.stringify(await res.json());
+    ctx.res.headers.set('content-type', 'application/json');
+  })
+  .get('/cosmos2', async ctx => {
+    const client = new CosmosClient({
+      endpoint: process.env.COSMOS_DB_ORIGIN,
+      masterKey: process.env.COSMOS_DB_MASTER_KEY,
+      dbId: process.env.COSMOS_DB_DATABASE,
+      collId: 'my-coll2'
     });
     const res = await client.queryDocuments({
       query: 'select x.id from ROOT x',

@@ -4,12 +4,7 @@
 export function escapeNonASCII(s: string) {
   return s.replace(
     /[\u0080-\uFFFF]/g,
-    m =>
-      '\\u' +
-      m
-        .charCodeAt(0)
-        .toString(16)
-        .padStart(4, '0')
+    m => '\\u' + m.charCodeAt(0).toString(16).padStart(4, '0')
   );
 }
 

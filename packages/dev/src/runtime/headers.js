@@ -59,7 +59,7 @@ export function wrapHeaders(Headers) {
      * @param {string} name
      * @param {...string} args
      */
-    Headers.prototype[method] = function(name, ...args) {
+    Headers.prototype[method] = function (name, ...args) {
       name = escapeHeaderName(name);
       // @ts-ignore
       return standard.call(this, name, ...args);
@@ -68,7 +68,7 @@ export function wrapHeaders(Headers) {
 
   const standardForEach = Headers.prototype.forEach;
   // @ts-ignore
-  Headers.prototype.forEach = function(callbackfn) {
+  Headers.prototype.forEach = function (callbackfn) {
     standardForEach.call(this, (value, name, parent) => {
       name = unescapeHeaderName(name);
       callbackfn(value, name, parent);
@@ -78,7 +78,7 @@ export function wrapHeaders(Headers) {
   // @ts-ignore
   const standardEntries = Headers.prototype.entries;
   // @ts-ignore
-  Headers.prototype.entries = function() {
+  Headers.prototype.entries = function () {
     return Array.from(standardEntries.call(this)).map(([k, v]) => [
       unescapeHeaderName(k),
       v
@@ -88,7 +88,7 @@ export function wrapHeaders(Headers) {
   // @ts-ignore
   const standardKeys = Headers.prototype.keys;
   // @ts-ignore
-  Headers.prototype.keys = function() {
+  Headers.prototype.keys = function () {
     return Array.from(standardKeys.call(this)).map(unescapeHeaderName);
   };
 }

@@ -41,10 +41,7 @@ const requestHandler: Middleware = context => {
   res.headers.set('content-type', 'text/html');
 };
 
-new Application()
-  .use(exceptionHandler)
-  .use(requestHandler)
-  .listen();
+new Application().use(exceptionHandler).use(requestHandler).listen();
 
 /*
 yarn workspace @cfworker/web cfworker run examples/example.ts --watch
