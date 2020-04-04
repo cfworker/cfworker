@@ -39,6 +39,6 @@
     "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   }
 }

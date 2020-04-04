@@ -23,22 +23,22 @@
     "test": "node --experimental-modules --experimental-json-modules --no-warnings test/index.js"
   },
   "dependencies": {
-    "@rollup/plugin-json": "^4.0.1",
-    "@rollup/plugin-replace": "^2.3.0",
-    "commander": "^4.0.0",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-replace": "^2.3.1",
+    "commander": "^5.0.0",
     "dotenv": "^8.2.0",
     "envinfo": "^7.4.0",
     "form-data": "^3.0.0",
-    "fs-extra": "^8.1.0",
+    "fs-extra": "^9.0.0",
     "node-cleanup": "^2.1.2",
     "node-fetch": "^2.6.0",
     "ora": "^4.0.3",
-    "puppeteer": "^2.0.0",
-    "rollup": "^1.27.14",
+    "puppeteer": "^2.1.1",
+    "rollup": "^2.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-multi-entry": "^2.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.25.3",
-    "typescript": "^3.7.4"
+    "rollup-plugin-typescript2": "^0.27.0",
+    "typescript": "^3.8.3"
   }
 }
