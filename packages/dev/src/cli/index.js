@@ -100,6 +100,7 @@ program
 
 program
   .command('deploy [input...]')
+  .storeOptionsAsProperties(false)
   .description('deploy worker script')
   .option('-n, --name <name>', 'the name of the worker script', 'hello-world')
   .option(
@@ -113,11 +114,12 @@ program
   )
   .action((main, command) => {
     loadEnv('production');
+    const options = command.opts();
     currentCommand = new DeployCommand({
       entry: main[0],
-      name: command.name,
-      route: command.route,
-      purgeCache: command.purgeCache
+      name: options.name,
+      route: options.route,
+      purgeCache: options.purgeCache
     });
     currentCommand.execute();
   });
