@@ -72,7 +72,7 @@ async function pushStream(
       reader.releaseLock();
       return;
     }
-    writer.write(value);
+    writer.write(value!);
   } while (true);
 }
 
