@@ -1,7 +1,3 @@
-declare var process: {
-  env: { [name: string]: string };
-};
-
 interface ErrorConstructor {
   captureStackTrace(thisArg: any, func: any): void;
 }

@@ -1,7 +1,7 @@
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import EventEmitter from 'events';
-import rollup from 'rollup';
+import { rollup, watch } from 'rollup';
 import commonjs from 'rollup-plugin-commonjs';
 import multiEntry from 'rollup-plugin-multi-entry';
 import resolve from 'rollup-plugin-node-resolve';
@@ -67,13 +67,13 @@ export class Bundler extends EventEmitter {
         ...this.inputOptions,
         output: this.outputOptions
       };
-      const watcher = rollup.watch([watchOptions]);
+      const watcher = watch([watchOptions]);
       this.dispose = () => watcher.close();
-      watcher.on('event', async ({ code, result: bundle, error }) => {
-        switch (code) {
+      watcher.on('event', async event => {
+        switch (event.code) {
           case 'ERROR':
-            logger.error(error);
-            this.emit('bundle-error', error);
+            logger.error(event.error);
+            this.emit('bundle-error', event.error);
             return;
           case 'BUNDLE_START':
             this.bundleStartTime = Date.now();
@@ -81,7 +81,7 @@ export class Bundler extends EventEmitter {
             this.emit('bundle-start');
             return;
           case 'BUNDLE_END':
-            this.updateCode(bundle);
+            this.updateCode(event.result);
             return;
         }
       });
@@ -89,7 +89,7 @@ export class Bundler extends EventEmitter {
       this.bundleStartTime = Date.now();
       logger.progress('Bundling...');
       this.emit('bundle-start');
-      const bundle = await rollup.rollup(this.inputOptions);
+      const bundle = await rollup(this.inputOptions);
       this.updateCode(bundle);
     }
     return this.bundled;
