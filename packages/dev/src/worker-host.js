@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import puppeteer from 'puppeteer';
 import { logger } from './logger.js';
 import { escapeHeaderName, unescapeHeaderName } from './runtime/headers.js';

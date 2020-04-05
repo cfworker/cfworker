@@ -1,6 +1,6 @@
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import { rollup, watch } from 'rollup';
 import commonjs from 'rollup-plugin-commonjs';
 import multiEntry from 'rollup-plugin-multi-entry';
@@ -11,15 +11,15 @@ import { logger } from './logger.js';
 export class Bundler extends EventEmitter {
   /** @type {import('rollup').RollupOptions} */
   inputOptions = {
-    // @ts-ignore
     plugins: [
       replace({ values: this.envReplacements() }),
+      // @ts-ignore
       multiEntry({ exports: false }),
       resolve(),
       commonjs(),
       json()
     ],
-    onwarn: message => logger.warn(message.toString())
+    onwarn: warning => logger.warn(warning.message)
   };
 
   /** @type {import('rollup').OutputOptions} */
@@ -65,7 +65,10 @@ export class Bundler extends EventEmitter {
       /** @type {import('rollup').RollupWatchOptions} */
       const watchOptions = {
         ...this.inputOptions,
-        output: this.outputOptions
+        output: this.outputOptions,
+        watch: {
+          skipWrite: true
+        }
       };
       const watcher = watch([watchOptions]);
       this.dispose = () => watcher.close();

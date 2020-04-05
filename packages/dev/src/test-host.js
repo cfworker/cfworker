@@ -1,4 +1,4 @@
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import { logger } from './logger.js';
 import { WorkerHost } from './worker-host.js';
 

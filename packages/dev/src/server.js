@@ -1,4 +1,4 @@
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import { createServer } from 'http';
 import { logger } from './logger.js';
 import { requireContent } from './require-content.js';
