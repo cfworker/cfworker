@@ -13,11 +13,11 @@ export async function getWorkersDevSubdomain(accountId, accountEmail, apiKey) {
   const response = await fetch(
     `${apiBase}/accounts/${accountId}/workers/subdomain`,
     {
-      headers: args.accountEmail ? {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey
+      headers: accountEmail ? {
+        'X-Auth-Email': accountEmail,
+        'X-Auth-Key': apiKey
       } : {
-        'Authorization': 'Bearer ' + args.apiKey
+        'Authorization': 'Bearer ' + apiKey
       }
     }
   );
