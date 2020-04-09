@@ -19,18 +19,20 @@ export class DeployDevCommand {
       CLOUDFLARE_WORKERS_DEV_PROJECT = args.project
     } = process.env;
 
+    if (!CLOUDFLARE_API_KEY) {
+      throw new Error(
+        'CLOUDFLARE_API_KEY environment variable is not defined.'
+      );
+/** XXX - if email is not specified then CLOUDFLARE_API_KEY must be an API token
     if (!CLOUDFLARE_EMAIL) {
       throw new Error('CLOUDFLARE_EMAIL environment variable is not defined.');
     }
+*/
     if (!CLOUDFLARE_ACCOUNT_ID) {
       throw new Error(
         'CLOUDFLARE_ACCOUNT_ID environment variable is not defined.'
       );
     }
-    if (!CLOUDFLARE_API_KEY) {
-      throw new Error(
-        'CLOUDFLARE_API_KEY environment variable is not defined.'
-      );
     }
 
     this.accountEmail = CLOUDFLARE_EMAIL;
@@ -97,9 +99,11 @@ export class DeployCommand {
       CLOUDFLARE_ZONE_ID
     } = process.env;
 
+/** XXX
     if (!CLOUDFLARE_EMAIL) {
       throw new Error('CLOUDFLARE_EMAIL environment variable is not defined.');
     }
+*/
     if (!CLOUDFLARE_ACCOUNT_ID) {
       throw new Error(
         'CLOUDFLARE_ACCOUNT_ID environment variable is not defined.'

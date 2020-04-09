@@ -13,9 +13,11 @@ export async function getWorkersDevSubdomain(accountId, accountEmail, apiKey) {
   const response = await fetch(
     `${apiBase}/accounts/${accountId}/workers/subdomain`,
     {
-      headers: {
-        'X-Auth-Email': accountEmail,
-        'X-Auth-Key': apiKey
+      headers: args.accountEmail ? {
+        'X-Auth-Email': args.accountEmail,
+        'X-Auth-Key': args.apiKey
+      } : {
+        'Authorization': 'Bearer ' + args.apiKey
       }
     }
   );
@@ -60,9 +62,11 @@ export async function deployToWorkersDev(args) {
     `${apiBase}/accounts/${args.accountId}/workers/scripts/${args.project}`,
     {
       method: 'PUT',
-      headers: Object.assign({}, form.getHeaders(), {
+      headers: Object.assign({}, form.getHeaders(), args.accountEmail ? {
         'X-Auth-Email': args.accountEmail,
         'X-Auth-Key': args.apiKey
+      } : {
+        'Authorization': 'Bearer ' + args.apiKey
       }),
       body: form.getBuffer()
     }
@@ -93,9 +97,11 @@ export async function deployToWorkersDev(args) {
  * @param {DeployArgs} args
  */
 export async function deploy(args) {
-  const authHeaders = {
+  const authHeaders = args.accountEmail ? {
     'X-Auth-Email': args.accountEmail,
     'X-Auth-Key': args.apiKey
+  } : {
+    'Authorization': 'Bearer ' + args.apiKey
   };
 
   logger.progress('Getting zone...');
