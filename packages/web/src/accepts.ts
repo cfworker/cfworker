@@ -1,11 +1,11 @@
 // @ts-ignore
-import { preferredMediaTypes } from 'negotiator/lib/mediaType.js';
-// @ts-ignore
-import { preferredLanguages } from 'negotiator/lib/language.js';
+import { preferredCharsets } from 'negotiator/lib/charset.js';
 // @ts-ignore
 import { preferredEncodings } from 'negotiator/lib/encoding.js';
 // @ts-ignore
-import { preferredCharsets } from 'negotiator/lib/charset.js';
+import { preferredLanguages } from 'negotiator/lib/language.js';
+// @ts-ignore
+import { preferredMediaTypes } from 'negotiator/lib/mediaType.js';
 
 const parseAccept = preferredMediaTypes as (header: string) => string[];
 const parseAcceptLanguage = preferredLanguages as (header: string) => string[];

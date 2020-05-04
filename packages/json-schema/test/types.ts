@@ -1,4 +1,4 @@
-import { SchemaDraft, Schema } from '../src/types';
+import { Schema, SchemaDraft } from '../src/types';
 
 export interface SchemaTestSuite {
   draft: SchemaDraft;

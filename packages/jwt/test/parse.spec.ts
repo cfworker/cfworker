@@ -1,8 +1,8 @@
+import { encode } from '@cfworker/base64url';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { parseJwt } from '../src/parse';
-import { encode } from '@cfworker/base64url';
 import { importKey } from '../src/jwks';
+import { parseJwt } from '../src/parse';
 import { JwtHeader, JwtPayload } from '../src/types';
 
 const iss = 'https://test.com';

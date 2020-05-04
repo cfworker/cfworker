@@ -1,5 +1,5 @@
-import { DecodedJwt } from './types';
 import { getkey } from './jwks';
+import { DecodedJwt } from './types';
 
 /**
  * Verify the JWT's signature.

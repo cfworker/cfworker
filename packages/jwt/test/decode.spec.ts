@@ -1,7 +1,7 @@
+import { decode } from '@cfworker/base64url';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { decodeJwt } from '../src/decode';
-import { decode } from '@cfworker/base64url';
 
 describe('decodeJwt', () => {
   const encoded =

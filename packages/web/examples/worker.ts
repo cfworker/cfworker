@@ -1,4 +1,4 @@
-import { Application, Middleware, escape } from '@cfworker/web';
+import { Application, escape, Middleware } from '@cfworker/web';
 
 // Exception handler middleware example:
 const exceptionHandler: Middleware = async (context, next) => {
