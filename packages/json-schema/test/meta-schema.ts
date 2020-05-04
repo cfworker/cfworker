@@ -1,4 +1,4 @@
-import { Schema, dereference } from '../src/index';
+import { dereference, Schema } from '../src/index';
 
 let lookup: Record<string, Schema> | undefined;
 

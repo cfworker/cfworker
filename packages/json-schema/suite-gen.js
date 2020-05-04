@@ -1,6 +1,6 @@
-import { dirname, resolve, join } from 'path';
-import { fileURLToPath } from 'url';
 import { promises as fs } from 'fs';
+import { dirname, join, resolve } from 'path';
+import { fileURLToPath } from 'url';
 const { readdir, writeFile } = fs;
 
 /**

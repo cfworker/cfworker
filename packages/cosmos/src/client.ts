@@ -5,11 +5,11 @@ import {
   ConsistencyLevel,
   Database,
   Document,
-  Resource,
   IndexingDirective,
   IndexingPolicy,
   OfferType,
-  PartitionKeyDefinition
+  PartitionKeyDefinition,
+  Resource
 } from './types';
 import { assertArg, escapeNonASCII, uri } from './util';
 

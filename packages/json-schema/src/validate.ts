@@ -1,9 +1,9 @@
 import { deepCompareStrict } from './deep-compare-strict';
-import { ucs2length } from './ucs2-length';
-import { Schema, InstanceType, SchemaDraft } from './types';
 import { dereference } from './dereference';
-import { encodePointer } from './pointer';
 import { fastFormat } from './format';
+import { encodePointer } from './pointer';
+import { InstanceType, Schema, SchemaDraft } from './types';
+import { ucs2length } from './ucs2-length';
 
 const validResult = Object.freeze({ valid: true });
 const invalidResult = Object.freeze({ valid: false });

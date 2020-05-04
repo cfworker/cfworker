@@ -1,7 +1,7 @@
+import { Reviver, safeParse } from 'secure-json-parse';
 import { Accepts } from './accepts';
 import { Cookies } from './cookies';
 import { ResponseBuilder } from './response-builder';
-import { safeParse, Reviver } from 'secure-json-parse';
 
 export class Context {
   public readonly req: Request;
