@@ -64,9 +64,10 @@ export const ignoredKeyword: Record<string, boolean> = {
  * https://json-schema.org/draft/2019-09/json-schema-core.html#initial-base
  * https://tools.ietf.org/html/rfc3986#section-5.1
  */
-export let initialBaseURI = self.location
-  ? new URL(self.location.origin + self.location.pathname + location.search)
-  : new URL('https://github.com/cfworker');
+export let initialBaseURI =
+  typeof self !== 'undefined' && self.location
+    ? new URL(self.location.origin + self.location.pathname + location.search)
+    : new URL('https://github.com/cfworker');
 
 export function dereference(
   schema: Schema | boolean,

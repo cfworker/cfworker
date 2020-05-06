@@ -16,7 +16,10 @@ export class Validator {
     return validate(instance, this.schema, this.draft, this.lookup);
   }
 
-  public addSchema(schema: Schema) {
+  public addSchema(schema: Schema, id?: string) {
+    if (id) {
+      schema = { ...schema, $id: id };
+    }
     dereference(schema, this.lookup);
   }
 }

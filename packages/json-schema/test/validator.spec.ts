@@ -21,4 +21,16 @@ describe('Validator', () => {
     expect(validator.validate(true).valid).to.equal(true);
     expect(validator.validate('hello world').valid).to.equal(false);
   });
+
+  it('adds schema with specified id', () => {
+    const validator = new Validator({
+      $id: 'https://foo.bar/baz',
+      $ref: '/beep'
+    });
+
+    validator.addSchema({ type: 'boolean' }, 'https://foo.bar/beep');
+
+    expect(validator.validate(true).valid).to.equal(true);
+    expect(validator.validate('hello world').valid).to.equal(false);
+  });
 });

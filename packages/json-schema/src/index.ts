@@ -5,3 +5,4 @@ export * from './pointer';
 export * from './types';
 export * from './ucs2-length';
 export * from './validate';
+export * from './validator';
