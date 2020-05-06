@@ -85,7 +85,7 @@ export class TestHost extends EventEmitter {
         mocha.setup({
           ui: 'bdd',
           reporter: inspect ? 'html' : 'spec',
-          useColors: !this.inspect
+          color: !this.inspect
         });
 
         mocha.checkLeaks();
