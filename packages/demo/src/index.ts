@@ -19,47 +19,26 @@ import {
 } from './auth/oauth-flow';
 import { html } from './html-stream';
 
-const exceptionHandler: Middleware = async (context, next) => {
-  const { res, req, state } = context;
+const sentryLogging: Middleware = async (context, next) => {
+  const { req, state } = context;
   try {
     await next();
   } catch (err) {
-    if (err instanceof HttpError && err.status !== 500) {
-      res.status = err.status;
-      res.body = err.message;
-      res.headers.set('content-type', 'text/plain');
-      return;
+    if (!(err instanceof HttpError) || err.status === 500) {
+      const { posted } = captureError(
+        process.env.SENTRY_DSN,
+        process.env.NODE_ENV,
+        err,
+        req.raw,
+        state.user
+      );
+      context.waitUntil(posted);
     }
-
-    const { event_id, posted } = captureError(
-      process.env.SENTRY_DSN,
-      process.env.NODE_ENV,
-      err,
-      req.raw,
-      state.user
-    );
-    context.waitUntil(posted);
-
-    let message: string;
-    if (String(process.env.NODE_ENV) === 'development') {
-      message = err.stack;
-    } else {
-      message = `Event ID: ${event_id}`;
-    }
-    res.status = 500;
-    if (req.accepts.type('text/html')) {
-      res.body = `<h1>Internal Server Error</h1><p><pre><code>${htmlEncode(
-        message
-      )}</code></pre></p>`;
-      res.headers.set('content-type', 'text/html');
-    } else {
-      res.body = message;
-      res.headers.set('content-type', 'text/plain');
-    }
+    throw err;
   }
 };
 
-const originAndReferrerValidation: Middleware = async (context, next) => {
+const originAndRefererValidation: Middleware = async (context, next) => {
   const { url, method, headers } = context.req;
 
   const permitted = [url.origin, auth0Origin];
@@ -69,13 +48,13 @@ const originAndReferrerValidation: Middleware = async (context, next) => {
     throw new HttpError(400, `Invalid origin "${originHeader}"`);
   }
 
-  const referrerHeader = headers.get('referrer');
+  const refererHeader = headers.get('referer');
   if (
-    referrerHeader &&
+    refererHeader &&
     method !== 'GET' &&
-    !permitted.includes(new URL(referrerHeader).origin)
+    !permitted.includes(new URL(refererHeader).origin)
   ) {
-    throw new HttpError(400, `Invalid ${method} referrer "${referrerHeader}"`);
+    throw new HttpError(400, `Invalid ${method} referer "${refererHeader}"`);
   }
 
   await next();
@@ -131,6 +110,10 @@ router
   .get('/signed-out', ({ res }) => {
     res.body = 'signed out.';
     res.headers.set('content-type', 'text/plain');
+    res.headers.set(
+      'clear-site-data',
+      '"cache", "cookies", "storage", "executionContexts"'
+    );
   })
   .get('/error-test', errorTest)
   .get('/eject', context =>
@@ -256,8 +239,8 @@ router
   });
 
 new Application()
-  .use(exceptionHandler)
-  .use(originAndReferrerValidation)
+  .use(sentryLogging)
+  .use(originAndRefererValidation)
   .use(authentication)
   .use(notFoundPage)
   .use(router.middleware)
@@ -277,3 +260,22 @@ function errorTest() {
 
   return foo();
 }
+
+/*
+    let message: string;
+    if (String(process.env.NODE_ENV) === 'development') {
+      message = err.stack;
+    } else {
+      message = `Event ID: ${event_id}`;
+    }
+    res.status = 500;
+    if (req.accepts.type('text/html')) {
+      res.body = `<h1>Internal Server Error</h1><p><pre><code>${htmlEncode(
+        message
+      )}</code></pre></p>`;
+      res.headers.set('content-type', 'text/html');
+    } else {
+      res.body = message;
+      res.headers.set('content-type', 'text/plain');
+    }
+*/
