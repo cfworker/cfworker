@@ -8,7 +8,7 @@ describe('Application', () => {
     const dispatched = new Request('/');
     const app = new Application();
     app.use(ctx => {
-      received = ctx.req;
+      received = ctx.req.raw;
     });
     app.listen();
     self.dispatchEvent(new MockFetchEvent(dispatched));

@@ -112,7 +112,7 @@ interface CreateUserResponse {
 }
 
 export async function handleRegister({ req, res }: Context) {
-  const createUserArgs = await req.json();
+  const createUserArgs = await req.body.json();
   const user = await createUser(createUserArgs);
   // const evArgs = {
   //   result_url: `${req.url.origin}/email-verified`,

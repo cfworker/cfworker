@@ -1,6 +1,5 @@
-import { BadRequestError } from '@cfworker/http-errors';
 import { parseJwt } from '@cfworker/jwt';
-import { Context, Cookies, Middleware } from '@cfworker/web';
+import { Context, Cookies, HttpError, Middleware } from '@cfworker/web';
 import { TokenResponse } from './token-response';
 
 export function getAuthorizeUrl({ origin, href }: URL) {
@@ -64,20 +63,20 @@ export function setTokenCookie(
 }
 
 export async function handleTokenCallback(context: Context) {
-  const code = context.url.searchParams.get('code');
-  const redirect_uri = context.url.searchParams.get('redirect_uri');
+  const code = context.req.url.searchParams.get('code');
+  const redirect_uri = context.req.url.searchParams.get('redirect_uri');
   if (!code) {
-    throw new BadRequestError('code is expected.');
+    throw new HttpError(400, 'code is expected.');
   }
   if (!redirect_uri) {
-    throw new BadRequestError('redirect_uri is expected.');
+    throw new HttpError(400, 'redirect_uri is expected.');
   }
   try {
     const tokenResponse = await exchangeCode(code, redirect_uri);
     setTokenCookie(context.cookies, tokenResponse);
     context.res.redirect(redirect_uri);
   } catch (err) {
-    throw new BadRequestError(err.message);
+    throw new HttpError(400, err.message);
   }
 }
 
@@ -116,9 +115,8 @@ export const authentication: Middleware = async ({ cookies, state }, next) => {
   await next();
 };
 
-export function handleSignout({ cookies, url, res }: Context) {
-  const returnTo = new URL(url.origin);
-  returnTo.pathname = '/signed-out';
+export function handleSignout({ cookies, req, res }: Context) {
+  const returnTo = new URL('/signed-out', req.url.origin);
   const signOutUrl = new URL(`https://${process.env.AUTH0_DOMAIN}/v2/logout`);
   signOutUrl.searchParams.set('client_id', process.env.AUTH0_CLIENT_ID);
   signOutUrl.searchParams.set('returnTo', returnTo.href);

@@ -106,6 +106,14 @@ export function dereference(
     return lookup;
   }
 
+  // set the schema's absolute URI.
+  if (schema.__absolute_uri__ === undefined) {
+    Object.defineProperty(schema, '__absolute_uri__', {
+      enumerable: false,
+      value: schemaURI
+    });
+  }
+
   // if a $ref is found, resolve it's absolute URI.
   if (schema.$ref && schema.__absolute_ref__ === undefined) {
     const url = new URL(schema.$ref, baseURI);

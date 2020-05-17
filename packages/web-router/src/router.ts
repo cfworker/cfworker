@@ -1,5 +1,9 @@
-import { BadRequestError } from '@cfworker/http-errors';
-import { composeMiddleware, Context, Middleware } from '@cfworker/web';
+import {
+  composeMiddleware,
+  Context,
+  HttpError,
+  Middleware
+} from '@cfworker/web';
 import { Key, pathToRegexp } from 'path-to-regexp';
 
 export const Method = (method: string) => ({ req }: Context) => {
@@ -28,14 +32,12 @@ export const Path = (pathname: string) => {
   const keys: Key[] = [];
   const regExp = pathToRegexp(pathname, keys);
 
-  return ({ url, state }: Context) => {
+  return ({ req: { url, params } }: Context) => {
     const match = url.pathname.match(regExp);
     if (!match) {
       return false;
     }
-    const params = Object.create(null);
     collectParameters(keys, match, params);
-    state.params = params;
     return true;
   };
 };
@@ -132,7 +134,8 @@ function decodePathnameComponent(component: string): string {
     return decodeURIComponent(component);
   } catch (err) {
     if (err instanceof URIError) {
-      throw new BadRequestError(
+      throw new HttpError(
+        400,
         `Unable to decode pathname component "${component}".`
       );
     }
