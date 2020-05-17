@@ -61,11 +61,11 @@ export function captureError(
   };
   const { origin, pathname: project, username: key } = new URL(sentryDsn);
   const api = `${origin}/api${project}/store/?sentry_key=${key}&sentry_version=7&sentry_client=${sentryClient}`;
-  const promise = fetch(api, {
+  const posted = fetch(api, {
     method: 'POST',
     body: JSON.stringify(body)
   });
-  return { event_id, promise };
+  return { event_id, posted };
 }
 
 function serializeHeaders(headers: Headers) {

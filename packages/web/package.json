@@ -30,9 +30,10 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "cfworker test test/**/*.spec.ts"
+    "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
+    "@cfworker/json-schema": "^1.1.4",
     "cookie": "^0.4.0",
     "escape-html": "^1.0.3",
     "koa-compose": "^4.1.0",

@@ -1,11 +1,13 @@
 import { CosmosClient, PartitionKeyDefinition } from '@cfworker/cosmos';
-import {
-  BadRequestError,
-  HttpError,
-  UnauthorizedError
-} from '@cfworker/http-errors';
 import { captureError } from '@cfworker/sentry';
-import { Application, Middleware } from '@cfworker/web';
+import {
+  Application,
+  htmlEncode,
+  HttpError,
+  Middleware,
+  toObject,
+  validate
+} from '@cfworker/web';
 import { Router } from '@cfworker/web-router';
 import { getManagementToken, handleRegister } from './auth/management';
 import {
@@ -15,39 +17,37 @@ import {
   handleSignout,
   handleTokenCallback
 } from './auth/oauth-flow';
-import { htmlEncode } from './html-encode';
 import { html } from './html-stream';
-import './polyfills';
 
 const exceptionHandler: Middleware = async (context, next) => {
   const { res, req, state } = context;
   try {
     await next();
   } catch (err) {
-    if (err instanceof HttpError && err.code !== 500) {
-      res.status = err.code;
+    if (err instanceof HttpError && err.status !== 500) {
+      res.status = err.status;
       res.body = err.message;
       res.headers.set('content-type', 'text/plain');
       return;
     }
 
-    const { event_id, promise } = captureError(
+    const { event_id, posted } = captureError(
       process.env.SENTRY_DSN,
       process.env.NODE_ENV,
       err,
-      req,
+      req.raw,
       state.user
     );
-    context.waitUntil(promise);
-    let message: string;
+    context.waitUntil(posted);
 
+    let message: string;
     if (String(process.env.NODE_ENV) === 'development') {
       message = err.stack;
     } else {
       message = `Event ID: ${event_id}`;
     }
     res.status = 500;
-    if (context.accepts.type('text/html')) {
+    if (req.accepts.type('text/html')) {
       res.body = `<h1>Internal Server Error</h1><p><pre><code>${htmlEncode(
         message
       )}</code></pre></p>`;
@@ -60,16 +60,13 @@ const exceptionHandler: Middleware = async (context, next) => {
 };
 
 const originAndReferrerValidation: Middleware = async (context, next) => {
-  const {
-    url,
-    req: { method, headers }
-  } = context;
+  const { url, method, headers } = context.req;
 
   const permitted = [url.origin, auth0Origin];
 
   const originHeader = headers.get('origin');
   if (originHeader && !permitted.includes(originHeader)) {
-    throw new BadRequestError(`Invalid origin "${originHeader}"`);
+    throw new HttpError(400, `Invalid origin "${originHeader}"`);
   }
 
   const referrerHeader = headers.get('referrer');
@@ -78,13 +75,16 @@ const originAndReferrerValidation: Middleware = async (context, next) => {
     method !== 'GET' &&
     !permitted.includes(new URL(referrerHeader).origin)
   ) {
-    throw new BadRequestError(`Invalid ${method} referrer "${referrerHeader}"`);
+    throw new HttpError(400, `Invalid ${method} referrer "${referrerHeader}"`);
   }
 
   await next();
 };
 
-const notFoundPage: Middleware = async ({ res, url, accepts }, next) => {
+const notFoundPage: Middleware = async (
+  { res, req: { url, accepts } },
+  next
+) => {
   await next();
   if (res.status === 404 && accepts.type('text/html')) {
     res.status = 404; // explicit status
@@ -100,12 +100,13 @@ const assertAuthenticated: Middleware = async (context, next) => {
     await next();
     return;
   }
-  if (context.accepts.type('text/html')) {
-    context.res.redirect(getAuthorizeUrl(context.url));
+  if (context.req.accepts.type('text/html')) {
+    context.res.redirect(getAuthorizeUrl(context.req.url));
     return;
   }
-  throw new UnauthorizedError(
-    `${context.url.pathname} requires authentication.`
+  throw new HttpError(
+    401,
+    `${context.req.url.pathname} requires authentication.`
   );
 };
 
@@ -119,11 +120,7 @@ router
   .get('/echo-headers', ({ req, res }) => {
     res.status = 200;
     res.headers.set('content-type', 'application/json');
-    /** @type {Record<string, string>} */
-    const headers = {};
-    // @ts-ignore
-    req.headers.forEach((v, k) => (headers[k] = v));
-    res.body = JSON.stringify(headers, null, 2);
+    res.body = JSON.stringify(toObject(req.headers), null, 2);
   })
   .get('/hello-world', ({ res }) => {
     res.body = 'hello world';
@@ -144,10 +141,26 @@ router
     res.body = JSON.stringify(state.user);
     res.headers.set('content-type', 'application/json');
   })
-  .get('/api/greetings/:greeting', assertAuthenticated, ({ res, state }) => {
-    res.body = JSON.stringify(state.params);
-    res.headers.set('content-type', 'application/json');
-  })
+  .get(
+    '/api/greetings/:greeting',
+    assertAuthenticated,
+    validate({
+      params: {
+        required: ['greeting'],
+        additionalProperties: false,
+        properties: {
+          greeting: {
+            type: 'string',
+            minLength: 5
+          }
+        }
+      }
+    }),
+    ({ req, res }) => {
+      res.body = JSON.stringify(req.params);
+      res.headers.set('content-type', 'application/json');
+    }
+  )
   .get('/stream', ({ res }) => {
     res.body = html`
       <!DOCTYPE html>

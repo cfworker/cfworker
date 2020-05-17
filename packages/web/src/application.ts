@@ -1,5 +1,9 @@
+import statuses from 'statuses';
 import { Context } from './context';
+import { HttpError } from './http-error';
 import { composeMiddleware, Middleware } from './middleware';
+
+const resolved = Promise.resolve();
 
 export class Application {
   private readonly middleware: Middleware[] = [];
@@ -26,14 +30,17 @@ export class Application {
 
   private async invokeMiddleware(context: Context, middleware: Middleware) {
     try {
-      await middleware(context, () => Promise.resolve());
+      await middleware(context, () => resolved);
       return context.res.create();
     } catch (err) {
       console.error(err.stack || err.toString());
-      return new Response(undefined, {
-        status: 500,
-        statusText: 'Internal Server Error'
-      });
+      const headers = { 'content-type': 'text/plain' };
+      if (err instanceof HttpError) {
+        const { status, statusText, message } = err;
+        return new Response(message, { status, statusText, headers });
+      }
+      const statusText = statuses[500];
+      return new Response(statusText, { status: 500, statusText, headers });
     }
   }
 }

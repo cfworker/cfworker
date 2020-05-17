@@ -22,10 +22,6 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
   Run, test and deploy Cloudflare workers
 
-- `@cfworker/http-errors`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/http-errors/README.md) | [npm](https://www.npmjs.com/package/@cfworker/http-errors)
-
-  A collection HTTP error classes for use with @cfworker/web
-
 - `@cfworker/json-schema`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/json-schema/README.md) | [npm](https://www.npmjs.com/package/@cfworker/json-schema)
 
   A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.

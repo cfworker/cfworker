@@ -1,4 +1,4 @@
-import { htmlEncode } from './html-encode';
+import { htmlEncode } from '@cfworker/web';
 
 export function html(
   strings: TemplateStringsArray,
