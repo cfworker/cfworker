@@ -26,7 +26,7 @@ export const Header = (header: string, val: string) => ({ req }: Context) => {
   );
 };
 export const Host = (host: string) => Header('host', host);
-export const Referrer = (host: string) => Header('referrer', host);
+export const Referer = (host: string) => Header('referer', host);
 
 export const Path = (pathname: string) => {
   const keys: Key[] = [];

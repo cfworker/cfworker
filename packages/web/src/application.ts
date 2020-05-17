@@ -34,13 +34,15 @@ export class Application {
       return context.res.create();
     } catch (err) {
       console.error(err.stack || err.toString());
-      const headers = { 'content-type': 'text/plain' };
+
       if (err instanceof HttpError) {
-        const { status, statusText, message } = err;
-        return new Response(message, { status, statusText, headers });
+        return err.toResponse();
       }
-      const statusText = statuses[500];
-      return new Response(statusText, { status: 500, statusText, headers });
+
+      const status = 500;
+      const statusText = statuses[500]!;
+      const headers = { 'content-type': 'text/plain' };
+      return new Response(statusText, { status, statusText, headers });
     }
   }
 }
