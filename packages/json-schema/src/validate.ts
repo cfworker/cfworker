@@ -2,11 +2,14 @@ import { deepCompareStrict } from './deep-compare-strict';
 import { dereference } from './dereference';
 import { fastFormat } from './format';
 import { encodePointer } from './pointer';
-import { InstanceType, Schema, SchemaDraft } from './types';
+import {
+  InstanceType,
+  OutputUnit,
+  Schema,
+  SchemaDraft,
+  ValidationResult
+} from './types';
 import { ucs2length } from './ucs2-length';
-
-const validResult = Object.freeze({ valid: true });
-const invalidResult = Object.freeze({ valid: false });
 
 export function validate(
   instance: any,
@@ -14,15 +17,26 @@ export function validate(
   draft: SchemaDraft = '2019-09',
   lookup = dereference(schema),
   recursiveAnchor: Schema | null = null,
-  instancePointer = '/#',
+  instanceLocation = '#',
+  schemaLocation = '#',
   evaluated?: { properties?: Record<string, boolean>; items?: number }
-): { valid: boolean } {
+): ValidationResult {
   if (schema === true) {
-    return validResult;
+    return { valid: true, errors: [] };
   }
 
   if (schema === false) {
-    return invalidResult;
+    return {
+      valid: false,
+      errors: [
+        {
+          instanceLocation,
+          keyword: 'false',
+          keywordLocation: instanceLocation,
+          error: 'False boolean schema.'
+        }
+      ]
+    };
   }
 
   const rawInstanceType = typeof instance;
@@ -101,6 +115,8 @@ export function validate(
     __absolute_ref__
   } = schema;
 
+  const errors: OutputUnit[] = [];
+
   if ($ref !== undefined) {
     const uri = __absolute_ref__ || $ref;
     const refSchema = lookup[uri];
@@ -112,20 +128,29 @@ export function validate(
       message += `\nKnown schemas:\n- ${Object.keys(lookup).join('\n- ')}`;
       throw new Error(message);
     }
-    if (
-      !validate(
-        instance,
-        refSchema,
-        draft,
-        lookup,
-        recursiveAnchor,
-        instancePointer
-      ).valid
-    ) {
-      return invalidResult;
+    const keywordLocation = `${schemaLocation}/$ref`;
+    const result = validate(
+      instance,
+      refSchema,
+      draft,
+      lookup,
+      recursiveAnchor,
+      instanceLocation,
+      keywordLocation
+    );
+    if (!result.valid) {
+      errors.push(
+        {
+          instanceLocation,
+          keyword: '$ref',
+          keywordLocation,
+          error: 'A subschema had errors.'
+        },
+        ...result.errors
+      );
     }
     if (draft === '4' || draft === '7') {
-      return validResult;
+      return { valid: errors.length === 0, errors };
     }
   }
 
@@ -133,18 +158,28 @@ export function validate(
     recursiveAnchor = schema;
   }
 
-  if (
-    $recursiveRef === '#' &&
-    !validate(
+  if ($recursiveRef === '#') {
+    const keywordLocation = `${schemaLocation}/$recursiveRef`;
+    const result = validate(
       instance,
       recursiveAnchor === null ? schema : recursiveAnchor,
       draft,
       lookup,
       recursiveAnchor,
-      instancePointer
-    ).valid
-  ) {
-    return invalidResult;
+      instanceLocation,
+      keywordLocation
+    );
+    if (!result.valid) {
+      errors.push(
+        {
+          instanceLocation,
+          keyword: '$recursiveRef',
+          keywordLocation,
+          error: 'A subschema had errors.'
+        },
+        ...result.errors
+      );
+    }
   }
 
   if (Array.isArray($type)) {
@@ -163,144 +198,242 @@ export function validate(
       }
     }
     if (!valid) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'type',
+        keywordLocation: `${schemaLocation}/type`,
+        error: `Instance type "${instanceType}" is invalid. Expected "${$type.join(
+          '", "'
+        )}".`
+      });
     }
   } else if ($type === 'integer') {
     if (instanceType !== 'number' || instance % 1 || instance !== instance) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'type',
+        keywordLocation: `${schemaLocation}/type`,
+        error: `Instance type "${instanceType}" is invalid. Expected "${$type}".`
+      });
     }
   } else if ($type !== undefined && instanceType !== $type) {
-    return invalidResult;
+    errors.push({
+      instanceLocation,
+      keyword: 'type',
+      keywordLocation: `${schemaLocation}/type`,
+      error: `Instance type "${instanceType}" is invalid. Expected "${$type}".`
+    });
   }
 
   if ($const !== undefined) {
     if (instanceType === 'object' || instanceType === 'array') {
       if (!deepCompareStrict(instance, $const)) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'const',
+          keywordLocation: `${schemaLocation}/const`,
+          error: `Instance does not match ${JSON.stringify($const)}.`
+        });
       }
     } else if (instance !== $const) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'const',
+        keywordLocation: `${schemaLocation}/const`,
+        error: `Instance does not match ${JSON.stringify($const)}.`
+      });
     }
   }
 
   if ($enum !== undefined) {
     if (instanceType === 'object' || instanceType === 'array') {
       if (!$enum.some(value => deepCompareStrict(instance, value))) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'enum',
+          keywordLocation: `${schemaLocation}/enum`,
+          error: `Instance does not match any of ${JSON.stringify($enum)}.`
+        });
       }
     } else if (!$enum.some(value => instance === value)) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'enum',
+        keywordLocation: `${schemaLocation}/enum`,
+        error: `Instance does not match any of ${JSON.stringify($enum)}.`
+      });
     }
   }
 
-  if (
-    $not !== undefined &&
-    validate(
+  if ($not !== undefined) {
+    const keywordLocation = `${schemaLocation}/not`;
+    const result = validate(
       instance,
       $not,
       draft,
       lookup,
       recursiveAnchor,
-      instancePointer,
+      instanceLocation,
+      keywordLocation,
       evaluated
-    ).valid
-  ) {
-    return invalidResult;
+    );
+    if (result.valid) {
+      errors.push({
+        instanceLocation,
+        keyword: 'not',
+        keywordLocation,
+        error: 'Instance matched "not" schema.'
+      });
+    }
   }
 
-  if (
-    $anyOf !== undefined &&
-    !$anyOf.some(
-      subSchema =>
-        validate(
-          instance,
-          subSchema,
-          draft,
-          lookup,
-          recursiveAnchor,
-          instancePointer,
-          evaluated
-        ).valid
-    )
-  ) {
-    return invalidResult;
-  }
-
-  if (
-    $allOf !== undefined &&
-    !$allOf.every(
-      subSchema =>
-        validate(
-          instance,
-          subSchema,
-          draft,
-          lookup,
-          recursiveAnchor,
-          instancePointer,
-          evaluated
-        ).valid
-    )
-  ) {
-    return invalidResult;
-  }
-
-  if (
-    $oneOf !== undefined &&
-    $oneOf.filter(
-      subSchema =>
-        validate(
-          instance,
-          subSchema,
-          draft,
-          lookup,
-          recursiveAnchor,
-          instancePointer,
-          evaluated
-        ).valid
-    ).length !== 1
-  ) {
-    return invalidResult;
-  }
-
-  if ($if !== undefined) {
+  if ($anyOf !== undefined) {
+    const keywordLocation = `${schemaLocation}/anyOf`;
+    const errorsLength = errors.length;
     if (
-      validate(
+      $anyOf.some((subSchema, i) => {
+        const result = validate(
+          instance,
+          subSchema,
+          draft,
+          lookup,
+          recursiveAnchor,
+          instanceLocation,
+          `${keywordLocation}/${i}`,
+          evaluated
+        );
+        errors.push(...result.errors);
+        return result.valid;
+      })
+    ) {
+      errors.length = errorsLength;
+    } else {
+      errors.splice(errorsLength, 0, {
+        instanceLocation,
+        keyword: 'anyOf',
+        keywordLocation,
+        error: 'Instance does not match any subschemas.'
+      });
+    }
+  }
+
+  if ($allOf !== undefined) {
+    const keywordLocation = `${schemaLocation}/allOf`;
+    const errorsLength = errors.length;
+    if (
+      $allOf.every((subSchema, i) => {
+        const result = validate(
+          instance,
+          subSchema,
+          draft,
+          lookup,
+          recursiveAnchor,
+          instanceLocation,
+          `${keywordLocation}/${i}`,
+          evaluated
+        );
+        errors.push(...result.errors);
+        return result.valid;
+      })
+    ) {
+      errors.length = errorsLength;
+    } else {
+      errors.splice(errorsLength, 0, {
+        instanceLocation,
+        keyword: 'allOf',
+        keywordLocation,
+        error: `Instance does not match every subschema.`
+      });
+    }
+  }
+
+  if ($oneOf !== undefined) {
+    const keywordLocation = `${schemaLocation}/oneOf`;
+    const errorsLength = errors.length;
+    const matches = $oneOf.filter((subSchema, i) => {
+      const result = validate(
         instance,
-        $if,
+        subSchema,
         draft,
         lookup,
         recursiveAnchor,
-        instancePointer,
+        instanceLocation,
+        `${keywordLocation}/${i}`,
         evaluated
-      ).valid
-    ) {
-      if (
-        $then !== undefined &&
-        !validate(
+      );
+      errors.push(...result.errors);
+      return result.valid;
+    }).length;
+    if (matches === 1) {
+      errors.length = errorsLength;
+    } else {
+      errors.splice(errorsLength, 0, {
+        instanceLocation,
+        keyword: 'oneOf',
+        keywordLocation,
+        error: `Instance does not match exactly one subschema (${matches} matches).`
+      });
+    }
+  }
+
+  if ($if !== undefined) {
+    const keywordLocation = `${schemaLocation}/if`;
+    const conditionResult = validate(
+      instance,
+      $if,
+      draft,
+      lookup,
+      recursiveAnchor,
+      instanceLocation,
+      keywordLocation,
+      evaluated
+    ).valid;
+    if (conditionResult) {
+      if ($then !== undefined) {
+        const thenResult = validate(
           instance,
           $then,
           draft,
           lookup,
           recursiveAnchor,
-          instancePointer,
+          instanceLocation,
+          `${schemaLocation}/then`,
           evaluated
-        ).valid
-      ) {
-        return invalidResult;
+        );
+        if (!thenResult.valid) {
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'if',
+              keywordLocation,
+              error: `Instance does not match "then" schema.`
+            },
+            ...thenResult.errors
+          );
+        }
       }
-    } else if (
-      $else !== undefined &&
-      !validate(
+    } else if ($else !== undefined) {
+      const elseResult = validate(
         instance,
         $else,
         draft,
         lookup,
         recursiveAnchor,
-        instancePointer,
+        instanceLocation,
+        `${schemaLocation}/else`,
         evaluated
-      ).valid
-    ) {
-      return invalidResult;
+      );
+      if (!elseResult.valid) {
+        errors.push(
+          {
+            instanceLocation,
+            keyword: 'if',
+            keywordLocation,
+            error: `Instance does not match "else" schema.`
+          },
+          ...elseResult.errors
+        );
+      }
     }
   }
 
@@ -308,7 +441,12 @@ export function validate(
     if ($required !== undefined) {
       for (const key of $required) {
         if (!(key in instance)) {
-          return invalidResult;
+          errors.push({
+            instanceLocation,
+            keyword: 'required',
+            keywordLocation: `${schemaLocation}/required`,
+            error: `Instance does not have required property "${key}".`
+          });
         }
       }
     }
@@ -316,37 +454,63 @@ export function validate(
     const keys = Object.keys(instance);
 
     if ($minProperties !== undefined && keys.length < $minProperties) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'minProperties',
+        keywordLocation: `${schemaLocation}/minProperties`,
+        error: `Instance does not have at least ${$minProperties} properties.`
+      });
     }
 
     if ($maxProperties !== undefined && keys.length > $maxProperties) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'maxProperties',
+        keywordLocation: `${schemaLocation}/maxProperties`,
+        error: `Instance does not have at least ${$maxProperties} properties.`
+      });
     }
 
     if ($propertyNames !== undefined) {
+      const keywordLocation = `${schemaLocation}/propertyNames`;
       for (const key in instance) {
-        if (
-          !validate(
-            key,
-            $propertyNames,
-            draft,
-            lookup,
-            recursiveAnchor,
-            instancePointer
-          ).valid
-        ) {
-          return invalidResult;
+        const subInstancePointer = `${instanceLocation}/${encodePointer(key)}`;
+        const result = validate(
+          key,
+          $propertyNames,
+          draft,
+          lookup,
+          recursiveAnchor,
+          subInstancePointer,
+          keywordLocation
+        );
+        if (!result.valid) {
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'propertyNames',
+              keywordLocation,
+              error: `Property name "${key}" does not match schema.`
+            },
+            ...result.errors
+          );
         }
       }
     }
 
     if ($dependentRequired !== undefined) {
+      const keywordLocation = `${schemaLocation}/dependantRequired`;
       for (const key in $dependentRequired) {
         if (key in instance) {
           const required = $dependentRequired[key];
-          for (const key of required) {
-            if (!(key in instance)) {
-              return invalidResult;
+          for (const dependantKey of required) {
+            if (!(dependantKey in instance)) {
+              errors.push({
+                instanceLocation,
+                keyword: 'dependentRequired',
+                keywordLocation,
+                error: `Instance has "${key}" but does not have "${dependantKey}".`
+              });
             }
           }
         }
@@ -355,45 +519,68 @@ export function validate(
 
     if ($dependentSchemas !== undefined) {
       for (const key in $dependentSchemas) {
+        const keywordLocation = `${schemaLocation}/dependentSchemas`;
         if (key in instance) {
-          if (
-            !validate(
-              instance,
-              $dependentSchemas[key],
-              draft,
-              lookup,
-              recursiveAnchor,
-              instancePointer
-            ).valid
-          ) {
-            return invalidResult;
+          const result = validate(
+            instance,
+            $dependentSchemas[key],
+            draft,
+            lookup,
+            recursiveAnchor,
+            instanceLocation,
+            `${keywordLocation}/${encodePointer(key)}`
+          );
+          if (!result.valid) {
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'dependentSchemas',
+                keywordLocation,
+                error: `Instance has "${key}" but does not match dependant schema.`
+              },
+              ...result.errors
+            );
           }
         }
       }
     }
 
     if ($dependencies !== undefined) {
+      const keywordLocation = `${schemaLocation}/dependencies`;
       for (const key in $dependencies) {
         if (key in instance) {
           const propsOrSchema = $dependencies[key];
           if (Array.isArray(propsOrSchema)) {
-            for (const key of propsOrSchema) {
-              if (!(key in instance)) {
-                return invalidResult;
+            for (const dependantKey of propsOrSchema) {
+              if (!(dependantKey in instance)) {
+                errors.push({
+                  instanceLocation,
+                  keyword: 'dependencies',
+                  keywordLocation,
+                  error: `Instance has "${key}" but does not have "${dependantKey}".`
+                });
               }
             }
           } else {
-            if (
-              !validate(
-                instance,
-                propsOrSchema,
-                draft,
-                lookup,
-                recursiveAnchor,
-                instancePointer
-              ).valid
-            ) {
-              return invalidResult;
+            const result = validate(
+              instance,
+              propsOrSchema,
+              draft,
+              lookup,
+              recursiveAnchor,
+              instanceLocation,
+              `${keywordLocation}/${encodePointer(key)}`
+            );
+            if (!result.valid) {
+              errors.push(
+                {
+                  instanceLocation,
+                  keyword: 'dependencies',
+                  keywordLocation,
+                  error: `Instance has "${key}" but does not match dependant schema.`
+                },
+                ...result.errors
+              );
             }
           }
         }
@@ -405,29 +592,44 @@ export function validate(
       throw new Error('evaluated.properties should be an object');
     }
 
+    let stop = false;
+
     if ($properties !== undefined) {
+      const keywordLocation = `${schemaLocation}/properties`;
       for (const key in $properties) {
         if (!(key in instance)) {
           continue;
         }
-        const subInstancePointer = `${instancePointer}/${encodePointer(key)}`;
-        if (
-          validate(
-            instance[key],
-            $properties[key],
-            draft,
-            lookup,
-            recursiveAnchor,
-            subInstancePointer
-          ).valid
-        ) {
+        const subInstancePointer = `${instanceLocation}/${encodePointer(key)}`;
+        const result = validate(
+          instance[key],
+          $properties[key],
+          draft,
+          lookup,
+          recursiveAnchor,
+          subInstancePointer,
+          `${keywordLocation}/${encodePointer(key)}`
+        );
+        if (result.valid) {
           evaluated.properties[key] = thisEvaluated[key] = true;
         } else {
-          return invalidResult;
+          stop = true;
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'properties',
+              keywordLocation,
+              error: `Property "${key}" does not match schema.`
+            },
+            ...result.errors
+          );
+          break;
         }
       }
     }
-    if ($patternProperties !== undefined) {
+
+    if (!stop && $patternProperties !== undefined) {
+      const keywordLocation = `${schemaLocation}/patternProperties`;
       for (const pattern in $patternProperties) {
         const regex = new RegExp(pattern);
         const subSchema = $patternProperties[pattern];
@@ -435,71 +637,114 @@ export function validate(
           if (!regex.test(key)) {
             continue;
           }
-          const subInstancePointer = `${instancePointer}/${encodePointer(key)}`;
-          if (
-            validate(
-              instance[key],
-              subSchema,
-              draft,
-              lookup,
-              recursiveAnchor,
-              subInstancePointer
-            ).valid
-          ) {
+          const subInstancePointer = `${instanceLocation}/${encodePointer(
+            key
+          )}`;
+          const result = validate(
+            instance[key],
+            subSchema,
+            draft,
+            lookup,
+            recursiveAnchor,
+            subInstancePointer,
+            `${keywordLocation}/${encodePointer(pattern)}`
+          );
+          if (result.valid) {
             evaluated.properties[key] = thisEvaluated[key] = true;
           } else {
-            return invalidResult;
+            stop = true;
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'patternProperties',
+                keywordLocation,
+                error: `Property "${key}" matches pattern "${pattern}" but does not match associated schema.`
+              },
+              ...result.errors
+            );
           }
         }
       }
     }
-    if ($additionalProperties !== undefined) {
+
+    if (!stop && $additionalProperties !== undefined) {
+      const keywordLocation = `${schemaLocation}/additionalProperties`;
       for (const key in instance) {
         if (thisEvaluated[key]) {
           continue;
         }
-        const subInstancePointer = `${instancePointer}/${encodePointer(key)}`;
-        if (
-          validate(
+        const subInstancePointer = `${instanceLocation}/${encodePointer(key)}`;
+        const result = validate(
+          instance[key],
+          $additionalProperties,
+          draft,
+          lookup,
+          recursiveAnchor,
+          subInstancePointer,
+          keywordLocation
+        );
+        if (result.valid) {
+          evaluated.properties[key] = true;
+        } else {
+          stop = true;
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'additionalProperties',
+              keywordLocation,
+              error: `Property "${key}" does not match additional properties schema.`
+            },
+            ...result.errors
+          );
+        }
+      }
+    } else if (!stop && $unevaluatedProperties !== undefined) {
+      const keywordLocation = `${schemaLocation}/unevaluatedProperties`;
+      for (const key in instance) {
+        if (!evaluated.properties[key]) {
+          const subInstancePointer = `${instanceLocation}/${encodePointer(
+            key
+          )}`;
+          const result = validate(
             instance[key],
-            $additionalProperties,
+            $unevaluatedProperties,
             draft,
             lookup,
             recursiveAnchor,
-            subInstancePointer
-          ).valid
-        ) {
-          evaluated.properties[key] = true;
-        } else {
-          return invalidResult;
-        }
-      }
-    } else if ($unevaluatedProperties !== undefined) {
-      for (const key in instance) {
-        if (!evaluated.properties[key]) {
-          const subInstancePointer = `${instancePointer}/${encodePointer(key)}`;
-          if (
-            !validate(
-              instance[key],
-              $unevaluatedProperties,
-              draft,
-              lookup,
-              recursiveAnchor,
-              subInstancePointer
-            ).valid
-          ) {
-            return invalidResult;
+            subInstancePointer,
+            keywordLocation
+          );
+          if (!result.valid) {
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'unevaluatedProperties',
+                keywordLocation,
+                error: `Property "${key}" does not match unevaluated properties schema.`
+              },
+              ...result.errors
+            );
           }
         }
       }
     }
   } else if (instanceType === 'array') {
     if ($maxItems !== undefined && instance.length > $maxItems) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'maxItems',
+        keywordLocation: `${schemaLocation}/maxItems`,
+        error: `Array has too many items (${instance.length} > ${$maxItems}).`
+      });
     }
 
     if ($minItems !== undefined && instance.length < $minItems) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'minItems',
+        keywordLocation: `${schemaLocation}/minItems`,
+        error: `Array has too few items (${instance.length} < ${$minItems}).`
+      });
     }
 
     if (!evaluated || evaluated.items === undefined) {
@@ -508,100 +753,157 @@ export function validate(
 
     const length: number = instance.length;
     let i = 0;
+    let stop = false;
     if ($items !== undefined) {
+      const keywordLocation = `${schemaLocation}/items`;
       if (Array.isArray($items)) {
         const length2 = Math.min($items.length, length);
         for (; i < length2; i++) {
-          if (
-            !validate(
-              instance[i],
-              $items[i],
-              draft,
-              lookup,
-              recursiveAnchor,
-              `${instancePointer}/${i}`
-            ).valid
-          ) {
-            return invalidResult;
+          const result = validate(
+            instance[i],
+            $items[i],
+            draft,
+            lookup,
+            recursiveAnchor,
+            `${instanceLocation}/${i}`,
+            `${keywordLocation}/${i}`
+          );
+          if (!result.valid) {
+            stop = true;
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'items',
+                keywordLocation,
+                error: `Items did not match schema.`
+              },
+              ...result.errors
+            );
+            break;
           }
         }
       } else {
         for (; i < length; i++) {
-          if (
-            !validate(
-              instance[i],
-              $items,
-              draft,
-              lookup,
-              recursiveAnchor,
-              `${instancePointer}/${i}`
-            ).valid
-          ) {
-            return invalidResult;
+          const result = validate(
+            instance[i],
+            $items,
+            draft,
+            lookup,
+            recursiveAnchor,
+            `${instanceLocation}/${i}`,
+            keywordLocation
+          );
+          if (!result.valid) {
+            stop = true;
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'items',
+                keywordLocation,
+                error: `Items did not match schema.`
+              },
+              ...result.errors
+            );
+            break;
           }
         }
       }
 
       evaluated.items = Math.max(i, evaluated.items);
 
-      if ($additionalItems !== undefined) {
+      if (!stop && $additionalItems !== undefined) {
+        const keywordLocation = `${schemaLocation}/additionalItems`;
         for (; i < length; i++) {
-          if (
-            !validate(
-              instance[i],
-              $additionalItems,
-              draft,
-              lookup,
-              recursiveAnchor,
-              `${instancePointer}/${i}`
-            ).valid
-          ) {
-            return invalidResult;
+          const result = validate(
+            instance[i],
+            $additionalItems,
+            draft,
+            lookup,
+            recursiveAnchor,
+            `${instanceLocation}/${i}`,
+            keywordLocation
+          );
+          if (!result.valid) {
+            stop = true;
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'additionalItems',
+                keywordLocation,
+                error: `Items did not match additional items schema.`
+              },
+              ...result.errors
+            );
           }
         }
         evaluated.items = Math.max(i, evaluated.items);
       }
     }
 
-    if ($unevaluatedItems !== undefined) {
+    if (!stop && $unevaluatedItems !== undefined) {
+      const keywordLocation = `${schemaLocation}/unevaluatedItems`;
       for (i = Math.max(evaluated.items, 0); i < length; i++) {
-        if (
-          !validate(
-            instance[i],
-            $unevaluatedItems,
-            draft,
-            lookup,
-            recursiveAnchor,
-            `${instancePointer}/${i}`
-          ).valid
-        ) {
-          return invalidResult;
+        const result = validate(
+          instance[i],
+          $unevaluatedItems,
+          draft,
+          lookup,
+          recursiveAnchor,
+          `${instanceLocation}/${i}`,
+          keywordLocation
+        );
+        if (!result.valid) {
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'unevaluatedItems',
+              keywordLocation,
+              error: `Items did not match unevaluated items schema.`
+            },
+            ...result.errors
+          );
         }
       }
     }
 
     if ($contains !== undefined) {
+      const keywordLocation = `${schemaLocation}/contains`;
       if (length === 0) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'contains',
+          keywordLocation,
+          error: `Array does not match item matching schema. Zero items.`
+        });
       }
       let contained = false;
+      const errorsLength = errors.length;
       for (let i = 0; i < length; i++) {
-        if (
-          validate(
-            instance[i],
-            $contains,
-            draft,
-            lookup,
-            recursiveAnchor,
-            `${instancePointer}/${i}`
-          ).valid
-        ) {
+        const result = validate(
+          instance[i],
+          $contains,
+          draft,
+          lookup,
+          recursiveAnchor,
+          `${instanceLocation}/${i}`,
+          keywordLocation
+        );
+        if (result.valid) {
           contained = true;
           break;
+        } else {
+          errors.push(...result.errors);
         }
       }
-      if (!contained) {
-        return invalidResult;
+      if (contained) {
+        errors.length = errorsLength;
+      } else {
+        errors.splice(errorsLength, 0, {
+          instanceLocation,
+          keyword: 'contains',
+          keywordLocation,
+          error: `Array does not contain item matching schema.`
+        });
       }
     }
 
@@ -616,7 +918,14 @@ export function validate(
           const b = instance[k];
           const bo = typeof b === 'object' && b !== null;
           if (a === b || (ao && bo && deepCompareStrict(a, b))) {
-            return invalidResult;
+            errors.push({
+              instanceLocation,
+              keyword: 'uniqueItems',
+              keywordLocation: `${schemaLocation}/uniqueItems`,
+              error: `Duplicate items at indexes ${j} and ${k}.`
+            });
+            j = Number.MAX_SAFE_INTEGER;
+            k = Number.MAX_SAFE_INTEGER;
           }
         }
       }
@@ -628,53 +937,116 @@ export function validate(
         (($exclusiveMinimum === true && instance <= $minimum) ||
           instance < $minimum)
       ) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'minimum',
+          keywordLocation: `${schemaLocation}/minimum`,
+          error: `${instance} is less than ${
+            $exclusiveMinimum ? 'or equal to ' : ''
+          } ${$minimum}.`
+        });
       }
       if (
         $maximum !== undefined &&
         (($exclusiveMaximum === true && instance >= $maximum) ||
           instance > $maximum)
       ) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'maximum',
+          keywordLocation: `${schemaLocation}/maximum`,
+          error: `${instance} is greater than ${
+            $exclusiveMaximum ? 'or equal to ' : ''
+          } ${$maximum}.`
+        });
       }
     } else {
       if ($minimum !== undefined && instance < $minimum) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'minimum',
+          keywordLocation: `${schemaLocation}/minimum`,
+          error: `${instance} is less than ${$minimum}.`
+        });
       }
       if ($maximum !== undefined && instance > $maximum) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'maximum',
+          keywordLocation: `${schemaLocation}/maximum`,
+          error: `${instance} is greater than ${$maximum}.`
+        });
       }
       if ($exclusiveMinimum !== undefined && instance <= $exclusiveMinimum) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'exclusiveMinimum',
+          keywordLocation: `${schemaLocation}/exclusiveMinimum`,
+          error: `${instance} is less than ${$exclusiveMinimum}.`
+        });
       }
       if ($exclusiveMaximum !== undefined && instance >= $exclusiveMaximum) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'exclusiveMaximum',
+          keywordLocation: `${schemaLocation}/exclusiveMaximum`,
+          error: `${instance} is greater than or equal to ${$exclusiveMaximum}.`
+        });
       }
     }
     if ($multipleOf !== undefined) {
       const division = instance / $multipleOf;
       if (division !== Math.floor(division)) {
-        return invalidResult;
+        errors.push({
+          instanceLocation,
+          keyword: 'multipleOf',
+          keywordLocation: `${schemaLocation}/multipleOf`,
+          error: `${instance} is not a multiple of ${$multipleOf}.`
+        });
       }
     }
   } else if (instanceType === 'string') {
-    if ($minLength !== undefined && ucs2length(instance) < $minLength) {
-      return invalidResult;
+    const length =
+      $minLength === undefined && $maxLength === undefined
+        ? 0
+        : ucs2length(instance);
+    if ($minLength !== undefined && length < $minLength) {
+      errors.push({
+        instanceLocation,
+        keyword: 'minLength',
+        keywordLocation: `${schemaLocation}/minLength`,
+        error: `String is too short (${length} < ${$minLength}).`
+      });
     }
-    if ($maxLength !== undefined && ucs2length(instance) > $maxLength) {
-      return invalidResult;
+    if ($maxLength !== undefined && length > $maxLength) {
+      errors.push({
+        instanceLocation,
+        keyword: 'maxLength',
+        keywordLocation: `${schemaLocation}/maxLength`,
+        error: `String is too long (${length} > ${$minLength}).`
+      });
     }
     if ($pattern !== undefined && !new RegExp($pattern).test(instance)) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'pattern',
+        keywordLocation: `${schemaLocation}/pattern`,
+        error: `String does not match pattern.`
+      });
     }
     if (
       $format !== undefined &&
       fastFormat[$format] &&
       !fastFormat[$format](instance)
     ) {
-      return invalidResult;
+      errors.push({
+        instanceLocation,
+        keyword: 'format',
+        keywordLocation: `${schemaLocation}/format`,
+        error: `String does not match format "${$format}".`
+      });
     }
   }
 
-  return validResult;
+  return { valid: errors.length === 0, errors };
 }
