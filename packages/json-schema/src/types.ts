@@ -74,3 +74,15 @@ export interface Schema {
 
   [key: string]: any;
 }
+
+export interface OutputUnit {
+  keyword: string;
+  keywordLocation: string;
+  instanceLocation: string;
+  error: string;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  errors: OutputUnit[];
+}
