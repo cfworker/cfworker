@@ -40,11 +40,7 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
 - `@cfworker/web`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/web/README.md) | [npm](https://www.npmjs.com/package/@cfworker/web)
 
-  Web framework for Cloudflare Workers and service workers, inspired by Koa
-
-- `@cfworker/web-router`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/web-router/README.md) | [npm](https://www.npmjs.com/package/@cfworker/web-router)
-
-  A router for Cloudflare Workers or service workers using path-to-regexp
+  Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify
 
 ## contributing
 
