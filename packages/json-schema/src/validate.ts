@@ -146,7 +146,7 @@ export function validate(
           keywordLocation,
           error: 'A subschema had errors.'
         },
-        ...result.errors!
+        ...result.errors
       );
     }
     if (draft === '4' || draft === '7') {
@@ -177,7 +177,7 @@ export function validate(
           keywordLocation,
           error: 'A subschema had errors.'
         },
-        ...result.errors!
+        ...result.errors
       );
     }
   }
@@ -308,7 +308,7 @@ export function validate(
     ) {
       errors.length = errorsLength;
     } else {
-      errors.push({
+      errors.splice(errorsLength, 0, {
         instanceLocation,
         keyword: 'anyOf',
         keywordLocation,
@@ -338,7 +338,7 @@ export function validate(
     ) {
       errors.length = errorsLength;
     } else {
-      errors.push({
+      errors.splice(errorsLength, 0, {
         instanceLocation,
         keyword: 'allOf',
         keywordLocation,
@@ -367,7 +367,7 @@ export function validate(
     if (matches === 1) {
       errors.length = errorsLength;
     } else {
-      errors.push({
+      errors.splice(errorsLength, 0, {
         instanceLocation,
         keyword: 'oneOf',
         keywordLocation,
@@ -401,12 +401,15 @@ export function validate(
           evaluated
         );
         if (!thenResult.valid) {
-          errors.push(...thenResult.errors, {
-            instanceLocation,
-            keyword: 'if',
-            keywordLocation,
-            error: `Instance does not match "then" schema.`
-          });
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'if',
+              keywordLocation,
+              error: `Instance does not match "then" schema.`
+            },
+            ...thenResult.errors
+          );
         }
       }
     } else if ($else !== undefined) {
@@ -421,12 +424,15 @@ export function validate(
         evaluated
       );
       if (!elseResult.valid) {
-        errors.push(...elseResult.errors, {
-          instanceLocation,
-          keyword: 'if',
-          keywordLocation,
-          error: `Instance does not match "else" schema.`
-        });
+        errors.push(
+          {
+            instanceLocation,
+            keyword: 'if',
+            keywordLocation,
+            error: `Instance does not match "else" schema.`
+          },
+          ...elseResult.errors
+        );
       }
     }
   }
@@ -479,12 +485,15 @@ export function validate(
           keywordLocation
         );
         if (!result.valid) {
-          errors.push(...result.errors, {
-            instanceLocation,
-            keyword: 'propertyNames',
-            keywordLocation,
-            error: `Property name "${key}" does not match schema.`
-          });
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'propertyNames',
+              keywordLocation,
+              error: `Property name "${key}" does not match schema.`
+            },
+            ...result.errors
+          );
         }
       }
     }
@@ -522,12 +531,15 @@ export function validate(
             `${keywordLocation}/${encodePointer(key)}`
           );
           if (!result.valid) {
-            errors.push(...result.errors, {
-              instanceLocation,
-              keyword: 'dependentSchemas',
-              keywordLocation,
-              error: `Instance has "${key}" but does not match dependant schema.`
-            });
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'dependentSchemas',
+                keywordLocation,
+                error: `Instance has "${key}" but does not match dependant schema.`
+              },
+              ...result.errors
+            );
           }
         }
       }
@@ -560,12 +572,15 @@ export function validate(
               `${keywordLocation}/${encodePointer(key)}`
             );
             if (!result.valid) {
-              errors.push(...result.errors, {
-                instanceLocation,
-                keyword: 'dependencies',
-                keywordLocation,
-                error: `Instance has "${key}" but does not match dependant schema.`
-              });
+              errors.push(
+                {
+                  instanceLocation,
+                  keyword: 'dependencies',
+                  keywordLocation,
+                  error: `Instance has "${key}" but does not match dependant schema.`
+                },
+                ...result.errors
+              );
             }
           }
         }
@@ -599,12 +614,15 @@ export function validate(
           evaluated.properties[key] = thisEvaluated[key] = true;
         } else {
           stop = true;
-          errors.push(...result.errors, {
-            instanceLocation,
-            keyword: 'properties',
-            keywordLocation,
-            error: `Property "${key}" does not match schema.`
-          });
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'properties',
+              keywordLocation,
+              error: `Property "${key}" does not match schema.`
+            },
+            ...result.errors
+          );
           break;
         }
       }
@@ -635,12 +653,15 @@ export function validate(
             evaluated.properties[key] = thisEvaluated[key] = true;
           } else {
             stop = true;
-            errors.push(...result.errors, {
-              instanceLocation,
-              keyword: 'patternProperties',
-              keywordLocation,
-              error: `Property "${key}" matches pattern "${pattern}" but does not match associated schema.`
-            });
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'patternProperties',
+                keywordLocation,
+                error: `Property "${key}" matches pattern "${pattern}" but does not match associated schema.`
+              },
+              ...result.errors
+            );
           }
         }
       }
@@ -666,12 +687,15 @@ export function validate(
           evaluated.properties[key] = true;
         } else {
           stop = true;
-          errors.push(...result.errors, {
-            instanceLocation,
-            keyword: 'additionalProperties',
-            keywordLocation,
-            error: `Property "${key}" does not match additional properties schema.`
-          });
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'additionalProperties',
+              keywordLocation,
+              error: `Property "${key}" does not match additional properties schema.`
+            },
+            ...result.errors
+          );
         }
       }
     } else if (!stop && $unevaluatedProperties !== undefined) {
@@ -691,12 +715,15 @@ export function validate(
             keywordLocation
           );
           if (!result.valid) {
-            errors.push(...result.errors, {
-              instanceLocation,
-              keyword: 'unevaluatedProperties',
-              keywordLocation,
-              error: `Property "${key}" does not match unevaluated properties schema.`
-            });
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'unevaluatedProperties',
+                keywordLocation,
+                error: `Property "${key}" does not match unevaluated properties schema.`
+              },
+              ...result.errors
+            );
           }
         }
       }
@@ -743,12 +770,15 @@ export function validate(
           );
           if (!result.valid) {
             stop = true;
-            errors.push(...result.errors, {
-              instanceLocation,
-              keyword: 'items',
-              keywordLocation,
-              error: `Items did not match schema.`
-            });
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'items',
+                keywordLocation,
+                error: `Items did not match schema.`
+              },
+              ...result.errors
+            );
             break;
           }
         }
@@ -765,12 +795,15 @@ export function validate(
           );
           if (!result.valid) {
             stop = true;
-            errors.push(...result.errors, {
-              instanceLocation,
-              keyword: 'items',
-              keywordLocation,
-              error: `Items did not match schema.`
-            });
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'items',
+                keywordLocation,
+                error: `Items did not match schema.`
+              },
+              ...result.errors
+            );
             break;
           }
         }
@@ -792,12 +825,15 @@ export function validate(
           );
           if (!result.valid) {
             stop = true;
-            errors.push(...result.errors, {
-              instanceLocation,
-              keyword: 'additionalItems',
-              keywordLocation,
-              error: `Items did not match additional items schema.`
-            });
+            errors.push(
+              {
+                instanceLocation,
+                keyword: 'additionalItems',
+                keywordLocation,
+                error: `Items did not match additional items schema.`
+              },
+              ...result.errors
+            );
           }
         }
         evaluated.items = Math.max(i, evaluated.items);
@@ -817,12 +853,15 @@ export function validate(
           keywordLocation
         );
         if (!result.valid) {
-          errors.push(...result.errors, {
-            instanceLocation,
-            keyword: 'unevaluatedItems',
-            keywordLocation,
-            error: `Items did not match unevaluated items schema.`
-          });
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'unevaluatedItems',
+              keywordLocation,
+              error: `Items did not match unevaluated items schema.`
+            },
+            ...result.errors
+          );
         }
       }
     }
@@ -859,7 +898,7 @@ export function validate(
       if (contained) {
         errors.length = errorsLength;
       } else {
-        errors.push({
+        errors.splice(errorsLength, 0, {
           instanceLocation,
           keyword: 'contains',
           keywordLocation,
