@@ -138,7 +138,8 @@ export function validate(
       lookup,
       recursiveAnchor,
       instanceLocation,
-      keywordLocation
+      keywordLocation,
+      evaluated
     );
     if (!result.valid) {
       errors.push(
@@ -169,7 +170,8 @@ export function validate(
       lookup,
       recursiveAnchor,
       instanceLocation,
-      keywordLocation
+      keywordLocation,
+      evaluated
     );
     if (!result.valid) {
       errors.push(
@@ -276,8 +278,8 @@ export function validate(
       lookup,
       recursiveAnchor,
       instanceLocation,
-      keywordLocation,
-      evaluated
+      keywordLocation /*,
+      evaluated*/
     );
     if (result.valid) {
       errors.push({
@@ -292,22 +294,23 @@ export function validate(
   if ($anyOf !== undefined) {
     const keywordLocation = `${schemaLocation}/anyOf`;
     const errorsLength = errors.length;
-    if (
-      $anyOf.some((subSchema, i) => {
-        const result = validate(
-          instance,
-          subSchema,
-          draft,
-          lookup,
-          recursiveAnchor,
-          instanceLocation,
-          `${keywordLocation}/${i}`,
-          evaluated
-        );
-        errors.push(...result.errors);
-        return result.valid;
-      })
-    ) {
+    let anyValid = false;
+    for (let i = 0; i < $anyOf.length; i++) {
+      const subSchema = $anyOf[i];
+      const result = validate(
+        instance,
+        subSchema,
+        draft,
+        lookup,
+        recursiveAnchor,
+        instanceLocation,
+        `${keywordLocation}/${i}`,
+        evaluated
+      );
+      errors.push(...result.errors);
+      anyValid = anyValid || result.valid;
+    }
+    if (anyValid) {
       errors.length = errorsLength;
     } else {
       errors.splice(errorsLength, 0, {
@@ -322,22 +325,23 @@ export function validate(
   if ($allOf !== undefined) {
     const keywordLocation = `${schemaLocation}/allOf`;
     const errorsLength = errors.length;
-    if (
-      $allOf.every((subSchema, i) => {
-        const result = validate(
-          instance,
-          subSchema,
-          draft,
-          lookup,
-          recursiveAnchor,
-          instanceLocation,
-          `${keywordLocation}/${i}`,
-          evaluated
-        );
-        errors.push(...result.errors);
-        return result.valid;
-      })
-    ) {
+    let allValid = true;
+    for (let i = 0; i < $allOf.length; i++) {
+      const subSchema = $allOf[i];
+      const result = validate(
+        instance,
+        subSchema,
+        draft,
+        lookup,
+        recursiveAnchor,
+        instanceLocation,
+        `${keywordLocation}/${i}`,
+        evaluated
+      );
+      errors.push(...result.errors);
+      allValid = allValid && result.valid;
+    }
+    if (allValid) {
       errors.length = errorsLength;
     } else {
       errors.splice(errorsLength, 0, {
@@ -530,7 +534,8 @@ export function validate(
             lookup,
             recursiveAnchor,
             instanceLocation,
-            `${keywordLocation}/${encodePointer(key)}`
+            `${keywordLocation}/${encodePointer(key)}`,
+            evaluated
           );
           if (!result.valid) {
             errors.push(
@@ -716,7 +721,9 @@ export function validate(
             subInstancePointer,
             keywordLocation
           );
-          if (!result.valid) {
+          if (result.valid) {
+            evaluated.properties[key] = true;
+          } else {
             errors.push(
               {
                 instanceLocation,
@@ -866,6 +873,7 @@ export function validate(
           );
         }
       }
+      evaluated.items = Math.max(i, evaluated.items);
     }
 
     if ($contains !== undefined) {

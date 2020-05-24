@@ -3753,9 +3753,9 @@ json-parse-better-errors@^1.0.0, json-parse-better-errors@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-parse-better-errors/-/json-parse-better-errors-1.0.2.tgz#bb867cfb3450e69107c131d1c514bab3dc8bcaa9"
   integrity sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==
 
-"json-schema-test-suite@https://github.com/json-schema-org/JSON-Schema-Test-Suite":
+"json-schema-test-suite@git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#ac63eb7":
   version "0.1.0"
-  resolved "https://github.com/json-schema-org/JSON-Schema-Test-Suite#ac63eb75f43d96f2171f02b02d6063c326114724"
+  resolved "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#ac63eb75f43d96f2171f02b02d6063c326114724"
 
 json-schema-traverse@^0.4.1:
   version "0.4.1"
