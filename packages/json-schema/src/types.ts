@@ -55,6 +55,8 @@ export interface Schema {
   additionalItems?: Schema | boolean;
   unevaluatedItems?: Schema | boolean;
   contains?: Schema | boolean;
+  minContains?: number;
+  maxContains?: number;
   minItems?: number;
   maxItems?: number;
   uniqueItems?: boolean;
