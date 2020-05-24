@@ -5,10 +5,10 @@ import {
   htmlEncode,
   HttpError,
   Middleware,
+  Router,
   toObject,
   validate
 } from '@cfworker/web';
-import { Router } from '@cfworker/web-router';
 import { getManagementToken, handleRegister } from './auth/management';
 import {
   auth0Origin,

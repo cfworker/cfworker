@@ -6,6 +6,7 @@ export * from './http-error';
 export * from './middleware';
 export * from './req';
 export * from './response-builder';
+export * from './router';
 export * from './to-object';
 export * from './validate';
 import escape_html from 'escape-html';

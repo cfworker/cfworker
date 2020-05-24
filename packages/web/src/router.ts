@@ -1,15 +1,11 @@
-import {
-  composeMiddleware,
-  Context,
-  HttpError,
-  Middleware
-} from '@cfworker/web';
 import { Key, pathToRegexp } from 'path-to-regexp';
+import { Context } from './context';
+import { HttpError } from './http-error';
+import { composeMiddleware, Middleware } from './middleware';
 
-export const Method = (method: string) => ({ req }: Context) => {
-  return (
-    req.method.localeCompare(method, 'en-us', { sensitivity: 'base' }) === 0
-  );
+export const Method = (method: string) => {
+  method = method.toUpperCase();
+  return ({ req }: Context) => req.method === method;
 };
 export const Get = Method('get');
 export const Post = Method('post');
@@ -19,18 +15,16 @@ export const Delete = Method('delete');
 export const Head = Method('patch');
 export const Options = Method('options');
 
-export const Header = (header: string, val: string) => ({ req }: Context) => {
-  const actual = req.headers.get(header);
-  return (
-    actual && actual.localeCompare(val, 'en-us', { sensitivity: 'base' }) === 0
-  );
+export const Header = (header: string, value: string) => {
+  value = value.toLowerCase();
+  return ({ req }: Context) => req.headers.get(header) === value;
 };
 export const Host = (host: string) => Header('host', host);
 export const Referer = (host: string) => Header('referer', host);
 
-export const Path = (pathname: string) => {
+export const Path = (pattern: string) => {
   const keys: Key[] = [];
-  const regExp = pathToRegexp(pathname, keys);
+  const regExp = pathToRegexp(pattern, keys);
 
   return ({ req: { url, params } }: Context) => {
     const match = url.pathname.match(regExp);
@@ -42,7 +36,7 @@ export const Path = (pathname: string) => {
   };
 };
 
-export type RouteCondition = (ctx: Context) => boolean;
+export type RouteCondition = (context: Context) => boolean;
 
 export interface Route {
   conditions: RouteCondition[];
