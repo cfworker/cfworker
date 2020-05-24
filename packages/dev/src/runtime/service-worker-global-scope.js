@@ -21,6 +21,7 @@ export class ServiceWorkerGlobalScope {
     this.FetchEvent = FetchEvent;
     this.Float32Array = Float32Array;
     this.Float64Array = Float64Array;
+    this.FormData = FormData;
     this.Function = Function;
     this.Headers = Headers;
     this.Int16Array = Int16Array;
