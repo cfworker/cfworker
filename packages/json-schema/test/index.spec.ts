@@ -8,20 +8,23 @@ const unsupportedTests = {
   'draft4/optional/bignum': true,
   'draft4/optional/ecmascript-regex': true,
   'draft4/optional/zeroTerminatedFloats': true,
+  'draft4/optional/non-bmp-regex': true,
 
   'draft7/optional/content': true,
-  'draft7/optional/ecmascript-regex': true,
+  'draft7/optional/format/ecmascript-regex': true,
   'draft7/optional/format/idn-email': true,
   'draft7/optional/format/idn-hostname': true,
   'draft7/optional/format/iri-reference': true,
   'draft7/optional/format/iri': true,
+  'draft7/optional/non-bmp-regex': true,
 
   'draft2019-09/optional/content': true,
-  'draft2019-09/optional/ecmascript-regex': true,
+  'draft2019-09/optional/format/ecmascript-regex': true,
   'draft2019-09/optional/format/idn-email': true,
   'draft2019-09/optional/format/idn-hostname': true,
   'draft2019-09/optional/format/iri-reference': true,
-  'draft2019-09/optional/format/iri': true
+  'draft2019-09/optional/format/iri': true,
+  'draft2019-09/optional/non-bmp-regex': true
 };
 
 const remotesLookup = Object.create(null);

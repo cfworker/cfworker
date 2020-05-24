@@ -98,6 +98,8 @@ export function validate(
     additionalItems: $additionalItems,
     unevaluatedItems: $unevaluatedItems,
     contains: $contains,
+    minContains: $minContains,
+    maxContains: $maxContains,
     minItems: $minItems,
     maxItems: $maxItems,
     uniqueItems: $uniqueItems,
@@ -867,43 +869,74 @@ export function validate(
     }
 
     if ($contains !== undefined) {
-      const keywordLocation = `${schemaLocation}/contains`;
-      if (length === 0) {
+      if (length === 0 && $minContains === undefined) {
         errors.push({
           instanceLocation,
           keyword: 'contains',
-          keywordLocation,
-          error: `Array does not match item matching schema. Zero items.`
+          keywordLocation: `${schemaLocation}/contains`,
+          error: `Array is empty. It must contain at least one item matching the schema.`
         });
-      }
-      let contained = false;
-      const errorsLength = errors.length;
-      for (let i = 0; i < length; i++) {
-        const result = validate(
-          instance[i],
-          $contains,
-          draft,
-          lookup,
-          recursiveAnchor,
-          `${instanceLocation}/${i}`,
-          keywordLocation
-        );
-        if (result.valid) {
-          contained = true;
-          break;
-        } else {
-          errors.push(...result.errors);
-        }
-      }
-      if (contained) {
-        errors.length = errorsLength;
-      } else {
-        errors.splice(errorsLength, 0, {
+      } else if ($minContains !== undefined && length < $minContains) {
+        errors.push({
           instanceLocation,
-          keyword: 'contains',
-          keywordLocation,
-          error: `Array does not contain item matching schema.`
+          keyword: 'minContains',
+          keywordLocation: `${schemaLocation}/minContains`,
+          error: `Array has less items (${length}) than minContains (${$minContains}).`
         });
+      } else {
+        const keywordLocation = `${schemaLocation}/contains`;
+        const errorsLength = errors.length;
+        let contained = 0;
+        for (let i = 0; i < length; i++) {
+          const result = validate(
+            instance[i],
+            $contains,
+            draft,
+            lookup,
+            recursiveAnchor,
+            `${instanceLocation}/${i}`,
+            keywordLocation
+          );
+          if (result.valid) {
+            contained++;
+            if ($minContains === undefined && $maxContains === undefined) {
+              break;
+            }
+          } else {
+            errors.push(...result.errors);
+          }
+        }
+
+        if (contained >= ($minContains || 0)) {
+          errors.length = errorsLength;
+        }
+
+        if (
+          $minContains === undefined &&
+          $maxContains === undefined &&
+          contained === 0
+        ) {
+          errors.splice(errorsLength, 0, {
+            instanceLocation,
+            keyword: 'contains',
+            keywordLocation,
+            error: `Array does not contain item matching schema.`
+          });
+        } else if ($minContains !== undefined && contained < $minContains) {
+          errors.push({
+            instanceLocation,
+            keyword: 'minContains',
+            keywordLocation: `${schemaLocation}/minContains`,
+            error: `Array must contain at least ${$minContains} items matching schema. Only ${contained} items were found.`
+          });
+        } else if ($maxContains !== undefined && contained > $maxContains) {
+          errors.push({
+            instanceLocation,
+            keyword: 'maxContains',
+            keywordLocation: `${schemaLocation}/maxContains`,
+            error: `Array may contain at most ${$maxContains} items matching schema. ${contained} items were found.`
+          });
+        }
       }
     }
 
