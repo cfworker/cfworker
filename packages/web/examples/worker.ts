@@ -13,7 +13,6 @@ router.get('/', ({ res }) => {
       <li><a href="/error">A route with a bug</a></li>
     </ol>
     <img src="favicon.ico" alt="cfworker logo">`;
-  res.headers.set('content-type', 'text/html');
 });
 
 // Add a greeting route with validation.
@@ -31,8 +30,7 @@ router.get(
     }
   }),
   ({ req, res }) => {
-    res.body = JSON.stringify(req.params);
-    res.headers.set('content-type', 'application/json');
+    res.body = req.params;
   }
 );
 
@@ -44,12 +42,12 @@ router.get('/error', () => {
 
 // Favicon route for fun :)
 router.get('/favicon.ico', ({ res }) => {
+  res.type = 'image/svg+xml';
   res.body = `
       <svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" width="200" height="200">
         <rect width="100%" height="100%" fill="#F38020"/>
         <text font-size="120" font-family="Arial, Helvetica, sans-serif" text-anchor="end" fill="#FFF" x="185" y="185">W</text>
       </svg>`;
-  res.headers.set('content-type', 'image/svg+xml');
 });
 
 // Simple CORS middleware.

@@ -70,7 +70,6 @@ const notFoundPage: Middleware = async (
     res.body = `<h1>Not Found</h1><p>Where in the world is ${htmlEncode(
       url.pathname
     )}?</p>`;
-    res.headers.set('content-type', 'text/html');
   }
 };
 
@@ -94,22 +93,18 @@ const router = new Router();
 router
   .get('/', ({ res }) => {
     res.body = '<h1>This is it!</h1>';
-    res.headers.set('content-type', 'text/html');
   })
   .get('/echo-headers', ({ req, res }) => {
     res.status = 200;
-    res.headers.set('content-type', 'application/json');
-    res.body = JSON.stringify(toObject(req.headers), null, 2);
+    res.body = toObject(req.headers);
   })
   .get('/hello-world', ({ res }) => {
     res.body = 'hello world';
-    res.headers.set('content-type', 'text/plain');
   })
   .get('/api/auth/callback', handleTokenCallback)
   .get('/sign-out', handleSignout)
   .get('/signed-out', ({ res }) => {
     res.body = 'signed out.';
-    res.headers.set('content-type', 'text/plain');
     res.headers.set(
       'clear-site-data',
       '"cache", "cookies", "storage", "executionContexts"'
@@ -121,8 +116,7 @@ router
   )
   .post('/api/tenants', handleRegister)
   .get('/api/me', assertAuthenticated, ({ res, state }) => {
-    res.body = JSON.stringify(state.user);
-    res.headers.set('content-type', 'application/json');
+    res.body = state.user;
   })
   .get(
     '/api/greetings/:greeting',
@@ -140,13 +134,11 @@ router
       }
     }),
     ({ req, res }) => {
-      res.body = JSON.stringify(req.params);
-      res.headers.set('content-type', 'application/json');
+      res.body = req.params;
     }
   )
   .get('/stream', ({ res }) => {
-    res.body = html`
-      <!DOCTYPE html>
+    res.body = html` <!DOCTYPE html>
       <html lang="en">
         <head>
           <meta charset="utf-8" />
@@ -160,8 +152,7 @@ router
             ${fetch('https://example.com').then(response => response.body)}
           </p>
         </body>
-      </html>
-    `;
+      </html>`;
   })
   .get('/cosmos', async ctx => {
     const client = new CosmosClient({
@@ -219,8 +210,7 @@ router
       partitionKey: 'test',
       parameters: [{ name: '@a', value: 'f' }]
     });
-    ctx.res.body = JSON.stringify(await res.json());
-    ctx.res.headers.set('content-type', 'application/json');
+    ctx.res.body = await res.json();
   })
   .get('/cosmos2', async ctx => {
     const client = new CosmosClient({
@@ -234,8 +224,15 @@ router
       partitionKey: 'test',
       parameters: [{ name: '@a', value: 'f' }]
     });
-    ctx.res.body = JSON.stringify(await res.json());
-    ctx.res.headers.set('content-type', 'application/json');
+    ctx.res.body = await res.json();
+  })
+  .get('/favicon.ico', ({ res }) => {
+    res.type = 'image/svg+xml';
+    res.body = `
+        <svg xmlns="http://www.w3.org/2000/svg" baseProfile="full" width="200" height="200">
+          <rect width="100%" height="100%" fill="#F38020"/>
+          <text font-size="120" font-family="Arial, Helvetica, sans-serif" text-anchor="end" fill="#FFF" x="185" y="185">W</text>
+        </svg>`;
   });
 
 new Application()
