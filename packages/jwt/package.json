@@ -34,7 +34,8 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/base64url": "^1.2.0"
+    "@cfworker/base64url": "^1.2.0",
+    "@cfworker/worker-types": "^1.2.0"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.2.0",
