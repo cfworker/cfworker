@@ -4,7 +4,7 @@ import {
   Schema,
   validate as schemaValidate
 } from '@cfworker/json-schema';
-import { HttpError } from 'web/src/http-error';
+import { HttpError } from './http-error';
 import { Middleware } from './middleware';
 import { toObject } from './to-object';
 
