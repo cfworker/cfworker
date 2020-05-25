@@ -1,10 +1,10 @@
+import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
+import multiEntry from '@rollup/plugin-multi-entry';
+import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import { EventEmitter } from 'events';
 import { rollup, watch } from 'rollup';
-import commonjs from 'rollup-plugin-commonjs';
-import multiEntry from 'rollup-plugin-multi-entry';
-import resolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript2';
 import { logger } from './logger.js';
 
@@ -15,7 +15,8 @@ export class Bundler extends EventEmitter {
       replace({ values: this.envReplacements() }),
       // @ts-ignore
       multiEntry({ exports: false }),
-      resolve(),
+      // @ts-ignore
+      resolve.nodeResolve(),
       commonjs(),
       json()
     ],
