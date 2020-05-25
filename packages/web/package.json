@@ -34,6 +34,12 @@
   },
   "dependencies": {
     "@cfworker/json-schema": "^1.2.0",
+    "@cfworker/worker-types": "^1.2.0",
+    "@types/cookie": "^0.4.0",
+    "@types/escape-html": "^1.0.0",
+    "@types/koa-compose": "3.2.5",
+    "@types/secure-json-parse": "^1.0.2",
+    "@types/statuses": "^1.5.0",
     "cookie": "^0.4.1",
     "escape-html": "^1.0.3",
     "koa-compose": "^4.1.0",
@@ -43,11 +49,6 @@
     "statuses": "^1.5.0"
   },
   "devDependencies": {
-    "@types/cookie": "^0.4.0",
-    "@types/escape-html": "^1.0.0",
-    "@types/koa-compose": "3.2.5",
-    "@types/secure-json-parse": "^1.0.2",
-    "@types/statuses": "^1.5.0",
     "typescript": "^3.9.3"
   }
 }

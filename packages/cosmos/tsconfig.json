@@ -3,7 +3,7 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["esnext", "webworker"],
-    "types": ["../worker-types"],
+    "types": ["@cfworker/worker-types"],
     "outDir": "dist",
     "rootDir": "./src"
   },

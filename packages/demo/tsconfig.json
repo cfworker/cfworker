@@ -4,6 +4,6 @@
     "target": "esnext",
     "lib": ["webworker", "esnext"],
     "composite": false,
-    "types": ["../worker-types"]
+    "types": ["@cfworker/worker-types"]
   }
 }

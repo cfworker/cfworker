@@ -33,6 +33,9 @@
     "clean": "tsc --build --clean",
     "test": "cfworker test test/**/*.spec.ts"
   },
+  "dependencies": {
+    "@cfworker/worker-types": "^1.2.0"
+  },
   "devDependencies": {
     "typescript": "^3.9.3"
   }

@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@cfworker/dev": "^1.2.0",
+    "@cfworker/worker-types": "^1.2.0",
     "typescript": "^3.9.3"
   }
 }
