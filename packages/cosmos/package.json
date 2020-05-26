@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "@cfworker/worker-types": "^1.2.1",
+    "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types",
     "base64-arraybuffer": "0.2.0"
   },
   "devDependencies": {
