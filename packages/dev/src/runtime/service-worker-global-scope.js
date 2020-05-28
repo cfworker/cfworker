@@ -1,11 +1,13 @@
 import { addEventListener, dispatchEvent } from './add-event-listener.js';
 import { FetchEvent } from './fetch-event.js';
+import { StaticContentKVNamespace } from './kv.js';
 
 export class ServiceWorkerGlobalScope {
   /**
    * @param {string[]} globals additional globals to expose
+   * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
    */
-  constructor(globals) {
+  constructor(globals, staticContentManifest) {
     this.Array = Array;
     this.ArrayBuffer = ArrayBuffer;
     this.Atomics = Atomics;
@@ -70,6 +72,7 @@ export class ServiceWorkerGlobalScope {
     this.console = console;
     this.constructor = ServiceWorkerGlobalScope;
     this.crypto = crypto;
+    this.caches = caches;
     this.decodeURI = decodeURI.bind(self);
     this.decodeURIComponent = decodeURIComponent.bind(self);
     this.dispatchEvent = dispatchEvent;
@@ -97,5 +100,14 @@ export class ServiceWorkerGlobalScope {
         this[global] = self[global];
       }
     }
+    if (staticContentManifest) {
+      this['__STATIC_CONTENT_MANIFEST'] = JSON.stringify(staticContentManifest);
+      this['__STATIC_CONTENT'] = new StaticContentKVNamespace();
+    }
+  }
+
+  async init() {
+    // @ts-ignore
+    this.caches.default = await this.caches.open('default');
   }
 }

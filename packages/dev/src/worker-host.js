@@ -4,6 +4,7 @@ import puppeteer from 'puppeteer';
 import { logger } from './logger.js';
 import { escapeHeaderName, unescapeHeaderName } from './runtime/headers.js';
 import { Server } from './server.js';
+import { StaticSite } from './static-site.js';
 
 export class WorkerHost extends EventEmitter {
   /** @type {import('puppeteer').Browser | undefined} */
@@ -12,12 +13,13 @@ export class WorkerHost extends EventEmitter {
   /**
    * @param {number} port
    * @param {boolean} inspect
+   * @param {StaticSite | null} site
    */
-  constructor(port, inspect) {
+  constructor(port, inspect, site) {
     super();
     this.port = port;
     this.inspect = inspect;
-    this.server = new Server(port);
+    this.server = new Server(port, site);
     /** @type {Promise<import('puppeteer').Page>} */
     this.pageReady = new Promise(resolve => (this.resolvePage = resolve));
   }
@@ -67,19 +69,31 @@ export class WorkerHost extends EventEmitter {
    * @param {string} code The worker script.
    * @param {string} sourcePathname Where to list the script in the chrome devtools sources tree.
    * @param {string[]} globals Names of additional globals to expose.
+   * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
    */
-  async setWorkerCode(code, sourcePathname = '/worker.js', globals = []) {
+  async setWorkerCode(
+    code,
+    sourcePathname = '/worker.js',
+    globals = [],
+    staticContentManifest = null
+  ) {
     const startTime = Date.now();
     logger.progress('Updating worker script...');
     const page = await this.pageReady;
     await page.evaluate(
-      async (code, sourcePathname, globals) => {
+      async (code, sourcePathname, globals, staticContentManifest) => {
         const { executeWorkerScript } = await import('./runtime/index.js');
-        executeWorkerScript(code, sourcePathname, globals);
+        await executeWorkerScript(
+          code,
+          sourcePathname,
+          globals,
+          staticContentManifest
+        );
       },
       code,
       sourcePathname,
-      globals
+      globals,
+      staticContentManifest
     );
     logger.success('Worker script updated', Date.now() - startTime);
     this.emit('worker-updated');
