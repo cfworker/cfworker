@@ -29,7 +29,8 @@ export async function assertBundlesJavaScriptTests() {
     globs: ['test/fixtures/*.spec.js'],
     port,
     inspect: false,
-    watch: true
+    watch: true,
+    check: true
   });
 
   let testEnd = new Promise(resolve =>
@@ -52,7 +53,8 @@ export async function assertBundlesTypeScriptTests() {
     globs: ['test/fixtures/*.spec.ts'],
     port,
     inspect: false,
-    watch: true
+    watch: true,
+    check: true
   });
 
   let testEnd = new Promise(resolve =>
@@ -64,6 +66,47 @@ export async function assertBundlesTypeScriptTests() {
   testEnd = new Promise(resolve => command.testHost.on('test-end', resolve));
   await fs.outputFile('./test/fixtures/b.spec.ts', passingSpec);
   assert.equal(await testEnd, 0);
+
+  command.dispose();
+}
+
+export async function assertSupportsStaticSiteTests() {
+  const siteSpec = `
+    import { expect } from 'chai';
+    import { describe, it } from 'mocha';
+
+    describe('manifest', () => {
+      const manifest = JSON.parse(__STATIC_CONTENT_MANIFEST);
+      it('has index.html', () => {
+        expect(manifest['index.html']).to.equal('index.503adfccd7.html');
+      });
+    });`;
+  await fs.outputFile('./test/fixtures/site.spec.js', siteSpec);
+  await fs.outputFile(
+    './test/fixtures/public/index.html',
+    '<body>hello world</body>'
+  );
+  const command = new TestCommand({
+    globs: ['test/fixtures/*.spec.js'],
+    port,
+    inspect: false,
+    watch: true,
+    check: true,
+    site: 'test/fixtures/public'
+  });
+
+  let testEnd = new Promise(resolve =>
+    command.testHost.on('test-end', resolve)
+  );
+  command.execute();
+  assert.equal(await testEnd, 0);
+
+  testEnd = new Promise(resolve => command.testHost.on('test-end', resolve));
+  await fs.outputFile(
+    './test/fixtures/public/index.html',
+    '<body>hello world 2</body>'
+  );
+  assert.equal(await testEnd, 1);
 
   command.dispose();
 }

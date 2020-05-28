@@ -2,9 +2,11 @@ import { EventEmitter } from 'events';
 import { createServer } from 'http';
 import { logger } from './logger.js';
 import { requireContent } from './require-content.js';
+import { StaticSite } from './static-site.js';
 
 export class Server extends EventEmitter {
   pathPrefix = '/__debug__';
+  staticContentPrefix = '/static-content/';
 
   indexHtml = `<!DOCTYPE html>
 <html lang="en">
@@ -21,10 +23,12 @@ export class Server extends EventEmitter {
 
   /**
    * @param {number} port
+   * @param {StaticSite | null} staticSite
    */
-  constructor(port) {
+  constructor(port, staticSite) {
     super();
     this.port = port;
+    this.staticSite = staticSite;
     this.server = createServer(this.requestListener);
     this.serving = new Promise(resolve => this.server.on('listening', resolve));
   }
@@ -47,9 +51,25 @@ export class Server extends EventEmitter {
         this.emit('request', req, res);
         return;
       }
+      url = url.replace(this.pathPrefix, '');
+
+      if (url.startsWith(this.staticContentPrefix) && this.staticSite) {
+        url = url.substr(this.staticContentPrefix.length);
+        const content = this.staticSite.files[url];
+        if (content) {
+          res.writeHead(200, 'OK', {
+            'cache-control': 'no-store'
+          });
+          res.write(content);
+          res.end();
+        } else {
+          res.writeHead(404, 'Not found', { 'cache-control': 'no-store' });
+          res.end();
+        }
+        return;
+      }
 
       url = url
-        .replace(this.pathPrefix, '')
         .replace('/runtime/', './runtime/')
         .replace('/node_modules/', '');
 

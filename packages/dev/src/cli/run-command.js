@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { Bundler } from '../bundler.js';
 import { logger } from '../logger.js';
+import { StaticSite } from '../static-site.js';
 import { WorkerHost } from '../worker-host.js';
 
 /**
@@ -10,6 +11,7 @@ import { WorkerHost } from '../worker-host.js';
  * @property {boolean} watch
  * @property {boolean} inspect
  * @property {boolean} check
+ * @property {string} [site]
  */
 
 /**
@@ -22,7 +24,8 @@ export class RunCommand {
   constructor(args) {
     this.args = args;
     this.bundler = new Bundler([args.entry], args.watch, [], args.check);
-    this.host = new WorkerHost(args.port, args.inspect);
+    this.site = args.site ? new StaticSite(args.site, args.watch) : null;
+    this.host = new WorkerHost(args.port, args.inspect, this.site);
   }
 
   async execute() {
@@ -36,15 +39,33 @@ export class RunCommand {
     }
 
     this.bundler.bundle();
+    const siteInitialized = this.site ? this.site.init() : Promise.resolve();
 
-    await Promise.all([this.host.start(), this.bundler.bundled]);
+    await Promise.all([
+      this.host.start(),
+      this.bundler.bundled,
+      siteInitialized
+    ]);
 
-    await this.host.setWorkerCode(this.bundler.code);
+    await this.host.setWorkerCode(
+      this.bundler.code,
+      '/worker.js',
+      [],
+      this.site ? this.site.manifest : null
+    );
 
     if (this.args.watch) {
-      this.bundler.on('bundle-end', () =>
-        this.host.setWorkerCode(this.bundler.code)
-      );
+      const update = () =>
+        this.host.setWorkerCode(
+          this.bundler.code,
+          '/worker.js',
+          [],
+          this.site ? this.site.manifest : null
+        );
+      this.bundler.on('bundle-end', update);
+      if (this.site) {
+        this.site.on('change', update);
+      }
     }
 
     const url = `http://localhost:${this.args.port}/`;
@@ -64,5 +85,8 @@ export class RunCommand {
   dispose() {
     this.bundler.dispose();
     this.host.dispose();
+    if (this.site) {
+      this.site.dispose();
+    }
   }
 }

@@ -12,10 +12,17 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
  * @param {string} code The worker script.
  * @param {string} sourcePathname Where to list the script in the chrome devtools sources tree.
  * @param {string[]} globals Names of additional globals to expose.
+ * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
  */
-export function executeWorkerScript(code, sourcePathname, globals = []) {
+export async function executeWorkerScript(
+  code,
+  sourcePathname,
+  globals = [],
+  staticContentManifest
+) {
   resetFetchHandler();
-  const scope = new ServiceWorkerGlobalScope(globals);
+  const scope = new ServiceWorkerGlobalScope(globals, staticContentManifest);
+  await scope.init();
   const guardedScope = new Proxy(scope, scopeGuard);
   const sourceUrl = `//# sourceURL=${location.origin}${sourcePathname}`;
   const fn = new AsyncFunction(
