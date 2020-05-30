@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/json-schema",
   "type": "module",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.",
   "keywords": [
     "json-schema",
@@ -38,7 +38,7 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.2.4",
+    "@cfworker/dev": "^1.2.5",
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "chai": "^4.2.0",
