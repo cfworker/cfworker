@@ -6,6 +6,8 @@ import glob from 'glob-promise';
 import { basename, dirname, extname, join } from 'path';
 import { logger } from './logger.js';
 
+const empty = Buffer.from('');
+
 export class StaticSite extends EventEmitter {
   ignored = ['**/node_modules/**/*'];
 
@@ -55,7 +57,14 @@ export class StaticSite extends EventEmitter {
     });
     const files = await Promise.all(
       matches.map(async filename => {
-        const content = await fs.readFile(join(directory, filename));
+        let content = empty;
+        try {
+          content = await fs.readFile(join(directory, filename));
+        } catch (err) {
+          if (err.code !== 'ENOENT') {
+            throw err;
+          }
+        }
         const hash = shortHash(content);
         return {
           filename,
