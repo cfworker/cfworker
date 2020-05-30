@@ -66,7 +66,7 @@ function middlewareFactory(
       const body = await req.body.json();
       validateRequestPart('body', body, $body, lookup);
     }
-    next();
+    await next();
   };
 }
 
