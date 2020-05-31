@@ -1,20 +1,20 @@
 import watch from 'chokidar';
-import crypto from 'crypto';
+import { createHash } from 'crypto';
 import { EventEmitter } from 'events';
-import fs from 'fs-extra';
+import { createReadStream } from 'fs';
 import glob from 'glob-promise';
 import { basename, dirname, extname, join } from 'path';
 import { logger } from './logger.js';
 
-const empty = Buffer.from('');
-
 export class StaticSite extends EventEmitter {
+  debounceHandle = setTimeout(() => {}, 0);
+
   ignored = ['**/node_modules/**/*'];
 
   /** @type {Record<string, string>} */
   manifest = {};
 
-  /** @type {Record<string, Buffer>} */
+  /** @type {Record<string, string>} */
   files = {};
 
   /**
@@ -37,7 +37,10 @@ export class StaticSite extends EventEmitter {
         ignoreInitial: true,
         ignored: this.ignored
       });
-      this.watcher.on('all', () => this.read());
+      this.watcher.on('all', () => {
+        clearTimeout(this.debounceHandle);
+        this.debounceHandle = setTimeout(() => this.read(), 300);
+      });
     }
   }
 
@@ -57,31 +60,42 @@ export class StaticSite extends EventEmitter {
     });
     const files = await Promise.all(
       matches.map(async filename => {
-        let content = empty;
+        const absoluteFilename = join(directory, filename);
+        let hash = '';
         try {
-          content = await fs.readFile(join(directory, filename));
+          const s = createReadStream(absoluteFilename);
+          const hasher = createHash('md5');
+          hasher.setEncoding('hex');
+          await new Promise(resolve => {
+            s.on('end', resolve);
+            s.pipe(hasher);
+          });
+          hasher.end();
+          hash = hasher.read().substr(0, 10);
         } catch (err) {
           if (err.code !== 'ENOENT') {
             throw err;
           }
         }
-        const hash = shortHash(content);
         return {
           filename,
           hash,
-          content
+          absoluteFilename
         };
       })
     );
     this.files = {};
     this.manifest = {};
-    for (const { filename, content, hash } of files) {
+    for (const { filename, absoluteFilename, hash } of files) {
+      if (hash === '') {
+        continue;
+      }
       const ext = extname(filename);
       const key = join(
         dirname(filename),
         `${basename(filename, ext)}.${hash}${ext}`
       );
-      this.files[key] = content;
+      this.files[key] = absoluteFilename;
       this.manifest[filename] = key;
     }
     logger.success(`Site manifest generated`, Date.now() - startTime);
@@ -93,11 +107,4 @@ export class StaticSite extends EventEmitter {
       this.watcher.close();
     }
   }
-}
-
-/**
- * @param {import('crypto').BinaryLike} data
- */
-function shortHash(data) {
-  return crypto.createHash('md5').update(data).digest('hex').substr(0, 10);
 }

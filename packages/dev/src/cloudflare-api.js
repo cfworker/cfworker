@@ -1,4 +1,5 @@
 import FormData from 'form-data';
+import fs from 'fs-extra';
 import fetch from 'node-fetch';
 import { logger } from './logger.js';
 import { StaticSite } from './static-site.js';
@@ -349,10 +350,13 @@ async function getSiteBindings(args) {
  */
 async function publishSiteToKV(args, namespace) {
   const body = JSON.stringify(
-    Object.entries(args.site.files).map(([key, value]) => ({
-      key,
-      value: value.toString()
-    }))
+    await Promise.all(
+      Object.entries(args.site.files).map(async ([key, filename]) => ({
+        key,
+        value: (await fs.readFile(filename)).toString('base64'),
+        base64: true
+      }))
+    )
   );
   const response = await fetch(
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces/${namespace.id}/bulk`,
