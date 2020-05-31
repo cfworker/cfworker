@@ -1,3 +1,4 @@
 dist
 packages/json-schema/test/json-schema-test-suite.ts
 packages/dev/test/fixtures
+.cfworker
