@@ -38,7 +38,7 @@ export class WorkerHost extends EventEmitter {
     const browser = (this.browser = await puppeteer.launch({
       headless: !this.inspect,
       devtools: this.inspect,
-      userDataDir: this.inspect ? './.cfworker' : undefined,
+      // userDataDir: this.inspect ? './.cfworker' : undefined,
       args: [
         '--start-maximized', // https://peter.sh/experiments/chromium-command-line-switches/
         '--disable-web-security' // Cloudflare workers are not subject to CORS rules.
@@ -159,7 +159,7 @@ export class WorkerHost extends EventEmitter {
     }
 
     res.writeHead(status, statusText, headers);
-    res.write(body);
+    res.write(Buffer.from(body, 'binary'));
     res.end();
     logger.log(statusChalk(status)(`${status} ${method.padEnd(7)} ${url}`));
     this.emit('request-end', method, url, status, statusText);

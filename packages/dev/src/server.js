@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { createReadStream } from 'fs';
 import { createServer } from 'http';
 import { logger } from './logger.js';
 import { requireContent } from './require-content.js';
@@ -55,13 +56,12 @@ export class Server extends EventEmitter {
 
       if (url.startsWith(this.staticContentPrefix) && this.staticSite) {
         url = url.substr(this.staticContentPrefix.length);
-        const content = this.staticSite.files[url];
-        if (content) {
-          res.writeHead(200, 'OK', {
-            'cache-control': 'no-store'
-          });
-          res.write(content);
-          res.end();
+        const filename = this.staticSite.files[url];
+        if (filename) {
+          const s = createReadStream(filename);
+          res.statusCode = 200;
+          // @ts-ignore
+          s.pipe(res);
         } else {
           res.writeHead(404, 'Not found', { 'cache-control': 'no-store' });
           res.end();

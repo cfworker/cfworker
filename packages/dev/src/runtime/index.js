@@ -44,7 +44,13 @@ export async function dispatchFetchEvent(url, init) {
   const event = new FetchEvent(request);
   fetchHandler(event);
   const response = await event.__responded__;
-  const body = await response.text();
+  const blob = await response.blob();
+  const body = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject('Error reading body.');
+    reader.readAsBinaryString(blob);
+  });
   /** @type {Record<string, string>} */
   const headers = Object.create(null);
   response.headers.forEach((v, k) => (headers[k] = v));
