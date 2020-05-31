@@ -38,7 +38,9 @@ export class WorkerHost extends EventEmitter {
     const browser = (this.browser = await puppeteer.launch({
       headless: !this.inspect,
       devtools: this.inspect,
+      userDataDir: this.inspect ? './.cfworker' : undefined,
       args: [
+        '--start-maximized', // https://peter.sh/experiments/chromium-command-line-switches/
         '--disable-web-security' // Cloudflare workers are not subject to CORS rules.
       ]
     }));
@@ -110,7 +112,8 @@ export class WorkerHost extends EventEmitter {
    * @param {import('http').ServerResponse} res
    */
   handleRequestWithWorker = async (req, res) => {
-    const url = `http://localhost:${this.port}${req.url}`;
+    const host = req.headers.host || `localhost:${this.port}`;
+    const url = `http://${host}${req.url}`;
     const method = req.method || 'GET';
 
     this.emit('request-start', method, req.url);
