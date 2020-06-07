@@ -1,5 +1,6 @@
 import { addEventListener, dispatchEvent } from './add-event-listener.js';
 import { FetchEvent } from './fetch-event.js';
+import { HTMLRewriter } from './html-rewriter';
 import { StaticContentKVNamespace } from './kv.js';
 
 export class ServiceWorkerGlobalScope {
@@ -26,6 +27,7 @@ export class ServiceWorkerGlobalScope {
     this.FormData = FormData;
     this.Function = Function;
     this.Headers = Headers;
+    this.HTMLRewriter = HTMLRewriter;
     this.Int16Array = Int16Array;
     this.Int32Array = Int32Array;
     this.Int8Array = Int8Array;
