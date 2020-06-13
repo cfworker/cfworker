@@ -139,7 +139,6 @@ export async function deploy(args) {
     body_part,
     bindings: site.bindings
   };
-  console.log(JSON.stringify(site.bindings));
   form.append('metadata', JSON.stringify(metadata), {
     contentType: 'application/json',
     filename: 'metadata.json'
