@@ -56,9 +56,19 @@ export async function deployToWorkersDev(args) {
     bindings: site.bindings
   };
   form.append('metadata', JSON.stringify(metadata), {
-    contentType: 'application/json'
+    contentType: 'application/json',
+    filename: 'metadata.json'
   });
-  form.append(body_part, args.code, { contentType: 'application/javascript' });
+  if (site.manifest) {
+    form.append('manifest', site.manifest, {
+      contentType: 'text/plain',
+      filename: 'manifest.json'
+    });
+  }
+  form.append(body_part, args.code, {
+    contentType: 'application/javascript',
+    filename: body_part
+  });
 
   const response = await fetch(
     `${apiBase}/accounts/${args.accountId}/workers/scripts/${args.name}`,
@@ -129,10 +139,21 @@ export async function deploy(args) {
     body_part,
     bindings: site.bindings
   };
+  console.log(JSON.stringify(site.bindings));
   form.append('metadata', JSON.stringify(metadata), {
-    contentType: 'application/json'
+    contentType: 'application/json',
+    filename: 'metadata.json'
   });
-  form.append(body_part, args.code, { contentType: 'application/javascript' });
+  if (site.manifest) {
+    form.append('manifest', site.manifest, {
+      contentType: 'text/plain',
+      filename: 'manifest.json'
+    });
+  }
+  form.append(body_part, args.code, {
+    contentType: 'application/javascript',
+    filename: body_part
+  });
 
   response = await fetch(
     `${apiBase}/accounts/${args.accountId}/workers/scripts/${args.name}`,
@@ -145,6 +166,14 @@ export async function deploy(args) {
       body: form.getBuffer()
     }
   );
+
+  if (!response.ok) {
+    throw new Error(
+      `GET worker routes failed.\n${response.status}: ${
+        response.statusText
+      }\n${await response.text()}`
+    );
+  }
 
   await site.kvCleanup();
 
@@ -313,7 +342,7 @@ async function createNamespace(title, args) {
 
 /**
  * @param {{ site: StaticSite | null; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
- * @returns {Promise<{ bindings: any[]; kvCleanup: () => Promise<void>; }>}
+ * @returns {Promise<{ bindings: any[]; kvCleanup: () => Promise<void>; manifest?: string }>}
  */
 async function getSiteBindings(args) {
   if (!args.site) {
@@ -330,9 +359,9 @@ async function getSiteBindings(args) {
   return {
     bindings: [
       {
-        type: 'plain_text',
+        type: 'text_blob',
         name: '__STATIC_CONTENT_MANIFEST',
-        text: JSON.stringify(args.site.manifest)
+        part: 'manifest'
       },
       {
         type: 'kv_namespace',
@@ -340,7 +369,8 @@ async function getSiteBindings(args) {
         namespace_id: namespace.id
       }
     ],
-    kvCleanup: () => bulkDelete(args, namespace)
+    kvCleanup: () => bulkDelete(args, namespace),
+    manifest: JSON.stringify(args.site.manifest)
   };
 }
 
