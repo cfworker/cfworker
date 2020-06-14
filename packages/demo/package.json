@@ -30,6 +30,6 @@
     "@cfworker/dev": "^1.2.9",
     "@cfworker/worker-types": "^1.2.3",
     "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   }
 }

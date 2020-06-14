@@ -27,6 +27,6 @@
     "test": "echo test"
   },
   "devDependencies": {
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   }
 }
