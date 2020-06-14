@@ -41,6 +41,15 @@ program.version(packageConfig.version);
 /** @type {import('commander').Command[]} */
 const commands = program.commands;
 
+/**
+ *
+ * @param {string} value
+ * @param {string[]} previous
+ */
+function collect(value, previous) {
+  return previous.concat([value]);
+}
+
 program
   .command('test [input...]')
   .description('run tests')
@@ -49,6 +58,7 @@ program
   .option('-i, --inspect', 'open browser window with devtools enabled', false)
   .option('-n --nocheck', 'disable diagnostic checks on TypeScript code')
   .option('-s --site <directory>', 'static site directory')
+  .option('-k --kv <filename>', 'kv json file', collect, [])
   .action((main, command) => {
     loadEnv();
     currentCommand = new TestCommand({
@@ -57,7 +67,8 @@ program
       watch: command.watch,
       inspect: command.inspect,
       check: !command.nocheck,
-      site: command.site
+      site: command.site,
+      kv: command.kv
     });
     currentCommand.execute();
   });
@@ -70,6 +81,7 @@ program
   .option('-i, --inspect', 'open browser window with devtools enabled', false)
   .option('-n --nocheck', 'disable diagnostic checks on TypeScript code')
   .option('-s --site <directory>', 'static site directory')
+  .option('-k --kv <filename>', 'kv json file', collect, [])
   .action((main, command) => {
     loadEnv();
     currentCommand = new RunCommand({
@@ -78,7 +90,8 @@ program
       watch: command.watch,
       inspect: command.inspect,
       check: !command.nocheck,
-      site: command.site
+      site: command.site,
+      kv: command.kv
     });
     currentCommand.execute();
   });
@@ -93,13 +106,15 @@ program
   )
   .option('-w, --watch', 'enable watch mode', false)
   .option('-s --site <directory>', 'static site directory')
+  .option('-k --kv <filename>', 'kv json file', collect, [])
   .action((main, command) => {
     loadEnv();
     currentCommand = new DeployDevCommand({
       entry: main[0],
       project: command.project,
       watch: command.watch,
-      site: command.site
+      site: command.site,
+      kv: command.kv
     });
     currentCommand.execute();
   });
@@ -119,6 +134,7 @@ program
     false
   )
   .option('-s --site <directory>', 'static site directory')
+  .option('-k --kv <filename>', 'kv json file', collect, [])
   .action((main, command) => {
     loadEnv('production');
     const options = command.opts();
@@ -127,7 +143,8 @@ program
       name: options.name,
       route: options.route,
       purgeCache: options.purgeCache,
-      site: options.site
+      site: options.site,
+      kv: options.kv
     });
     currentCommand.execute();
   });

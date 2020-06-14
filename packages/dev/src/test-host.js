@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { KV } from './kv.js';
 import { logger } from './logger.js';
 import { StaticSite } from './static-site.js';
 import { WorkerHost } from './worker-host.js';
@@ -19,11 +20,12 @@ export class TestHost extends EventEmitter {
    * @param {number} port
    * @param {boolean} inspect
    * @param {StaticSite | null} site
+   * @param {KV} kv
    */
-  constructor(port, inspect, site) {
+  constructor(port, inspect, site, kv) {
     super();
     this.inspect = inspect;
-    this.workerHost = new WorkerHost(port, inspect, site);
+    this.workerHost = new WorkerHost(port, inspect, site, kv);
   }
 
   start() {

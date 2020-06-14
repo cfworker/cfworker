@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { EventEmitter } from 'events';
 import puppeteer from 'puppeteer';
+import { KV } from './kv.js';
 import { logger } from './logger.js';
 import { escapeHeaderName, unescapeHeaderName } from './runtime/headers.js';
 import { Server } from './server.js';
@@ -14,12 +15,14 @@ export class WorkerHost extends EventEmitter {
    * @param {number} port
    * @param {boolean} inspect
    * @param {StaticSite | null} site
+   * @param {KV} kv
    */
-  constructor(port, inspect, site) {
+  constructor(port, inspect, site, kv) {
     super();
     this.port = port;
     this.inspect = inspect;
     this.server = new Server(port, site);
+    this.kv = kv;
     /** @type {Promise<import('puppeteer').Page>} */
     this.pageReady = new Promise(resolve => (this.resolvePage = resolve));
   }
@@ -72,30 +75,40 @@ export class WorkerHost extends EventEmitter {
    * @param {string} sourcePathname Where to list the script in the chrome devtools sources tree.
    * @param {string[]} globals Names of additional globals to expose.
    * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
+   * @param {import('./kv.js').KVNamespaceInit[]} kvNamespaces
    */
   async setWorkerCode(
     code,
     sourcePathname = '/worker.js',
     globals = [],
-    staticContentManifest = null
+    staticContentManifest = null,
+    kvNamespaces = []
   ) {
     const startTime = Date.now();
     logger.progress('Updating worker script...');
     const page = await this.pageReady;
     await page.evaluate(
-      async (code, sourcePathname, globals, staticContentManifest) => {
+      async (
+        code,
+        sourcePathname,
+        globals,
+        staticContentManifest,
+        kvNamespaces
+      ) => {
         const { executeWorkerScript } = await import('./runtime/index.js');
         await executeWorkerScript(
           code,
           sourcePathname,
           globals,
-          staticContentManifest
+          staticContentManifest,
+          kvNamespaces
         );
       },
       code,
       sourcePathname,
       globals,
-      staticContentManifest
+      staticContentManifest,
+      kvNamespaces
     );
     logger.success('Worker script updated', Date.now() - startTime);
     this.emit('worker-updated');

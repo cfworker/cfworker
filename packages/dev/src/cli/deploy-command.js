@@ -5,12 +5,13 @@ import {
   deployToWorkersDev,
   getWorkersDevSubdomain
 } from '../cloudflare-api.js';
+import { KV } from '../kv.js';
 import { logger } from '../logger.js';
 import { StaticSite } from '../static-site.js';
 
 export class DeployDevCommand {
   /**
-   * @param {{ project: string; entry: string; watch: boolean; site?: string; }} args
+   * @param {{ project: string; entry: string; watch: boolean; site?: string; kv: string[]; }} args
    */
   constructor(args) {
     const {
@@ -41,12 +42,14 @@ export class DeployDevCommand {
     this.watch = args.watch;
     this.bundler = new Bundler([args.entry], args.watch);
     this.site = args.site ? new StaticSite(args.site, false) : null;
+    this.kv = new KV(args.kv, false);
   }
 
   async execute() {
     await Promise.all([
       this.bundler.bundle(),
-      this.site ? this.site.init() : Promise.resolve()
+      this.site ? this.site.init() : Promise.resolve(),
+      this.kv.init()
     ]);
 
     logger.progress('Getting subdomain...');
@@ -81,7 +84,8 @@ export class DeployDevCommand {
       accountId: this.accountId,
       apiKey: this.apiKey,
       name: this.project,
-      site: this.site
+      site: this.site,
+      kv: this.kv
     });
 
     logger.success(
@@ -97,7 +101,7 @@ export class DeployDevCommand {
 
 export class DeployCommand {
   /**
-   * @param {{ entry: string; name: string; route: string; purgeCache: boolean; site?: string; }} args
+   * @param {{ entry: string; name: string; route: string; purgeCache: boolean; site?: string; kv: string[]; }} args
    */
   constructor(args) {
     const {
@@ -133,6 +137,7 @@ export class DeployCommand {
     this.args = args;
     this.bundler = new Bundler([args.entry], false);
     this.site = args.site ? new StaticSite(args.site, false) : null;
+    this.kv = new KV(args.kv, false);
   }
 
   async execute() {
@@ -140,7 +145,8 @@ export class DeployCommand {
 
     await Promise.all([
       this.bundler.bundle(),
-      this.site ? this.site.init() : Promise.resolve()
+      this.site ? this.site.init() : Promise.resolve(),
+      this.kv.init()
     ]);
 
     logger.progress('Deploying worker...');
@@ -154,7 +160,8 @@ export class DeployCommand {
       apiKey: this.apiKey,
       purgeCache: this.args.purgeCache,
       routePattern: this.args.route,
-      site: this.site
+      site: this.site,
+      kv: this.kv
     });
 
     const url = 'https://' + (this.args.route ? this.args.route : zoneName);

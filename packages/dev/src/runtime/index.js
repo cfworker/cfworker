@@ -13,15 +13,21 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
  * @param {string} sourcePathname Where to list the script in the chrome devtools sources tree.
  * @param {string[]} globals Names of additional globals to expose.
  * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
+ * @param {import('../kv.js').KVNamespaceInit[]} kvNamespaces Workers KV namespaces.
  */
 export async function executeWorkerScript(
   code,
   sourcePathname,
   globals = [],
-  staticContentManifest
+  staticContentManifest,
+  kvNamespaces
 ) {
   resetFetchHandler();
-  const scope = new ServiceWorkerGlobalScope(globals, staticContentManifest);
+  const scope = new ServiceWorkerGlobalScope(
+    globals,
+    staticContentManifest,
+    kvNamespaces
+  );
   await scope.init();
   const guardedScope = new Proxy(scope, scopeGuard);
   const sourceUrl = `//# sourceURL=${location.origin}${sourcePathname}`;
