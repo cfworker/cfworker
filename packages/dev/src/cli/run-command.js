@@ -94,5 +94,6 @@ export class RunCommand {
     if (this.site) {
       this.site.dispose();
     }
+    this.kv.dispose();
   }
 }

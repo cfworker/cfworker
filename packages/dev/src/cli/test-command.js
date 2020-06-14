@@ -75,5 +75,6 @@ export class TestCommand {
     if (this.site) {
       this.site.dispose();
     }
+    this.kv.dispose();
   }
 }

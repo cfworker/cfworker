@@ -96,6 +96,10 @@ export class DeployDevCommand {
 
   dispose() {
     this.bundler.dispose();
+    if (this.site) {
+      this.site.dispose();
+    }
+    this.kv.dispose();
   }
 }
 
@@ -171,5 +175,11 @@ export class DeployCommand {
     );
   }
 
-  dispose() {}
+  dispose() {
+    this.bundler.dispose();
+    if (this.site) {
+      this.site.dispose();
+    }
+    this.kv.dispose();
+  }
 }
