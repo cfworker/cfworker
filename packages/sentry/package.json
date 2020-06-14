@@ -38,6 +38,6 @@
     "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types"
   },
   "devDependencies": {
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   }
 }
