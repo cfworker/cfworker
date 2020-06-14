@@ -20,7 +20,8 @@ export async function assertBundlesJavaScriptWorker() {
     port,
     inspect: false,
     watch: false,
-    check: false
+    check: false,
+    kv: []
   });
   await command.execute();
   const response = await fetch('http://localhost:7000');
@@ -44,7 +45,8 @@ export async function assertBundlesTypeScriptWorker() {
     port,
     inspect: false,
     watch: false,
-    check: true
+    check: true,
+    kv: []
   });
   await command.execute();
   const response = await fetch('http://localhost:7000');
@@ -61,7 +63,8 @@ export async function assertRespondsWith503WhenFetchListenerIsNotAdded() {
     port,
     inspect: false,
     watch: false,
-    check: true
+    check: true,
+    kv: []
   });
   await command.execute();
   const response = await fetch('http://localhost:7000');
@@ -78,7 +81,8 @@ export async function assertWatchesForChanges() {
     port,
     inspect: false,
     watch: true,
-    check: true
+    check: true,
+    kv: []
   });
   await command.execute();
   let response = await fetch('http://localhost:7000');
@@ -114,7 +118,8 @@ export async function assertCanReadRequestCookieHeader() {
     port,
     inspect: false,
     watch: false,
-    check: true
+    check: true,
+    kv: []
   });
   await command.execute();
   const response = await fetch('http://localhost:7000', {
@@ -141,7 +146,8 @@ export async function assertCanRespondWithSetCookieHeader() {
     port,
     inspect: false,
     watch: false,
-    check: true
+    check: true,
+    kv: []
   });
   await command.execute();
 
@@ -165,7 +171,8 @@ export async function assertCanReadWriteCache() {
     port,
     inspect: false,
     watch: false,
-    check: false
+    check: false,
+    kv: []
   });
   await command.execute();
   const response = await fetch('http://localhost:7000');
@@ -198,7 +205,8 @@ export async function assertCanServeStaticSite() {
     inspect: false,
     watch: true,
     check: false,
-    site: 'test/fixtures/public'
+    site: 'test/fixtures/public',
+    kv: []
   });
   await command.execute();
   const response = await fetch('http://localhost:7000');
@@ -216,6 +224,46 @@ export async function assertCanServeStaticSite() {
   const response2 = await fetch('http://localhost:7000');
   const html2 = await response2.text();
   assert.equal(html2, '<body>hello world 2</body>');
+
+  command.dispose();
+}
+
+export async function assertCanCreateKVNamespace() {
+  const entry = './test/fixtures/worker.js';
+  const code = `
+    addEventListener('fetch', async e => {
+      const body = await greetings.get('hello', 'text');
+      e.respondWith(new Response(body));
+    });`;
+  await fs.outputFile(entry, code);
+  await fs.outputFile(
+    './test/fixtures/greetings.json',
+    '[{ "key": "hello", "value": "world", "base64": false }]'
+  );
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: true,
+    check: false,
+    kv: ['./test/fixtures/greetings.json']
+  });
+  await command.execute();
+  // const response = await fetch('http://localhost:7000');
+  // const html = await response.text();
+  // assert.equal(html, 'world');
+
+  // const updated = new Promise(resolve =>
+  //   command.host.on('worker-updated', resolve)
+  // );
+  // await fs.outputFile(
+  //   './test/fixtures/greetings.json',
+  //   '[{ "key": "hello", "value": "world 2", "base64": false }]'
+  // );
+  // await updated;
+  // const response2 = await fetch('http://localhost:7000');
+  // const html2 = await response2.text();
+  // assert.equal(html2, 'world 2');
 
   command.dispose();
 }

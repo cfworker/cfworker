@@ -1,14 +1,15 @@
 import { addEventListener, dispatchEvent } from './add-event-listener.js';
 import { FetchEvent } from './fetch-event.js';
 import { HTMLRewriter } from './html-rewriter';
-import { StaticContentKVNamespace } from './kv.js';
+import { MemoryKVNamespace, StaticContentKVNamespace } from './kv.js';
 
 export class ServiceWorkerGlobalScope {
   /**
    * @param {string[]} globals additional globals to expose
    * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
+   * @param {import('../kv.js').KVNamespaceInit[]} kvNamespaces Workers KV namespaces.
    */
-  constructor(globals, staticContentManifest) {
+  constructor(globals, staticContentManifest, kvNamespaces) {
     this.Array = Array;
     this.ArrayBuffer = ArrayBuffer;
     this.Atomics = Atomics;
@@ -105,6 +106,10 @@ export class ServiceWorkerGlobalScope {
     if (staticContentManifest) {
       this['__STATIC_CONTENT_MANIFEST'] = JSON.stringify(staticContentManifest);
       this['__STATIC_CONTENT'] = new StaticContentKVNamespace();
+    }
+    for (const { name, items } of kvNamespaces) {
+      // @ts-ignore
+      this[name] = new MemoryKVNamespace(items);
     }
   }
 

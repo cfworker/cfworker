@@ -1,4 +1,5 @@
 import { Bundler } from '../bundler.js';
+import { KV } from '../kv.js';
 import { StaticSite } from '../static-site.js';
 import { TestHost } from '../test-host.js';
 
@@ -10,6 +11,7 @@ import { TestHost } from '../test-host.js';
  * @property {boolean} inspect
  * @property {boolean} check
  * @property {string} [site]
+ * @property {string[]} kv
  */
 
 export class TestCommand {
@@ -25,7 +27,8 @@ export class TestCommand {
       args.check
     );
     this.site = args.site ? new StaticSite(args.site, args.watch) : null;
-    this.testHost = new TestHost(args.port, args.inspect, this.site);
+    this.kv = new KV(args.kv, args.watch);
+    this.testHost = new TestHost(args.port, args.inspect, this.site, this.kv);
   }
 
   async execute() {
@@ -41,7 +44,8 @@ export class TestCommand {
     await Promise.all([
       this.bundler.bundle(),
       this.testHost.start(),
-      siteInitialized
+      siteInitialized,
+      this.kv.init()
     ]);
 
     const failures = await this.testHost.runTests(
@@ -71,5 +75,6 @@ export class TestCommand {
     if (this.site) {
       this.site.dispose();
     }
+    this.kv.dispose();
   }
 }

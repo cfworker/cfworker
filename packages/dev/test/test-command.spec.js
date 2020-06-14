@@ -30,7 +30,8 @@ export async function assertBundlesJavaScriptTests() {
     port,
     inspect: false,
     watch: true,
-    check: true
+    check: true,
+    kv: []
   });
 
   let testEnd = new Promise(resolve =>
@@ -54,7 +55,8 @@ export async function assertBundlesTypeScriptTests() {
     port,
     inspect: false,
     watch: true,
-    check: true
+    check: true,
+    kv: []
   });
 
   let testEnd = new Promise(resolve =>
@@ -92,7 +94,8 @@ export async function assertSupportsStaticSiteTests() {
     inspect: false,
     watch: true,
     check: true,
-    site: 'test/fixtures/public'
+    site: 'test/fixtures/public',
+    kv: []
   });
 
   let testEnd = new Promise(resolve =>

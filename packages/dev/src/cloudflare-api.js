@@ -1,6 +1,7 @@
 import FormData from 'form-data';
 import fs from 'fs-extra';
 import fetch from 'node-fetch';
+import { KV } from './kv.js';
 import { logger } from './logger.js';
 import { StaticSite } from './static-site.js';
 
@@ -41,6 +42,7 @@ export async function getWorkersDevSubdomain(accountId, accountEmail, apiKey) {
  * @property {string} accountEmail Cloudflare account email
  * @property {string} apiKey Cloudflare API key
  * @property {StaticSite | null} site Workers Site
+ * @property {KV} kv Workers KV
  */
 
 /**
@@ -49,11 +51,12 @@ export async function getWorkersDevSubdomain(accountId, accountEmail, apiKey) {
  */
 export async function deployToWorkersDev(args) {
   const site = await getSiteBindings(args);
+  const kv = await getKVBindings(args);
   const form = new FormData();
   const body_part = 'worker.js';
   const metadata = {
     body_part,
-    bindings: site.bindings
+    bindings: [...site.bindings, ...kv.bindings]
   };
   form.append('metadata', JSON.stringify(metadata), {
     contentType: 'application/json',
@@ -90,6 +93,7 @@ export async function deployToWorkersDev(args) {
   }
 
   await site.kvCleanup();
+  await kv.kvCleanup();
 }
 
 /**
@@ -103,6 +107,7 @@ export async function deployToWorkersDev(args) {
  * @property {string} apiKey Cloudflare API key
  * @property {boolean} purgeCache Whether to purge the cache (purges everything)
  * @property {StaticSite | null} site Workers Site
+ * @property {KV} kv Workers KV
  */
 
 /**
@@ -131,13 +136,14 @@ export async function deploy(args) {
   const zoneName = (await response.json()).result.name;
 
   const site = await getSiteBindings(args);
+  const kv = await getKVBindings(args);
 
   logger.progress('Deploying script...');
   const form = new FormData();
   const body_part = args.name;
   const metadata = {
     body_part,
-    bindings: site.bindings
+    bindings: [...site.bindings, ...kv.bindings]
   };
   form.append('metadata', JSON.stringify(metadata), {
     contentType: 'application/json',
@@ -175,6 +181,7 @@ export async function deploy(args) {
   }
 
   await site.kvCleanup();
+  await kv.kvCleanup();
 
   if (args.routePattern) {
     logger.progress('Getting routes...');
@@ -374,19 +381,55 @@ async function getSiteBindings(args) {
 }
 
 /**
+ * @param {{ kv: KV; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
+ * @returns {Promise<{ bindings: any[]; kvCleanup: () => Promise<void>; }>}
+ */
+async function getKVBindings(args) {
+  if (args.kv.namespaces.length === 0) {
+    return { bindings: [], kvCleanup: async () => {} };
+  }
+
+  const bindings = [];
+
+  for (const { name, items } of args.kv.namespaces) {
+    logger.progress(`Publishing KV namespace "${name}"...`);
+    const namespace =
+      (await getNamespace(name, args)) || (await createNamespace(name, args));
+    await bulkKV(args, namespace, items);
+    bindings.push({
+      type: 'kv_namespace',
+      name,
+      namespace_id: namespace.id
+    });
+  }
+
+  return {
+    bindings,
+    kvCleanup: () => Promise.resolve() // todo
+  };
+}
+
+/**
  * @param {{ site: StaticSite; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
  * @param {{ id: string; }} namespace
  */
 async function publishSiteToKV(args, namespace) {
-  const body = JSON.stringify(
-    await Promise.all(
-      Object.entries(args.site.files).map(async ([key, filename]) => ({
-        key,
-        value: (await fs.readFile(filename)).toString('base64'),
-        base64: true
-      }))
-    )
+  const items = await Promise.all(
+    Object.entries(args.site.files).map(async ([key, filename]) => ({
+      key,
+      value: (await fs.readFile(filename)).toString('base64'),
+      base64: true
+    }))
   );
+  await bulkKV(args, namespace, items);
+}
+
+/**
+ * @param {{ accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ id: string; }} namespace
+ * @param {import('./kv.js').KVItem[]} items
+ */
+async function bulkKV(args, namespace, items) {
   const response = await fetch(
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces/${namespace.id}/bulk`,
     {
@@ -396,12 +439,12 @@ async function publishSiteToKV(args, namespace) {
         'X-Auth-Key': args.apiKey,
         'content-type': 'application/json'
       },
-      body
+      body: JSON.stringify(items)
     }
   );
   if (!response.ok) {
     throw new Error(
-      `Error publishing static files to KV - ${response.status}: ${
+      `Error publishing items to KV - ${response.status}: ${
         response.statusText
       }\n${await response.text()}`
     );

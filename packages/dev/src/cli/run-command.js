@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 import { Bundler } from '../bundler.js';
+import { KV } from '../kv.js';
 import { logger } from '../logger.js';
 import { StaticSite } from '../static-site.js';
 import { WorkerHost } from '../worker-host.js';
@@ -12,6 +13,7 @@ import { WorkerHost } from '../worker-host.js';
  * @property {boolean} inspect
  * @property {boolean} check
  * @property {string} [site]
+ * @property {string[]} kv
  */
 
 /**
@@ -25,7 +27,8 @@ export class RunCommand {
     this.args = args;
     this.bundler = new Bundler([args.entry], args.watch, [], args.check);
     this.site = args.site ? new StaticSite(args.site, args.watch) : null;
-    this.host = new WorkerHost(args.port, args.inspect, this.site);
+    this.kv = new KV(args.kv, args.watch);
+    this.host = new WorkerHost(args.port, args.inspect, this.site, this.kv);
   }
 
   async execute() {
@@ -44,14 +47,16 @@ export class RunCommand {
     await Promise.all([
       this.host.start(),
       this.bundler.bundled,
-      siteInitialized
+      siteInitialized,
+      this.kv.init()
     ]);
 
     await this.host.setWorkerCode(
       this.bundler.code,
       '/worker.js',
       [],
-      this.site ? this.site.manifest : null
+      this.site ? this.site.manifest : null,
+      this.kv.namespaces
     );
 
     if (this.args.watch) {
@@ -60,7 +65,8 @@ export class RunCommand {
           this.bundler.code,
           '/worker.js',
           [],
-          this.site ? this.site.manifest : null
+          this.site ? this.site.manifest : null,
+          this.kv.namespaces
         );
       this.bundler.on('bundle-end', update);
       if (this.site) {
@@ -88,5 +94,6 @@ export class RunCommand {
     if (this.site) {
       this.site.dispose();
     }
+    this.kv.dispose();
   }
 }
