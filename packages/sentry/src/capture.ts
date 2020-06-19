@@ -9,6 +9,7 @@ const sentryClient = 'cfworker-sentry';
 export function captureError(
   sentryDsn: string,
   environment: string,
+  release: string,
   err: any,
   request: Request,
   user: any
@@ -30,7 +31,7 @@ export function captureError(
     level: 'error',
     transaction: request.url,
     server_name: 'cloudflare',
-    release: 'todo',
+    release,
     // tags: {},
     environment,
     // modules: {},
