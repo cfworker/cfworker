@@ -28,6 +28,7 @@ const sentryLogging: Middleware = async (context, next) => {
       const { posted } = captureError(
         process.env.SENTRY_DSN,
         process.env.NODE_ENV,
+        'demo',
         err,
         req.raw,
         state.user
