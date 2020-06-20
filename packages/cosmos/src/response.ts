@@ -21,6 +21,9 @@ export abstract class CosmosResponse {
   get requestCharge() {
     return parseInt(this.response.headers.get('x-ms-request-charge')!);
   }
+  get raw() {
+    return this.response;
+  }
 }
 
 export class ItemResponse<T extends PersistedResource> extends CosmosResponse {
