@@ -7,6 +7,8 @@ import {
   QueryParameter
 } from '../src/index';
 
+declare const process: { env: Record<string, string> };
+
 const endpoint = process.env.COSMOS_DB_ORIGIN;
 const masterKey = process.env.COSMOS_DB_MASTER_KEY;
 const dbId = process.env.COSMOS_DB_DATABASE;

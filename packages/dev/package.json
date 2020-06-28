@@ -23,11 +23,12 @@
     "test": "node --experimental-modules --experimental-json-modules --no-warnings test/index.js"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types",
+    "@cfworker/worker-types": "^1.2.10",
+    "@cloudflare/workers-types": "^2.0.0",
     "@rollup/plugin-commonjs": "^13.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-multi-entry": "^3.0.1",
-    "@rollup/plugin-node-resolve": "^8.0.1",
+    "@rollup/plugin-node-resolve": "^8.1.0",
     "@rollup/plugin-replace": "^2.3.3",
     "chokidar": "^3.4.0",
     "commander": "^5.1.0",
@@ -40,8 +41,8 @@
     "node-cleanup": "^2.1.2",
     "node-fetch": "^2.6.0",
     "ora": "^4.0.4",
-    "puppeteer": "^3.3.0",
-    "rollup": "^2.16.1",
+    "puppeteer": "^4.0.1",
+    "rollup": "^2.18.1",
     "rollup-plugin-typescript2": "^0.27.1",
     "typescript": "^3.9.5"
   }

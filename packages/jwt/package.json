@@ -36,7 +36,7 @@
   "dependencies": {
     "@cfworker/base64url": "^1.2.10",
     "@cfworker/worker-types": "^1.2.10",
-    "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types"
+    "@cloudflare/workers-types": "^2.0.0"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.2.10",
