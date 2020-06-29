@@ -35,7 +35,7 @@
   "dependencies": {
     "@cfworker/json-schema": "^1.2.10",
     "@cfworker/worker-types": "^1.2.10",
-    "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types",
+    "@cloudflare/workers-types": "^2.0.0",
     "@types/cookie": "^0.4.0",
     "@types/escape-html": "^1.0.0",
     "@types/koa-compose": "3.2.5",
@@ -46,7 +46,7 @@
     "koa-compose": "^4.1.0",
     "negotiator": "^0.6.2",
     "path-to-regexp": "^6.1.0",
-    "secure-json-parse": "^2.0.0",
+    "secure-json-parse": "^2.1.0",
     "statuses": "^1.5.0"
   },
   "devDependencies": {

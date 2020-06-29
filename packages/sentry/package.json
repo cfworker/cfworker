@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@cfworker/worker-types": "^1.2.10",
-    "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types"
+    "@cloudflare/workers-types": "^2.0.0"
   },
   "devDependencies": {
     "typescript": "^3.9.5"

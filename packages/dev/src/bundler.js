@@ -15,8 +15,7 @@ export class Bundler extends EventEmitter {
       replace({ values: this.envReplacements() }),
       // @ts-ignore
       multiEntry({ exports: false }),
-      // @ts-ignore
-      resolve.nodeResolve(),
+      resolve(),
       commonjs(),
       json()
     ],

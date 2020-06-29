@@ -24,12 +24,12 @@
     "@cfworker/cosmos": "^1.2.12",
     "@cfworker/jwt": "^1.2.10",
     "@cfworker/sentry": "^1.2.11",
-    "@cfworker/web": "^1.2.10"
+    "@cfworker/web": "^1.2.10",
+    "@cfworker/worker-types": "^1.2.10",
+    "@cloudflare/workers-types": "^2.0.0"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.2.10",
-    "@cfworker/worker-types": "^1.2.10",
-    "@cloudflare/workers-types": "git+https://github.com/cloudflare/workers-types",
     "typescript": "^3.9.5"
   }
 }
