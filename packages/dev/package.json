@@ -43,6 +43,7 @@
     "ora": "^4.0.4",
     "puppeteer": "^4.0.1",
     "rollup": "^2.18.1",
+    "rollup-plugin-minify-html-literals": "^1.2.4",
     "rollup-plugin-typescript2": "^0.27.1",
     "typescript": "^3.9.5"
   }

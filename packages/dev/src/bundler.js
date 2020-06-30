@@ -5,6 +5,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import { EventEmitter } from 'events';
 import { rollup, watch } from 'rollup';
+import minifyHTML from 'rollup-plugin-minify-html-literals';
 import typescript from 'rollup-plugin-typescript2';
 import { logger } from './logger.js';
 
@@ -12,9 +13,11 @@ export class Bundler extends EventEmitter {
   /** @type {import('rollup').RollupOptions} */
   inputOptions = {
     plugins: [
-      replace({ values: this.envReplacements() }),
       // @ts-ignore
       multiEntry({ exports: false }),
+      replace({ values: this.envReplacements() }),
+      // @ts-ignore
+      ...(process.env.NODE_ENV === 'production' ? [minifyHTML.default()] : []),
       resolve(),
       commonjs(),
       json()
