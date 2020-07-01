@@ -88,7 +88,7 @@ export class Router {
     }
   };
 
-  private compose(conditions: RouteCondition[], ...middleware: Middleware[]) {
+  public compose(conditions: RouteCondition[], ...middleware: Middleware[]) {
     this.routes.push({
       conditions,
       middleware: composeMiddleware(middleware)
