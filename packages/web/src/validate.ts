@@ -63,7 +63,15 @@ function middlewareFactory(
       validateRequestPart('search', search, $search, lookup);
     }
     if ($body && hasBody[req.method]) {
-      const body = await req.body.json();
+      let body: any;
+      if (
+        req.headers.get('content-type') === 'application/x-www-form-urlencoded'
+      ) {
+        const form = await req.body.formData();
+        body = toObject(form);
+      } else {
+        body = await req.body.json();
+      }
       validateRequestPart('body', body, $body, lookup);
     }
     await next();
