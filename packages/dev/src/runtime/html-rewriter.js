@@ -139,10 +139,10 @@ export class HTMLRewriter {
             if (node.nodeType === Node.TEXT_NODE) {
               const marker = document.createElement('span');
               node.before(marker);
-              marker.insertAdjacentHTML('beforebegin', htmlEncode(content));
+              marker.insertAdjacentHTML('beforebegin', content);
               marker.remove();
             } else {
-              node.insertAdjacentHTML('beforebegin', htmlEncode(content));
+              node.insertAdjacentHTML('beforebegin', content);
             }
           } else {
             node.before(content);
@@ -158,10 +158,10 @@ export class HTMLRewriter {
             if (node.nodeType === Node.TEXT_NODE) {
               const marker = document.createElement('span');
               node.after(marker);
-              marker.insertAdjacentHTML('afterend', htmlEncode(content));
+              marker.insertAdjacentHTML('afterend', content);
               marker.remove();
             } else {
-              node.insertAdjacentHTML('afterend', htmlEncode(content));
+              node.insertAdjacentHTML('afterend', content);
             }
           } else {
             node.after(content);
@@ -181,10 +181,10 @@ export class HTMLRewriter {
           if (node.nodeType === Node.TEXT_NODE) {
             const marker = document.createElement('span');
             node.before(marker);
-            marker.insertAdjacentHTML('afterend', htmlEncode(content));
+            marker.insertAdjacentHTML('afterend', content);
             marker.remove();
           } else {
-            node.insertAdjacentHTML('afterend', htmlEncode(content));
+            node.insertAdjacentHTML('afterend', content);
           }
           node.remove();
         } else {
