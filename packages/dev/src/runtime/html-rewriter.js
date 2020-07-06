@@ -290,7 +290,13 @@ class CFElement {
     return this._node.tagName.toLowerCase();
   }
   get attributes() {
-    return this._node.attributes;
+    const length = this._node.attributes.length;
+    const arr = [];
+    for (let i = 0; i < length; i++) {
+      const attr = this._node.attributes.item(i);
+      arr.push([attr.name, attr.value]);
+    }
+    return arr;
   }
   get namespaceURI() {
     return this._node.namespaceURI;
