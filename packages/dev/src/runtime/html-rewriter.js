@@ -287,7 +287,7 @@ class CFElement {
   }
 
   get tagName() {
-    return this._node.tagName;
+    return this._node.tagName.toLowerCase();
   }
   get attributes() {
     return this._node.attributes;
