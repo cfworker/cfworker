@@ -7,13 +7,20 @@ export class Validator {
 
   constructor(
     private readonly schema: Schema | boolean,
-    private readonly draft: SchemaDraft = '2019-09'
+    private readonly draft: SchemaDraft = '2019-09',
+    private readonly shortCircuit = true
   ) {
     this.lookup = dereference(schema);
   }
 
   public validate(instance: any) {
-    return validate(instance, this.schema, this.draft, this.lookup);
+    return validate(
+      instance,
+      this.schema,
+      this.draft,
+      this.lookup,
+      this.shortCircuit
+    );
   }
 
   public addSchema(schema: Schema, id?: string) {

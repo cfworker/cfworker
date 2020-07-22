@@ -16,6 +16,7 @@ export function validate(
   schema: Schema | boolean,
   draft: SchemaDraft = '2019-09',
   lookup = dereference(schema),
+  shortCircuit = true,
   recursiveAnchor: Schema | null = null,
   instanceLocation = '#',
   schemaLocation = '#',
@@ -136,6 +137,7 @@ export function validate(
       refSchema,
       draft,
       lookup,
+      shortCircuit,
       recursiveAnchor,
       instanceLocation,
       keywordLocation,
@@ -168,6 +170,7 @@ export function validate(
       recursiveAnchor === null ? schema : recursiveAnchor,
       draft,
       lookup,
+      shortCircuit,
       recursiveAnchor,
       instanceLocation,
       keywordLocation,
@@ -276,6 +279,7 @@ export function validate(
       $not,
       draft,
       lookup,
+      shortCircuit,
       recursiveAnchor,
       instanceLocation,
       keywordLocation /*,
@@ -302,6 +306,7 @@ export function validate(
         subSchema,
         draft,
         lookup,
+        shortCircuit,
         recursiveAnchor,
         instanceLocation,
         `${keywordLocation}/${i}`,
@@ -333,6 +338,7 @@ export function validate(
         subSchema,
         draft,
         lookup,
+        shortCircuit,
         recursiveAnchor,
         instanceLocation,
         `${keywordLocation}/${i}`,
@@ -362,6 +368,7 @@ export function validate(
         subSchema,
         draft,
         lookup,
+        shortCircuit,
         recursiveAnchor,
         instanceLocation,
         `${keywordLocation}/${i}`,
@@ -389,6 +396,7 @@ export function validate(
       $if,
       draft,
       lookup,
+      shortCircuit,
       recursiveAnchor,
       instanceLocation,
       keywordLocation,
@@ -401,6 +409,7 @@ export function validate(
           $then,
           draft,
           lookup,
+          shortCircuit,
           recursiveAnchor,
           instanceLocation,
           `${schemaLocation}/then`,
@@ -424,6 +433,7 @@ export function validate(
         $else,
         draft,
         lookup,
+        shortCircuit,
         recursiveAnchor,
         instanceLocation,
         `${schemaLocation}/else`,
@@ -486,6 +496,7 @@ export function validate(
           $propertyNames,
           draft,
           lookup,
+          shortCircuit,
           recursiveAnchor,
           subInstancePointer,
           keywordLocation
@@ -532,6 +543,7 @@ export function validate(
             $dependentSchemas[key],
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             instanceLocation,
             `${keywordLocation}/${encodePointer(key)}`,
@@ -574,6 +586,7 @@ export function validate(
               propsOrSchema,
               draft,
               lookup,
+              shortCircuit,
               recursiveAnchor,
               instanceLocation,
               `${keywordLocation}/${encodePointer(key)}`
@@ -613,6 +626,7 @@ export function validate(
           $properties[key],
           draft,
           lookup,
+          shortCircuit,
           recursiveAnchor,
           subInstancePointer,
           `${keywordLocation}/${encodePointer(key)}`
@@ -620,7 +634,7 @@ export function validate(
         if (result.valid) {
           evaluated.properties[key] = thisEvaluated[key] = true;
         } else {
-          stop = true;
+          stop = shortCircuit;
           errors.push(
             {
               instanceLocation,
@@ -630,7 +644,7 @@ export function validate(
             },
             ...result.errors
           );
-          break;
+          if (stop) break;
         }
       }
     }
@@ -652,6 +666,7 @@ export function validate(
             subSchema,
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             subInstancePointer,
             `${keywordLocation}/${encodePointer(pattern)}`
@@ -659,7 +674,7 @@ export function validate(
           if (result.valid) {
             evaluated.properties[key] = thisEvaluated[key] = true;
           } else {
-            stop = true;
+            stop = shortCircuit;
             errors.push(
               {
                 instanceLocation,
@@ -686,6 +701,7 @@ export function validate(
           $additionalProperties,
           draft,
           lookup,
+          shortCircuit,
           recursiveAnchor,
           subInstancePointer,
           keywordLocation
@@ -693,7 +709,7 @@ export function validate(
         if (result.valid) {
           evaluated.properties[key] = true;
         } else {
-          stop = true;
+          stop = shortCircuit;
           errors.push(
             {
               instanceLocation,
@@ -717,6 +733,7 @@ export function validate(
             $unevaluatedProperties,
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             subInstancePointer,
             keywordLocation
@@ -773,12 +790,13 @@ export function validate(
             $items[i],
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
             `${keywordLocation}/${i}`
           );
           if (!result.valid) {
-            stop = true;
+            stop = shortCircuit;
             errors.push(
               {
                 instanceLocation,
@@ -788,7 +806,7 @@ export function validate(
               },
               ...result.errors
             );
-            break;
+            if (stop) break;
           }
         }
       } else {
@@ -798,12 +816,13 @@ export function validate(
             $items,
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
             keywordLocation
           );
           if (!result.valid) {
-            stop = true;
+            stop = shortCircuit;
             errors.push(
               {
                 instanceLocation,
@@ -813,7 +832,7 @@ export function validate(
               },
               ...result.errors
             );
-            break;
+            if (stop) break;
           }
         }
       }
@@ -828,12 +847,13 @@ export function validate(
             $additionalItems,
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
             keywordLocation
           );
           if (!result.valid) {
-            stop = true;
+            stop = shortCircuit;
             errors.push(
               {
                 instanceLocation,
@@ -857,6 +877,7 @@ export function validate(
           $unevaluatedItems,
           draft,
           lookup,
+          shortCircuit,
           recursiveAnchor,
           `${instanceLocation}/${i}`,
           keywordLocation
@@ -901,6 +922,7 @@ export function validate(
             $contains,
             draft,
             lookup,
+            shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
             keywordLocation

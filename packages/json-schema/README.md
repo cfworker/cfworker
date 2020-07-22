@@ -37,3 +37,28 @@ If possible use Ajv in a build step to precompile your schema. Otherwise use thi
 
    validator.addSchema({ $id: 'https://foo.bar/beep', type: 'boolean' });
    ```
+
+4. Include all errors
+   By default the validator will stop processing an object or array after the first error. Specifying shortCircuit to false will produce all errors.
+
+   ```js
+   const validator = new Validator(
+     {
+       type: 'object',
+       properties: {
+         name: { type: 'string' },
+         email: { type: 'string' },
+         number: { type: 'number' },
+         required: ['name', 'email', 'number']
+       }
+     },
+     '2019-09',
+     false
+   );
+
+   const result = validator.validate({
+     name: 'hello',
+     email: 5, //invalid type
+     number: 'Hello' //invalid type
+   });
+   ```
