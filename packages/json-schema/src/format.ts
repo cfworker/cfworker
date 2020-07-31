@@ -24,18 +24,45 @@ const FASTDATETIME = /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|2
 // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
 const FASTURI = /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i;
 const FASTURIREFERENCE = /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i;
-// email (sources from jsen validator):
-// http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address#answer-8829363
-// http://www.w3.org/TR/html5/forms.html#valid-e-mail-address (search for 'willful violation')
-const FASTEMAIL = /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$/i;
-const EMAIL = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i;
+
+// https://github.com/ExodusMovement/schemasafe/blob/master/src/formats.js
+const EMAIL = (input: string) => {
+  if (input[0] === '"') return false;
+  const [name, host, ...rest] = input.split('@');
+  if (
+    !name ||
+    !host ||
+    rest.length !== 0 ||
+    name.length > 64 ||
+    host.length > 253
+  )
+    return false;
+  if (name[0] === '.' || name.endsWith('.') || name.includes('..'))
+    return false;
+  if (
+    !/^[a-z0-9.-]+$/i.test(host) ||
+    !/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+$/i.test(name)
+  )
+    return false;
+  return host
+    .split('.')
+    .every(part => /^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/i.test(part));
+};
+
 // optimized https://www.safaribooksonline.com/library/view/regular-expressions-cookbook/9780596802837/ch07s16.html
 const IPV4 = /^(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?)$/;
 // optimized http://stackoverflow.com/questions/53497/regular-expression-that-matches-valid-ipv6-addresses
 const IPV6 = /^\s*(?:(?:(?:[0-9a-f]{1,4}:){7}(?:[0-9a-f]{1,4}|:))|(?:(?:[0-9a-f]{1,4}:){6}(?::[0-9a-f]{1,4}|(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){5}(?:(?:(?::[0-9a-f]{1,4}){1,2})|:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(?:(?:[0-9a-f]{1,4}:){4}(?:(?:(?::[0-9a-f]{1,4}){1,3})|(?:(?::[0-9a-f]{1,4})?:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){3}(?:(?:(?::[0-9a-f]{1,4}){1,4})|(?:(?::[0-9a-f]{1,4}){0,2}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){2}(?:(?:(?::[0-9a-f]{1,4}){1,5})|(?:(?::[0-9a-f]{1,4}){0,3}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?:(?:[0-9a-f]{1,4}:){1}(?:(?:(?::[0-9a-f]{1,4}){1,6})|(?:(?::[0-9a-f]{1,4}){0,4}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(?::(?:(?:(?::[0-9a-f]{1,4}){1,7})|(?:(?::[0-9a-f]{1,4}){0,5}:(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(?:%.+)?\s*$/i;
 
-// Regex from https://stackoverflow.com/questions/32044846/regex-for-iso-8601-durations
-const DURATION = /^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$/;
+// https://github.com/ExodusMovement/schemasafe/blob/master/src/formats.js
+const DURATION = (input: string) =>
+  input.length > 1 &&
+  input.length < 80 &&
+  (/^P\d+([.,]\d+)?W$/.test(input) ||
+    (/^P[\dYMDTHS]*(\d[.,]\d+)?[YMDHS]$/.test(input) &&
+      /^P([.,\d]+Y)?([.,\d]+M)?([.,\d]+D)?(T([.,\d]+H)?([.,\d]+M)?([.,\d]+S)?)?$/.test(
+        input
+      )));
 
 function bind(r: RegExp) {
   return r.test.bind(r);
@@ -45,12 +72,12 @@ export const fullFormat: Record<string, (s: string) => boolean> = {
   date,
   time: time.bind(undefined, false),
   'date-time': date_time,
-  duration: bind(DURATION),
+  duration: DURATION,
   uri,
   'uri-reference': bind(URIREF),
   'uri-template': bind(URITEMPLATE),
   url: bind(URL_),
-  email: bind(EMAIL),
+  email: EMAIL,
   hostname: bind(HOSTNAME),
   ipv4: bind(IPV4),
   ipv6: bind(IPV6),
@@ -67,8 +94,7 @@ export const fastFormat: Record<string, (s: string) => boolean> = {
   time: bind(FASTTIME),
   'date-time': bind(FASTDATETIME),
   uri: bind(FASTURI),
-  'uri-reference': bind(FASTURIREFERENCE),
-  email: bind(FASTEMAIL)
+  'uri-reference': bind(FASTURIREFERENCE)
 };
 
 function isLeapYear(year: number) {
