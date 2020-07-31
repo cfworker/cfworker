@@ -1,4 +1,5 @@
 import { FeedResponse, ItemResponse } from './response';
+import { defaultRetryPolicy, RetryContext, RetryPolicy } from './retry';
 import { getSigner, Signer } from './signer';
 import {
   Collection,
@@ -27,6 +28,11 @@ export interface CosmosClientConfig {
   masterKey: string;
 
   /**
+   * The retry policy to use when requests are throttled.
+   */
+  retryPolicy?: RetryPolicy;
+
+  /**
    * Default consistency level for requests. This can be overriden on individual requests.
    * @default "Session"
    */
@@ -41,23 +47,39 @@ export interface CosmosClientConfig {
    * Default collection id. This can be overriden on individual requests.
    */
   collId?: string;
+
+  /**
+   * The session token to reuse when ConsistencyLevel is "Session"
+   */
+  sessionToken?: string;
+
+  /**
+   * System fetch function
+   */
+  fetch?: typeof fetch;
 }
 
 export class CosmosClient {
   private readonly endpoint: string;
   private readonly signer: Signer;
+  private readonly retryPolicy: RetryPolicy;
   private readonly consistencyLevel: ConsistencyLevel;
   private readonly dbId: string | undefined;
   private readonly collId: string | undefined;
+  private readonly systemFetch: typeof fetch;
   private sessionToken = '';
   public requestCharges = 0;
+  public retries = { count: 0, delayMs: 0 };
 
   constructor(config: CosmosClientConfig) {
     this.endpoint = config.endpoint;
     this.signer = getSigner(config.masterKey);
+    this.retryPolicy = config.retryPolicy || defaultRetryPolicy;
     this.consistencyLevel = config.consistencyLevel || 'Session';
     this.dbId = config.dbId;
     this.collId = config.collId;
+    this.systemFetch = config.fetch || fetch;
+    this.sessionToken = config.sessionToken || '';
   }
 
   public async getDatabases(
@@ -66,7 +88,7 @@ export class CosmosClient {
     const url = this.endpoint + `/dbs`;
     const request = new Request(url, { method: 'GET' });
     this.setHeaders(request.headers, args);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     const next = this.getNext(response, args, this.getDatabases);
     return new FeedResponse<Database>(response, next, 'Databases');
   }
@@ -77,7 +99,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}`;
     const request = new Request(url, { method: 'GET' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<Database>(response);
   }
 
@@ -89,7 +111,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}/colls`;
     const request = new Request(url, { method: 'GET' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     const next = this.getNext(response, args, this.getCollections);
     return new FeedResponse<Collection>(response, next, 'DocumentCollections');
   }
@@ -101,7 +123,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}`;
     const request = new Request(url, { method: 'GET' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<Collection>(response);
   }
 
@@ -120,7 +142,7 @@ export class CosmosClient {
     const request = new Request(url, { method: 'POST', body });
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/json');
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<Collection>(response);
   }
 
@@ -139,7 +161,7 @@ export class CosmosClient {
     const request = new Request(url, { method: 'PUT', body });
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/json');
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<Collection>(response);
   }
 
@@ -150,7 +172,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}`;
     const request = new Request(url, { method: 'DELETE' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return response;
   }
 
@@ -163,7 +185,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}/docs`;
     const request = new Request(url, { method: 'GET' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     const next = this.getNext<GetDocumentsArgs, T & Document>(
       response,
       args,
@@ -179,7 +201,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}/docs/${docId}`;
     const request = new Request(url, { method: 'GET' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<T & Document>(response);
   }
 
@@ -197,7 +219,7 @@ export class CosmosClient {
     const request = new Request(url, { method: 'POST', body });
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/json');
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<T & Document>(response);
   }
 
@@ -216,7 +238,7 @@ export class CosmosClient {
     const request = new Request(url, { method: 'PUT', body });
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/json');
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return new ItemResponse<T & Document>(response);
   }
 
@@ -227,7 +249,7 @@ export class CosmosClient {
     const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}/docs/${docId}`;
     const request = new Request(url, { method: 'DELETE' });
     this.setHeaders(request.headers, headers);
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     return response;
   }
 
@@ -260,7 +282,7 @@ export class CosmosClient {
     const request = new Request(url, { method: 'POST', body });
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/query+json');
-    const response = await this.fetch(request);
+    const response = await this.fetchWithRetry(request);
     const next = this.getNext<QueryDocumentsArgs, T>(
       response,
       args,
@@ -283,9 +305,38 @@ export class CosmosClient {
     };
   }
 
-  private async fetch(request: Request) {
+  private async fetchWithRetry(request: Request): Promise<Response> {
+    const retryRequest = request.clone();
+
+    const response = await this.fetch(request);
+
+    const retryContext: RetryContext = (request as any).__retryContext__ || {
+      attempts: 0,
+      cumulativeWaitMs: 0,
+      request,
+      response
+    };
+    retryContext.attempts++;
+    retryContext.request = retryRequest;
+    retryContext.response = response;
+
+    const { retry, delayMs } = await this.retryPolicy.shouldRetry(retryContext);
+
+    if (!retry) {
+      return response;
+    }
+
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+    retryContext.cumulativeWaitMs += delayMs;
+    (retryRequest as any).__retryContext__ = retryContext;
+    this.retries.count++;
+    this.retries.delayMs += delayMs;
+    return this.fetchWithRetry(retryContext.request);
+  }
+
+  private async fetch(request: Request): Promise<Response> {
     await this.signer.sign(request);
-    const response = await fetch(request);
+    const response = await this.systemFetch(request);
     this.sessionToken =
       response.headers.get('x-ms-session-token') || this.sessionToken;
     const requestCharge = +(response.headers.get('x-ms-request-charge') || 0);
