@@ -67,7 +67,7 @@ export class CosmosClient {
   private readonly dbId: string | undefined;
   private readonly collId: string | undefined;
   private readonly systemFetch: typeof fetch;
-  private sessionToken = '';
+  public sessionToken = '';
   public requestCharges = 0;
   public retries = { count: 0, delayMs: 0 };
 
