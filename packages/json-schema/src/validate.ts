@@ -1086,7 +1086,7 @@ export function validate(
         instanceLocation,
         keyword: 'maxLength',
         keywordLocation: `${schemaLocation}/maxLength`,
-        error: `String is too long (${length} > ${$minLength}).`
+        error: `String is too long (${length} > ${$maxLength}).`
       });
     }
     if ($pattern !== undefined && !new RegExp($pattern).test(instance)) {
