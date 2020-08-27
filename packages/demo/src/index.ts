@@ -149,9 +149,7 @@ router
         <body>
           <h1>Demo</h1>
           <p>${getManagementToken().then(x => x.substr(0, 5))}</p>
-          <p>
-            ${fetch('https://example.com').then(response => response.body)}
-          </p>
+          <p>${fetch('https://example.com').then(response => response.body)}</p>
         </body>
       </html>`;
   })

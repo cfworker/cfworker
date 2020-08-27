@@ -22,8 +22,8 @@ async function* getFiles(dir) {
 }
 
 const supportedDrafts = {
-  '4': true,
-  '7': true,
+  4: true,
+  7: true,
   '2019-09': true
 };
 
