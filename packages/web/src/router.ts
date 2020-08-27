@@ -12,7 +12,7 @@ export const Post = Method('post');
 export const Put = Method('put');
 export const Patch = Method('patch');
 export const Delete = Method('delete');
-export const Head = Method('patch');
+export const Head = Method('head');
 export const Options = Method('options');
 
 export const Header = (header: string, value: string) => {
