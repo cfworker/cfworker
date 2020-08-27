@@ -14,7 +14,7 @@ export function captureError(
   request: Request,
   user: any
 ) {
-  const event_id = uuid('');
+  const event_id = uuid();
   const timestamp = new Date().toISOString().substr(0, 19);
   if (!(err instanceof Error)) {
     err = Object.prototype.valueOf.call(err);

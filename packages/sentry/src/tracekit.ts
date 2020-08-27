@@ -19,7 +19,7 @@ export interface TraceKitStack {
 export function serializeError(error: any): TraceKitError {
   const chrome = /^\s*at (.*?) ?\((.*?)(?::(\d+))?(?::(\d+))?\)?\s*$/i;
   const chromeEval = /\((\S*)(?::(\d+))(?::(\d+))\)/;
-  const lines = error.stack.split('\n');
+  const lines = error.stack ? error.stack.split('\n') : [];
   const stack: TraceKitStack[] = [];
   for (const line of lines) {
     let parts: RegExpExecArray | null;
