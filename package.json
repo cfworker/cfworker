@@ -36,11 +36,11 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "^9.1.2",
-    "@commitlint/config-conventional": "^9.1.2",
-    "husky": "^4.2.5",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "husky": "^4.3.0",
     "lerna": "^3.22.1",
-    "prettier": "2.1.1",
-    "pretty-quick": "^3.0.0"
+    "prettier": "2.1.2",
+    "pretty-quick": "^3.0.2"
   }
 }
