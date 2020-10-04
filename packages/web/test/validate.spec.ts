@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { Context } from '../src/context';
-import { HttpError } from '../src/http-error';
-import { validate } from '../src/validate';
+import { Context } from '../src/context.js';
+import { HttpError } from '../src/http-error.js';
+import { validate } from '../src/validate.js';
 
 describe('validate', () => {
   const middleware = validate({

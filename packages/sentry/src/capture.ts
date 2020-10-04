@@ -1,5 +1,5 @@
 import { uuid } from '@cfworker/uuid';
-import { serializeError } from './tracekit';
+import { serializeError } from './tracekit.js';
 
 const sentryClient = 'cfworker-sentry';
 

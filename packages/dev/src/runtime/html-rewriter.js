@@ -1,6 +1,6 @@
 /// <reference types="@cloudflare/workers-types" />
 
-import { htmlEncode } from './html-encode';
+import { htmlEncode } from './html-encode.js';
 
 const encoder = new TextEncoder();
 const parser = new DOMParser();

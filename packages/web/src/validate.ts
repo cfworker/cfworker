@@ -4,9 +4,9 @@ import {
   Schema,
   validate as schemaValidate
 } from '@cfworker/json-schema';
-import { HttpError } from './http-error';
-import { Middleware } from './middleware';
-import { toObject } from './to-object';
+import { HttpError } from './http-error.js';
+import { Middleware } from './middleware.js';
+import { toObject } from './to-object.js';
 
 export interface RequestSchemas {
   body?: Schema;

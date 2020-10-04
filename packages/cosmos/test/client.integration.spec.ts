@@ -5,7 +5,7 @@ import {
   IndexingPolicy,
   PartitionKeyDefinition,
   QueryParameter
-} from '../src/index';
+} from '../src/index.js';
 
 declare const process: { env: Record<string, string> };
 

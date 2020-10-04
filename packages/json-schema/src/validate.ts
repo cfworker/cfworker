@@ -1,15 +1,15 @@
-import { deepCompareStrict } from './deep-compare-strict';
-import { dereference } from './dereference';
-import { fastFormat } from './format';
-import { encodePointer } from './pointer';
+import { deepCompareStrict } from './deep-compare-strict.js';
+import { dereference } from './dereference.js';
+import { fastFormat } from './format.js';
+import { encodePointer } from './pointer.js';
 import {
   InstanceType,
   OutputUnit,
   Schema,
   SchemaDraft,
   ValidationResult
-} from './types';
-import { ucs2length } from './ucs2-length';
+} from './types.js';
+import { ucs2length } from './ucs2-length.js';
 
 export function validate(
   instance: any,

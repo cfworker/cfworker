@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { Application } from '../src/index';
+import { Application } from '../src/index.js';
 
 describe('Application', () => {
   it('listens', () => {

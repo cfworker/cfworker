@@ -1,4 +1,4 @@
-import { DecodedJwt, JsonWebKeyset } from './types';
+import { DecodedJwt, JsonWebKeyset } from './types.js';
 
 /**
  * Fetch a json web keyset.

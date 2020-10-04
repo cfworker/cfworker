@@ -1,5 +1,5 @@
 import { decode } from '@cfworker/base64url';
-import { DecodedJwt } from './types';
+import { DecodedJwt } from './types.js';
 
 /**
  * Decode a JWT into header, payload, and signature components.

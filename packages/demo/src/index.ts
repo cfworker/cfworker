@@ -9,15 +9,15 @@ import {
   toObject,
   validate
 } from '@cfworker/web';
-import { getManagementToken, handleRegister } from './auth/management';
+import { getManagementToken, handleRegister } from './auth/management.js';
 import {
   auth0Origin,
   authentication,
   getAuthorizeUrl,
   handleSignout,
   handleTokenCallback
-} from './auth/oauth-flow';
-import { html } from './html-stream';
+} from './auth/oauth-flow.js';
+import { html } from './html-stream.js';
 
 const sentryLogging: Middleware = async (context, next) => {
   const { req, state } = context;

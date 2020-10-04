@@ -1,5 +1,5 @@
-export { decodeJwt } from './decode';
-export { getJwks } from './jwks';
-export { parseJwt } from './parse';
-export * from './types';
-export { verifyJwtSignature } from './verify';
+export { decodeJwt } from './decode.js';
+export { getJwks } from './jwks.js';
+export { parseJwt } from './parse.js';
+export * from './types.js';
+export { verifyJwtSignature } from './verify.js';

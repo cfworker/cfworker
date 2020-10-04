@@ -8,7 +8,7 @@ const port = 7000;
 export async function assertBundlesJavaScriptWorker() {
   const entry = './test/fixtures/worker.js';
   const code = `
-    import { status } from './status';
+    import { status } from './status.js';
     addEventListener('fetch', e => e.respondWith(new Response('', { status })));`;
   await fs.outputFile(entry, code);
   await fs.outputFile(
@@ -32,7 +32,7 @@ export async function assertBundlesJavaScriptWorker() {
 export async function assertBundlesTypeScriptWorker() {
   const entry = './test/fixtures/worker.ts';
   const code = `
-    import { status } from './status';
+    import { status } from './status.js';
     // @ts-ignore
     addEventListener('fetch', e => e.respondWith(new Response('', { status })));`;
   await fs.outputFile(entry, code);

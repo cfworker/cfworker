@@ -1,4 +1,4 @@
-import { Schema, SchemaDraft } from '../src/types';
+import { Schema, SchemaDraft } from '../src/types.js';
 
 export interface SchemaTestSuite {
   draft: SchemaDraft;

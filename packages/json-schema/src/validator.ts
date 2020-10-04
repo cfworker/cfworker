@@ -1,6 +1,6 @@
-import { dereference } from './dereference';
-import { Schema, SchemaDraft } from './types';
-import { validate } from './validate';
+import { dereference } from './dereference.js';
+import { Schema, SchemaDraft } from './types.js';
+import { validate } from './validate.js';
 
 export class Validator {
   private readonly lookup: ReturnType<typeof dereference>;

@@ -1,5 +1,5 @@
 import compose, { Middleware as GenericMiddleware } from 'koa-compose';
-import { Context } from './context';
+import { Context } from './context.js';
 
 export type Middleware = GenericMiddleware<Context>;
 

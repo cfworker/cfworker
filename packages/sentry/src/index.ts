@@ -1,1 +1,1 @@
-export { captureError } from './capture';
+export { captureError } from './capture.js';

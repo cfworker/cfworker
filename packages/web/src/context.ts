@@ -1,6 +1,6 @@
-import { Cookies } from './cookies';
-import { Req } from './req';
-import { ResponseBuilder } from './response-builder';
+import { Cookies } from './cookies.js';
+import { Req } from './req.js';
+import { ResponseBuilder } from './response-builder.js';
 
 export class Context {
   public readonly req: Req;
