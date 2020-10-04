@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { parseUuid, uuid } from '../src/index';
+import { parseUuid, uuid } from '../src/index.js';
 
 describe('uuid', () => {
   it('generates a uuid', () => {

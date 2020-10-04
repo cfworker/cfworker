@@ -1,6 +1,6 @@
-import { FeedResponse, ItemResponse } from './response';
-import { defaultRetryPolicy, RetryContext, RetryPolicy } from './retry';
-import { getSigner, Signer } from './signer';
+import { FeedResponse, ItemResponse } from './response.js';
+import { defaultRetryPolicy, RetryContext, RetryPolicy } from './retry.js';
+import { getSigner, Signer } from './signer.js';
 import {
   Collection,
   ConsistencyLevel,
@@ -11,8 +11,8 @@ import {
   OfferType,
   PartitionKeyDefinition,
   Resource
-} from './types';
-import { assertArg, escapeNonASCII, uri } from './util';
+} from './types.js';
+import { assertArg, escapeNonASCII, uri } from './util.js';
 
 export interface CosmosClientConfig {
   /**

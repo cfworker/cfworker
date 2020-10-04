@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { ResponseBuilder } from '../src/response-builder';
+import { ResponseBuilder } from '../src/response-builder.js';
 
 describe('ResponseBuilder', () => {
   it('sets status text from status code', () => {

@@ -1,5 +1,5 @@
 import { Reviver, safeParse } from 'secure-json-parse';
-import { Accepts } from './accepts';
+import { Accepts } from './accepts.js';
 
 export class Req {
   public readonly raw: Request;

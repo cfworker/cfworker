@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { dereference, validate } from '../src/index';
-import { remotes, suites } from './json-schema-test-suite';
-import { loadMeta } from './meta-schema';
+import { dereference, validate } from '../src/index.js';
+import { remotes, suites } from './json-schema-test-suite.js';
+import { loadMeta } from './meta-schema.js';
 
 const unsupportedTests = {
   'draft4/optional/bignum': true,

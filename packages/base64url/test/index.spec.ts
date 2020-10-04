@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { decode, encode } from '../src/index';
+import { decode, encode } from '../src/index.js';
 
 describe('base64url', () => {
   const asciiPlain = 'The quick brown fox jumps over the lazy dog.';

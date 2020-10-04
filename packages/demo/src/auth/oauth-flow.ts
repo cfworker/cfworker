@@ -1,6 +1,6 @@
 import { parseJwt } from '@cfworker/jwt';
 import { Context, Cookies, HttpError, Middleware } from '@cfworker/web';
-import { TokenResponse } from './token-response';
+import { TokenResponse } from './token-response.js';
 
 export function getAuthorizeUrl({ origin, href }: URL) {
   const domain = process.env.AUTH0_DOMAIN;

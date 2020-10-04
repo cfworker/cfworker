@@ -1,4 +1,4 @@
-import { PersistedResource } from './types';
+import { PersistedResource } from './types.js';
 
 export abstract class CosmosResponse {
   constructor(protected readonly response: Response) {}

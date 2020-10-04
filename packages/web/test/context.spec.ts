@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { Context } from '../src/context';
+import { Context } from '../src/context.js';
 
 declare var FetchEvent: any;
 

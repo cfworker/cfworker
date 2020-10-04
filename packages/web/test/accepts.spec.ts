@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { Accepts } from '../src/index';
+import { Accepts } from '../src/index.js';
 
 describe('Accept', () => {
   it('supports empty headers', () => {

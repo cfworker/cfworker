@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { Req, ReqBody } from '../src/req';
+import { Req, ReqBody } from '../src/req.js';
 
 describe('Req', () => {
   const request = new Request('https://foo.com/hello-%28world%29', {

@@ -1,7 +1,7 @@
 import { Key, pathToRegexp } from 'path-to-regexp';
-import { Context } from './context';
-import { HttpError } from './http-error';
-import { composeMiddleware, Middleware } from './middleware';
+import { Context } from './context.js';
+import { HttpError } from './http-error.js';
+import { composeMiddleware, Middleware } from './middleware.js';
 
 export const Method = (method: string) => {
   method = method.toUpperCase();

@@ -1,7 +1,7 @@
 import statuses from 'statuses';
-import { Context } from './context';
-import { HttpError } from './http-error';
-import { composeMiddleware, Middleware } from './middleware';
+import { Context } from './context.js';
+import { HttpError } from './http-error.js';
+import { composeMiddleware, Middleware } from './middleware.js';
 
 const resolved = Promise.resolve();
 

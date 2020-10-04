@@ -1,6 +1,6 @@
 import { Context } from '@cfworker/web';
-import { validateEmail } from './email';
-import { TokenResponse } from './token-response';
+import { validateEmail } from './email.js';
+import { TokenResponse } from './token-response.js';
 
 let managementToken: string;
 

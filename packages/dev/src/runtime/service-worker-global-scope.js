@@ -1,6 +1,6 @@
 import { addEventListener, dispatchEvent } from './add-event-listener.js';
 import { FetchEvent } from './fetch-event.js';
-import { HTMLRewriter } from './html-rewriter';
+import { HTMLRewriter } from './html-rewriter.js';
 import { MemoryKVNamespace, StaticContentKVNamespace } from './kv.js';
 
 export class ServiceWorkerGlobalScope {
