@@ -78,7 +78,7 @@ export class CosmosClient {
     this.consistencyLevel = config.consistencyLevel || 'Session';
     this.dbId = config.dbId;
     this.collId = config.collId;
-    this.systemFetch = config.fetch || fetch;
+    this.systemFetch = config.fetch || fetch.bind(self);
     this.sessionToken = config.sessionToken || '';
   }
 
