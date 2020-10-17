@@ -17,7 +17,7 @@ addEventListener('fetch', event => {
       environment,
       err,
       event.request,
-      user // optional
+      user // optional, eg { name: 'octocat' }
     );
     event.waitUntil(promise);
   }
