@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/sentry",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Minimalist Sentry client for Cloudflare workers and service workers",
   "keywords": [
     "sentry",
@@ -34,8 +34,8 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/worker-types": "^1.6.0",
     "@cfworker/uuid": "1.6.0",
+    "@cfworker/worker-types": "^1.6.0",
     "@cloudflare/workers-types": "^2.0.0"
   },
   "devDependencies": {
