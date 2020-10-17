@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@cfworker/worker-types": "^1.6.0",
+    "@cfworker/uuid": "1.6.0",
     "@cloudflare/workers-types": "^2.0.0"
   },
   "devDependencies": {
