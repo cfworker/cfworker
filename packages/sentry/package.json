@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/sentry",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Minimalist Sentry client for Cloudflare workers and service workers",
   "keywords": [
     "sentry",
