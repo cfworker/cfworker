@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { EventEmitter } from 'events';
 import puppeteer from 'puppeteer';
+import { getLocalhostIP } from './ip.js';
 import { KV } from './kv.js';
 import { logger } from './logger.js';
 import { escapeHeaderName, unescapeHeaderName } from './runtime/headers.js';
@@ -10,6 +11,9 @@ import { StaticSite } from './static-site.js';
 export class WorkerHost extends EventEmitter {
   /** @type {import('puppeteer').Browser | undefined} */
   browser = undefined;
+
+  /** @type {string|null} */
+  localIP = null;
 
   /**
    * @param {number} port
@@ -37,6 +41,8 @@ export class WorkerHost extends EventEmitter {
     logger.progress('Starting server...');
     this.server.serve();
 
+    const ipPromise = getLocalhostIP();
+
     logger.progress('Starting chrome...');
     const browser = (this.browser = await puppeteer.launch({
       headless: !this.inspect,
@@ -63,6 +69,8 @@ export class WorkerHost extends EventEmitter {
       waitUntil: ['load']
     });
     await this.forkConsoleLog(page);
+
+    this.localIP = await ipPromise;
 
     this.server.on('request', this.handleRequestWithWorker);
 
@@ -146,7 +154,17 @@ export class WorkerHost extends EventEmitter {
       delete req.headers[key];
       req.headers[newKey] = value;
     }
-    req.headers['CF-Connecting-IP'] = req.connection.remoteAddress;
+
+    if (
+      this.localIP &&
+      (!req.connection.remoteAddress ||
+        req.connection.remoteAddress === '::1' ||
+        req.connection.remoteAddress.endsWith('127.0.0.1'))
+    ) {
+      req.headers['CF-Connecting-IP'] = this.localIP;
+    } else {
+      req.headers['CF-Connecting-IP'] = req.connection.remoteAddress;
+    }
 
     const init = {
       method,
