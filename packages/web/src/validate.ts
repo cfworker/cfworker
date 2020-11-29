@@ -64,8 +64,11 @@ function middlewareFactory(
     }
     if ($body && hasBody[req.method]) {
       let body: any;
+      const contentType = req.headers.get('content-type') || '';
       if (
-        req.headers.get('content-type') === 'application/x-www-form-urlencoded'
+        contentType === 'application/x-www-form-urlencoded' ||
+        contentType.startsWith('application/x-www-form-urlencoded;') ||
+        contentType.startsWith('multipart/form-data;')
       ) {
         const form = await req.body.formData();
         body = toObject(form);
