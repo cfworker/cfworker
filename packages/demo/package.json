@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/demo",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Web app demo",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -24,7 +24,7 @@
     "@cfworker/cosmos": "^1.6.3",
     "@cfworker/jwt": "^1.6.3",
     "@cfworker/sentry": "^1.6.3",
-    "@cfworker/web": "^1.6.3",
+    "@cfworker/web": "^1.6.4",
     "@cfworker/worker-types": "^1.6.0",
     "@cloudflare/workers-types": "^2.0.0"
   },
