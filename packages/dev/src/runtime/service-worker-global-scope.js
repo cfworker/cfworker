@@ -29,6 +29,7 @@ export class ServiceWorkerGlobalScope {
     this.Function = Function;
     this.Headers = Headers;
     this.HTMLRewriter = HTMLRewriter;
+    this.Infinity = Infinity;
     this.Int16Array = Int16Array;
     this.Int32Array = Int32Array;
     this.Int8Array = Int8Array;

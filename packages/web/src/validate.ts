@@ -17,6 +17,8 @@ export interface RequestSchemas {
 
 export type RequestPart = keyof RequestSchemas;
 
+export type RequestParser = (data: URLSearchParams | FormData) => any;
+
 const draft = '2019-09';
 
 const hasBody: Record<string, true> = {
@@ -28,6 +30,7 @@ const hasBody: Record<string, true> = {
 
 function middlewareFactory(
   schemas: RequestSchemas,
+  parser: RequestParser = toObject,
   lookup = Object.create(null)
 ): Middleware {
   const {
@@ -59,7 +62,7 @@ function middlewareFactory(
       validateRequestPart('headers', headers, $headers, lookup);
     }
     if ($search) {
-      const search = toObject(req.url.searchParams);
+      const search = parser(req.url.searchParams);
       validateRequestPart('search', search, $search, lookup);
     }
     if ($body && hasBody[req.method]) {
@@ -71,7 +74,7 @@ function middlewareFactory(
         contentType.startsWith('multipart/form-data;')
       ) {
         const form = await req.body.formData();
-        body = toObject(form);
+        body = parser(form);
       } else {
         body = await req.body.json();
       }
