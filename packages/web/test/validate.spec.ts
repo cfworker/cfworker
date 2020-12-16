@@ -1,8 +1,10 @@
+import { Schema } from '@cfworker/json-schema';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
+import qs from 'qs';
 import { Context } from '../src/context.js';
 import { HttpError } from '../src/http-error.js';
-import { validate } from '../src/validate.js';
+import { RequestParser, validate } from '../src/validate.js';
 
 describe('validate', () => {
   const middleware = validate({
@@ -177,6 +179,44 @@ describe('validate', () => {
     await middleware(context, async () => (resolved = true));
     // verify formData read
     await context.req.body.formData();
+    expect(resolved).to.be.true;
+  });
+
+  it('supports custom parsers', async () => {
+    const validObj = { a: ['b', 'c'] };
+
+    const schema: Schema = {
+      type: 'object',
+      const: validObj
+    };
+
+    const stringified = qs.stringify(validObj);
+
+    const qsParser: RequestParser = data => {
+      if (data instanceof FormData) {
+        data = new URLSearchParams(data as any);
+      }
+      return qs.parse(data.toString());
+    };
+
+    const middleware = validate({ search: schema, body: schema }, qsParser);
+
+    let request = new Request('https:/a.b/?' + stringified, {
+      method: 'POST',
+      body: new URLSearchParams(stringified)
+    });
+    let resolved = false;
+    await middleware(new Context({ request }), async () => (resolved = true));
+    expect(resolved).to.be.true;
+
+    const form = new FormData();
+    form.append('a[]', 'b');
+    form.append('a[]', 'c');
+    request = new Request('https:/a.b/?' + stringified, {
+      method: 'POST',
+      body: form
+    });
+    await middleware(new Context({ request }), async () => (resolved = true));
     expect(resolved).to.be.true;
   });
 });
