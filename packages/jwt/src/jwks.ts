@@ -15,16 +15,14 @@ export async function getJwks(issuer: string): Promise<JsonWebKeyset> {
   return response.json();
 }
 
-const getCacheKey = (issuer: string, kid?: string) => `${issuer}/${kid || ''}`;
-
-const importedKeys: Record<string, CryptoKey> = {};
+const importedKeys: Record<string, Record<string, CryptoKey>> = {};
 
 /**
  * Import and cache a JsonWebKeyset
- * @param issuer The issuer. Serves as the cache key.
+ * @param iss The issuer. Serves as the first-level cache key.
  * @param jwks The JsonWebKeyset to import.
  */
-export async function importKey(issuer: string, jwk: JsonWebKey) {
+export async function importKey(iss: string, jwk: JsonWebKey) {
   const input = {
     kty: 'RSA',
     e: 'AQAB',
@@ -39,34 +37,29 @@ export async function importKey(issuer: string, jwk: JsonWebKey) {
     false,
     ['verify']
   );
-  importedKeys[getCacheKey(issuer, jwk?.kid)] = key;
+  importedKeys[iss] = importedKeys[iss] || {};
+  importedKeys[iss][jwk.kid || 'default'] = key;
 }
 
 /**
  * Get the CryptoKey associated with the JWT's issuer.
  */
-export async function getkey(decoded: DecodedJwt): Promise<CryptoKey> {
-  const {
-    header: { kid },
+export async function getKey(decoded: DecodedJwt): Promise<CryptoKey> {
+  let {
+    header: { kid = 'default' },
     payload: { iss }
   } = decoded;
 
-  const cacheKey = getCacheKey(iss, kid);
-
-  if (!importedKeys[cacheKey]) {
+  if (!importedKeys[iss]) {
     const jwks = await getJwks(iss);
-    const jwk = jwks.keys.find(k => k.kid === kid);
-
-    if (!jwk) {
-      throw new Error(
-        `Error jwk not found in keyset. kid:${kid}  keyset:${JSON.stringify(
-          jwks
-        )}`
-      );
-    }
-
-    await importKey(iss, jwk);
+    await Promise.all(jwks.keys.map(jwk => importKey(iss, jwk)));
   }
 
-  return importedKeys[cacheKey];
+  const key = importedKeys[iss][kid];
+
+  if (!key) {
+    throw new Error(`Error jwk not found. iss: ${iss}; kid: ${kid};`);
+  }
+
+  return key;
 }
