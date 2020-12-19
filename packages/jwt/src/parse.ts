@@ -1,5 +1,5 @@
 import { decodeJwt } from './decode.js';
-import { DecodedJwt, JwtParseResult } from './types.js';
+import { DecodedJwt, JwtParseResult, JsonWebKeyset } from './types.js';
 import { verifyJwtSignature } from './verify.js';
 
 /**
@@ -8,7 +8,8 @@ import { verifyJwtSignature } from './verify.js';
 export async function parseJwt(
   encodedToken: string,
   issuerOrigin: string,
-  audience: string
+  audience: string,
+  keySet?: JsonWebKeyset
 ): Promise<JwtParseResult> {
   let decoded: DecodedJwt;
   try {
@@ -53,7 +54,7 @@ export async function parseJwt(
   }
   let signatureValid: boolean;
   try {
-    signatureValid = await verifyJwtSignature(decoded);
+    signatureValid = await verifyJwtSignature(decoded, keySet);
   } catch {
     return { valid: false, reason: `Error verifying JWT signature.` };
   }

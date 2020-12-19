@@ -20,6 +20,28 @@ describe('parseJwt', () => {
     expect(result.valid).to.equal(true);
   });
 
+  it('Accepts external jwks', async () => {
+    const exp = Math.floor(new Date().getTime() / 1000) + 10;
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'abc' };
+    const payload = { iss, aud, exp, sub, iat };
+    const jwt = await createJwt(header, payload);
+    const result = await parseJwt(jwt, iss, aud, {
+      keys: [
+        {
+          kid: 'abc',
+          alg: 'RS256',
+          e: 'AQAB',
+          ext: true,
+          key_ops: ['verify'],
+          kty: 'RSA',
+          n:
+            'q9-bSyae6KkVo9rdgrvEW0BhfnHlSIMasKGCMbD7metqOzviVKz9_aWMUPTngwwT_gQRnXz7gUMZ8qc_E1AeX_VAcS9DQUJONJp8sogVXFABhkzQLBKg7eYn6_1tknwE-84L4toiTYduR2zwDAOWr3tfg8RI9BBwv5efTBw3SAqnedErobZqKY3ZSgI4y8hFxkYOLApZK6672HHck4gW5Xh0WY5kcKKa8jJYeqH479X_guugOBe3x7JcwpAaQKK7fH0A1F__citBsEym_VqdXlAhE_J5eiu8JWw3AkfXUUA3nPl1GmrGan1PCSmzhjxbvfwAsAQ1Y2GdWL8ErprEEw'
+        } as JsonWebKey
+      ]
+    });
+    expect(result.valid).to.equal(true);
+  });
+
   it('rejects unexpected algorithm', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
     const header: JwtHeader = { alg: 'HS256', typ: 'JWT', kid: 'xyz' };

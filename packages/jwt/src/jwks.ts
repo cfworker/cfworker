@@ -43,9 +43,12 @@ export async function importKey(issuer: string, jwk: JsonWebKey) {
 /**
  * Get the CryptoKey associated with the JWT's issuer.
  */
-export async function getkey(decoded: DecodedJwt): Promise<CryptoKey> {
+export async function getkey(
+  decoded: DecodedJwt,
+  keySet?: JsonWebKeyset
+): Promise<CryptoKey> {
   if (!importedKeys[decoded.payload.iss]) {
-    const jwks = await getJwks(decoded.payload.iss);
+    const jwks = keySet || (await getJwks(decoded.payload.iss));
     await importKey(decoded.payload.iss, jwks.keys[0]);
   }
   return importedKeys[decoded.payload.iss];
