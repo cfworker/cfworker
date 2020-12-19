@@ -15,6 +15,8 @@ export async function getJwks(issuer: string): Promise<JsonWebKeyset> {
   return response.json();
 }
 
+const getCacheKey = (issuer: string, kid?: string) => `${issuer}/${kid || ''}`;
+
 const importedKeys: Record<string, CryptoKey> = {};
 
 /**
@@ -37,16 +39,34 @@ export async function importKey(issuer: string, jwk: JsonWebKey) {
     false,
     ['verify']
   );
-  importedKeys[issuer] = key;
+  importedKeys[getCacheKey(issuer, jwk?.kid)] = key;
 }
 
 /**
  * Get the CryptoKey associated with the JWT's issuer.
  */
 export async function getkey(decoded: DecodedJwt): Promise<CryptoKey> {
-  if (!importedKeys[decoded.payload.iss]) {
-    const jwks = await getJwks(decoded.payload.iss);
-    await importKey(decoded.payload.iss, jwks.keys[0]);
+  const {
+    header: { kid },
+    payload: { iss }
+  } = decoded;
+
+  const cacheKey = getCacheKey(iss, kid);
+
+  if (!importedKeys[cacheKey]) {
+    const jwks = await getJwks(iss);
+    const jwk = jwks.keys.find(k => k.kid === kid);
+
+    if (!jwk) {
+      throw new Error(
+        `Error jwk not found in keyset. kid:${kid}  keyset:${JSON.stringify(
+          jwks
+        )}`
+      );
+    }
+
+    await importKey(iss, jwk);
   }
-  return importedKeys[decoded.payload.iss];
+
+  return importedKeys[cacheKey];
 }
