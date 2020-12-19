@@ -1,4 +1,4 @@
-import { getkey } from './jwks.js';
+import { getKey } from './jwks.js';
 import { DecodedJwt } from './types.js';
 
 /**
@@ -11,6 +11,6 @@ export async function verifyJwtSignature(decoded: DecodedJwt) {
   const signature = new Uint8Array(
     Array.from(decoded.signature).map(c => c.charCodeAt(0))
   );
-  const key = await getkey(decoded);
+  const key = await getKey(decoded);
   return crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, signature, data);
 }
