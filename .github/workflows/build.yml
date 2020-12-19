@@ -27,6 +27,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Environment log
         run: |
+          echo $GITHUB_REPOSITORY
           node --version
           yarn --version
       - name: Install
