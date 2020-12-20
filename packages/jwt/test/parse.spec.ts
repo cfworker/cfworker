@@ -8,12 +8,13 @@ import { JwtHeader, JwtPayload } from '../src/types.js';
 const iss = 'https://test.com';
 const aud = 'test-aud';
 const sub = 'test-sub';
+const kid = 'xyz';
 const iat = Math.floor(new Date().getTime() / 1000);
 
 describe('parseJwt', () => {
   it('parses a valid JWT', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -21,21 +22,23 @@ describe('parseJwt', () => {
   });
 
   it('Accepts external jwks', async () => {
+    const kid = 'abc';
+    const iss = 'https://test2.com';
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'abc' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud, {
       keys: [
         {
-          kid: 'abc',
+          kid,
           alg: 'RS256',
           e: 'AQAB',
           ext: true,
           key_ops: ['verify'],
           kty: 'RSA',
           n:
-            'q9-bSyae6KkVo9rdgrvEW0BhfnHlSIMasKGCMbD7metqOzviVKz9_aWMUPTngwwT_gQRnXz7gUMZ8qc_E1AeX_VAcS9DQUJONJp8sogVXFABhkzQLBKg7eYn6_1tknwE-84L4toiTYduR2zwDAOWr3tfg8RI9BBwv5efTBw3SAqnedErobZqKY3ZSgI4y8hFxkYOLApZK6672HHck4gW5Xh0WY5kcKKa8jJYeqH479X_guugOBe3x7JcwpAaQKK7fH0A1F__citBsEym_VqdXlAhE_J5eiu8JWw3AkfXUUA3nPl1GmrGan1PCSmzhjxbvfwAsAQ1Y2GdWL8ErprEEw'
+            'q1rk8wnDn93YHoSwtZ0PIn7maw-TqsqCR0kVBWM_UCtCQE6YigKwAASZBO5hH9orLUBVI4psjkKZQ2tj0roUGSDdFhgXt650goFq0r3knknhjy-Z5xMRYdwjvW85swC0nnCsGml-KeKRWLEtlrobzUyT7fP3m4vBiyCsru9mR7kiWlBShmjDyd3gAdMn2BjAC1HszNSUbCuoCUVch3YpAO6ApFiZa6f3qscMNOP5UFVdbvIx-robyQkU7Ocbbi2qrssyQTAAsamdN4b8lwOeraDy9euwp8QBgvwj6yKRT5pqC-ao-SDRzc_cwbLO02i6FDnrf3tLpAWxNS28Q3SXLQ'
         } as JsonWebKey
       ]
     });
@@ -44,7 +47,7 @@ describe('parseJwt', () => {
 
   it('rejects unexpected algorithm', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'HS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'HS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -53,7 +56,7 @@ describe('parseJwt', () => {
 
   it('rejects unexpected type', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWS', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWS', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -62,7 +65,7 @@ describe('parseJwt', () => {
 
   it('rejects invalid issuer', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 60;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss: 'https://nefarious.com', aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -71,7 +74,7 @@ describe('parseJwt', () => {
 
   it('rejects invalid audience', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 60;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud: 'nefarious', exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -80,7 +83,7 @@ describe('parseJwt', () => {
 
   it('rejects expired JWT', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) - 60;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -88,14 +91,16 @@ describe('parseJwt', () => {
   });
 });
 
-let privateKey: CryptoKey;
+const privateKeys: Record<string, CryptoKey> = {};
 
 async function createJwt(
   header: JwtHeader,
   payload: JwtPayload
 ): Promise<string> {
-  if (!privateKey) {
-    privateKey = await generateKey();
+  const kid = header.kid;
+  const iss = payload.iss;
+  if (!privateKeys[kid]) {
+    privateKeys[kid] = await generateKey({ iss, kid });
   }
 
   const data =
@@ -103,14 +108,14 @@ async function createJwt(
 
   const signature = await crypto.subtle.sign(
     'RSASSA-PKCS1-v1_5',
-    privateKey,
+    privateKeys[kid],
     new TextEncoder().encode(data)
   );
 
   return data + '.' + btoa(String.fromCharCode(...new Uint8Array(signature)));
 }
 
-async function generateKey() {
+async function generateKey({ iss, kid }: { iss: string; kid: string }) {
   const keyPair = await crypto.subtle.generateKey(
     {
       name: 'RSASSA-PKCS1-v1_5',
@@ -123,6 +128,6 @@ async function generateKey() {
   );
 
   const jwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
-  await importKey(iss, jwk);
+  await importKey(iss, { ...jwk, kid } as JsonWebKey);
   return keyPair.privateKey;
 }

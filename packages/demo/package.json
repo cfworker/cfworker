@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/demo",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "Web app demo",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -21,8 +21,8 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/cosmos": "^1.6.5",
-    "@cfworker/jwt": "^1.6.5",
+    "@cfworker/cosmos": "^1.6.6",
+    "@cfworker/jwt": "^1.6.6",
     "@cfworker/sentry": "^1.6.5",
     "@cfworker/web": "^1.6.5",
     "@cfworker/worker-types": "^1.6.0",

@@ -15,14 +15,14 @@ export async function getJwks(issuer: string): Promise<JsonWebKeyset> {
   return response.json();
 }
 
-const importedKeys: Record<string, CryptoKey> = {};
+const importedKeys: Record<string, Record<string, CryptoKey>> = {};
 
 /**
  * Import and cache a JsonWebKeyset
- * @param issuer The issuer. Serves as the cache key.
+ * @param iss The issuer. Serves as the first-level cache key.
  * @param jwks The JsonWebKeyset to import.
  */
-export async function importKey(issuer: string, jwk: JsonWebKey) {
+export async function importKey(iss: string, jwk: JsonWebKey) {
   const input = {
     kty: 'RSA',
     e: 'AQAB',
@@ -37,19 +37,32 @@ export async function importKey(issuer: string, jwk: JsonWebKey) {
     false,
     ['verify']
   );
-  importedKeys[issuer] = key;
+  importedKeys[iss] = importedKeys[iss] || {};
+  importedKeys[iss][jwk.kid || 'default'] = key;
 }
 
 /**
  * Get the CryptoKey associated with the JWT's issuer.
  */
-export async function getkey(
+export async function getKey(
   decoded: DecodedJwt,
   keySet?: JsonWebKeyset
 ): Promise<CryptoKey> {
-  if (!importedKeys[decoded.payload.iss]) {
-    const jwks = keySet || (await getJwks(decoded.payload.iss));
-    await importKey(decoded.payload.iss, jwks.keys[0]);
+  let {
+    header: { kid = 'default' },
+    payload: { iss }
+  } = decoded;
+
+  if (!importedKeys[iss]) {
+    const jwks = keySet || (await getJwks(iss));
+    await Promise.all(jwks.keys.map(jwk => importKey(iss, jwk)));
   }
-  return importedKeys[decoded.payload.iss];
+
+  const key = importedKeys[iss][kid];
+
+  if (!key) {
+    throw new Error(`Error jwk not found. iss: ${iss}; kid: ${kid};`);
+  }
+
+  return key;
 }
