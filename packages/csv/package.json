@@ -1,0 +1,36 @@
+{
+  "name": "@cfworker/csv",
+  "version": "1.6.5",
+  "description": "Streaming CSV encoding for Cloudflare Workers and service workers",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "tsconfig.json",
+    "README.md",
+    "package.json"
+  ],
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "cfworker test test/**/*.spec.ts"
+  },
+  "devDependencies": {
+    "@cfworker/dev": "^1.6.5",
+    "@types/chai": "^4.2.12",
+    "@types/mocha": "^8.0.3",
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3",
+    "typescript": "^4.0.3"
+  }
+}

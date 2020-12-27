@@ -14,6 +14,10 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
   Azure Cosmos DB client for Cloudflare Workers and service workers
 
+- `@cfworker/csv`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md) | [npm](https://www.npmjs.com/package/@cfworker/csv)
+
+  Streaming CSV encoding for Cloudflare Workers and service workers
+
 - `@cfworker/demo`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/demo/README.md) | [npm](https://www.npmjs.com/package/@cfworker/demo)
 
   Web app demo

@@ -1,10 +1,13 @@
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { readdirSync, readFileSync, writeFileSync } from 'fs';
 
 export async function generatePackageListMarkdown() {
   const packages = readdirSync('packages');
   const npm = 'https://www.npmjs.com/package/';
   let markdown = '## packages\n\n';
   for (const name of packages) {
+    if (name === 'worker-types') {
+      continue;
+    }
     try {
       const buffer = readFileSync(`packages/${name}/package.json`);
       const pkg = JSON.parse(buffer.toString());
