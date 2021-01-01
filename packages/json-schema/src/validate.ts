@@ -1058,8 +1058,11 @@ export function validate(
       }
     }
     if ($multipleOf !== undefined) {
-      const division = instance / $multipleOf;
-      if (division !== Math.floor(division)) {
+      const remainder = instance % $multipleOf;
+      if (
+        Math.abs(0 - remainder) >= 1.1920929e-7 &&
+        Math.abs($multipleOf - remainder) >= 1.1920929e-7
+      ) {
         errors.push({
           instanceLocation,
           keyword: 'multipleOf',
