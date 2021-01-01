@@ -42,7 +42,7 @@
     "@types/chai": "^4.2.12",
     "@types/mocha": "^8.0.3",
     "chai": "^4.2.0",
-    "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#ac63eb7",
+    "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#8daea3f",
     "mocha": "^8.1.3",
     "typescript": "^4.0.3"
   }
