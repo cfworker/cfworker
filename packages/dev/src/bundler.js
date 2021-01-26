@@ -121,7 +121,7 @@ export class Bundler extends EventEmitter {
       replacements[`process.env.${key}`] = JSON.stringify(value);
     }
 
-    replacements['process.env.'] = '({}).';
+    replacements['process.env.'] = '({} as any).';
 
     return replacements;
   }
