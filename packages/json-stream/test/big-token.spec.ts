@@ -3,7 +3,9 @@ import { describe, it } from 'mocha';
 import { Parser } from '../src/parser.js';
 
 describe('Parser', () => {
-  it('can handle large tokens without running out of memory', done => {
+  it('can handle large tokens without running out of memory', function (done) {
+    this.timeout(5000);
+
     const parser = new Parser();
     const chunkSize = 1024;
     const chunks = 1024 * 200; // 200mb
