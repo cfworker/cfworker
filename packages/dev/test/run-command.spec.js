@@ -8,14 +8,21 @@ const port = 7000;
 export async function assertBundlesJavaScriptWorker() {
   const entry = './test/fixtures/worker.js';
   const code = `
-    import { status } from './status';
+    import { status } from './status.js';
     addEventListener('fetch', e => e.respondWith(new Response('', { status })));`;
   await fs.outputFile(entry, code);
   await fs.outputFile(
     './test/fixtures/status.js',
     'export const status = 200;'
   );
-  const command = new RunCommand({ entry, port, inspect: false, watch: false });
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: false,
+    kv: []
+  });
   await command.execute();
   const response = await fetch('http://localhost:7000');
   assert.equal(response.status, 200);
@@ -25,7 +32,7 @@ export async function assertBundlesJavaScriptWorker() {
 export async function assertBundlesTypeScriptWorker() {
   const entry = './test/fixtures/worker.ts';
   const code = `
-    import { status } from './status';
+    import { status } from './status.js';
     // @ts-ignore
     addEventListener('fetch', e => e.respondWith(new Response('', { status })));`;
   await fs.outputFile(entry, code);
@@ -33,7 +40,14 @@ export async function assertBundlesTypeScriptWorker() {
     './test/fixtures/status.js',
     'export const status = 200;'
   );
-  const command = new RunCommand({ entry, port, inspect: false, watch: false });
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: true,
+    kv: []
+  });
   await command.execute();
   const response = await fetch('http://localhost:7000');
   assert.equal(response.status, 200);
@@ -44,7 +58,14 @@ export async function assertRespondsWith503WhenFetchListenerIsNotAdded() {
   const entry = './test/fixtures/worker.js';
   const code = `console.log('hello world')`;
   await fs.outputFile(entry, code);
-  const command = new RunCommand({ entry, port, inspect: false, watch: false });
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: true,
+    kv: []
+  });
   await command.execute();
   const response = await fetch('http://localhost:7000');
   assert.equal(response.status, 503);
@@ -55,7 +76,14 @@ export async function assertWatchesForChanges() {
   const entry = './test/fixtures/worker.js';
   let code = `console.log('hello world')`;
   await fs.outputFile(entry, code);
-  const command = new RunCommand({ entry, port, inspect: false, watch: true });
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: true,
+    check: true,
+    kv: []
+  });
   await command.execute();
   let response = await fetch('http://localhost:7000');
   assert.equal(response.status, 503);
@@ -85,7 +113,14 @@ export async function assertCanReadRequestCookieHeader() {
     });`;
   await fs.outputFile(entry, code);
   const { RunCommand } = await import('../src/cli/run-command.js');
-  const command = new RunCommand({ entry, port, inspect: false, watch: false });
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: true,
+    kv: []
+  });
   await command.execute();
   const response = await fetch('http://localhost:7000', {
     headers: { cookie }
@@ -106,11 +141,129 @@ export async function assertCanRespondWithSetCookieHeader() {
     });`;
   await fs.outputFile(entry, code);
   const { RunCommand } = await import('../src/cli/run-command.js');
-  const command = new RunCommand({ entry, port, inspect: false, watch: false });
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: true,
+    kv: []
+  });
   await command.execute();
 
   const response = await fetch('http://localhost:7000');
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('set-cookie'), 'test cookie');
+  command.dispose();
+}
+
+export async function assertCanReadWriteCache() {
+  const entry = './test/fixtures/worker.js';
+  const code = `
+    addEventListener('fetch', async e => {
+      await caches.default.put('/', new Response(undefined, { status: 201, statusText: 'no content' }));
+      const response = await caches.default.match('/');
+      e.respondWith(response);
+    });`;
+  await fs.outputFile(entry, code);
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: false,
+    kv: []
+  });
+  await command.execute();
+  const response = await fetch('http://localhost:7000');
+  assert.equal(response.status, 201);
+  assert.equal(response.statusText, 'no content');
+  command.dispose();
+}
+
+export async function assertCanServeStaticSite() {
+  const entry = './test/fixtures/worker.js';
+  const code = `
+    addEventListener('fetch', async e => {
+      const key = JSON.parse(__STATIC_CONTENT_MANIFEST)['index.html'];
+      const body = await __STATIC_CONTENT.get(key, 'stream');
+      e.respondWith(new Response(body));
+    });`;
+  await fs.outputFile(entry, code);
+  await fs.outputFile(
+    './test/fixtures/public/index.html',
+    '<body>hello world</body>'
+  );
+  await fs.outputFile(
+    './test/fixtures/public/node_modules/ignored.js',
+    'var x = 1;'
+  );
+  await fs.outputFile('./test/fixtures/public/foo/bar.js', 'var bar = 2;');
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: true,
+    check: false,
+    site: 'test/fixtures/public',
+    kv: []
+  });
+  await command.execute();
+  const response = await fetch('http://localhost:7000');
+  const html = await response.text();
+  assert.equal(html, '<body>hello world</body>');
+
+  const updated = new Promise(resolve =>
+    command.host.on('worker-updated', resolve)
+  );
+  await fs.outputFile(
+    './test/fixtures/public/index.html',
+    '<body>hello world 2</body>'
+  );
+  await updated;
+  const response2 = await fetch('http://localhost:7000');
+  const html2 = await response2.text();
+  assert.equal(html2, '<body>hello world 2</body>');
+
+  command.dispose();
+}
+
+export async function assertCanCreateKVNamespace() {
+  const entry = './test/fixtures/worker.js';
+  const code = `
+    addEventListener('fetch', async e => {
+      const body = await greetings.get('hello', 'text');
+      e.respondWith(new Response(body));
+    });`;
+  await fs.outputFile(entry, code);
+  await fs.outputFile(
+    './test/fixtures/greetings.json',
+    '[{ "key": "hello", "value": "world", "base64": false }]'
+  );
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: true,
+    check: false,
+    kv: ['./test/fixtures/greetings.json']
+  });
+  await command.execute();
+  // const response = await fetch('http://localhost:7000');
+  // const html = await response.text();
+  // assert.equal(html, 'world');
+
+  // const updated = new Promise(resolve =>
+  //   command.host.on('worker-updated', resolve)
+  // );
+  // await fs.outputFile(
+  //   './test/fixtures/greetings.json',
+  //   '[{ "key": "hello", "value": "world 2", "base64": false }]'
+  // );
+  // await updated;
+  // const response2 = await fetch('http://localhost:7000');
+  // const html2 = await response2.text();
+  // assert.equal(html2, 'world 2');
+
   command.dispose();
 }

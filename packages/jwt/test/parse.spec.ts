@@ -1,19 +1,20 @@
+import { encode } from '@cfworker/base64url';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { parseJwt } from '../src/parse';
-import { encode } from '@cfworker/base64url';
-import { importKey } from '../src/jwks';
-import { JwtHeader, JwtPayload } from '../src/types';
+import { importKey } from '../src/jwks.js';
+import { parseJwt } from '../src/parse.js';
+import { JwtHeader, JwtPayload } from '../src/types.js';
 
 const iss = 'https://test.com';
 const aud = 'test-aud';
 const sub = 'test-sub';
+const kid = 'xyz';
 const iat = Math.floor(new Date().getTime() / 1000);
 
 describe('parseJwt', () => {
   it('parses a valid JWT', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -22,7 +23,7 @@ describe('parseJwt', () => {
 
   it('rejects unexpected algorithm', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'HS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'HS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -31,7 +32,7 @@ describe('parseJwt', () => {
 
   it('rejects unexpected type', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 10;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWS', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWS', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -40,7 +41,7 @@ describe('parseJwt', () => {
 
   it('rejects invalid issuer', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 60;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss: 'https://nefarious.com', aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -49,7 +50,7 @@ describe('parseJwt', () => {
 
   it('rejects invalid audience', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 60;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud: 'nefarious', exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -58,7 +59,7 @@ describe('parseJwt', () => {
 
   it('rejects expired JWT', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) - 60;
-    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid: 'xyz' };
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(header, payload);
     const result = await parseJwt(jwt, iss, aud);
@@ -101,6 +102,6 @@ async function generateKey() {
   );
 
   const jwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
-  await importKey(iss, jwk);
+  await importKey(iss, { ...jwk, kid } as JsonWebKey);
   return keyPair.privateKey;
 }

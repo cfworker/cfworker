@@ -14,6 +14,10 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
   Azure Cosmos DB client for Cloudflare Workers and service workers
 
+- `@cfworker/csv`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md) | [npm](https://www.npmjs.com/package/@cfworker/csv)
+
+  Streaming CSV encoding for Cloudflare Workers and service workers
+
 - `@cfworker/demo`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/demo/README.md) | [npm](https://www.npmjs.com/package/@cfworker/demo)
 
   Web app demo
@@ -22,9 +26,9 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
   Run, test and deploy Cloudflare workers
 
-- `@cfworker/http-errors`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/http-errors/README.md) | [npm](https://www.npmjs.com/package/@cfworker/http-errors)
+- `@cfworker/json-schema`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/json-schema/README.md) | [npm](https://www.npmjs.com/package/@cfworker/json-schema)
 
-  A collection HTTP error classes for use with @cfworker/web
+  A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.
 
 - `@cfworker/jwt`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/jwt/README.md) | [npm](https://www.npmjs.com/package/@cfworker/jwt)
 
@@ -40,11 +44,7 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
 - `@cfworker/web`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/web/README.md) | [npm](https://www.npmjs.com/package/@cfworker/web)
 
-  Web framework for Cloudflare Workers and service workers, inspired by Koa
-
-- `@cfworker/web-router`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/web-router/README.md) | [npm](https://www.npmjs.com/package/@cfworker/web-router)
-
-  A router for Cloudflare Workers or service workers using path-to-regexp
+  Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify
 
 ## contributing
 

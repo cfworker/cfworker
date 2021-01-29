@@ -1,7 +1,6 @@
-import { BadRequestError } from '@cfworker/http-errors';
 import { parseJwt } from '@cfworker/jwt';
-import { Context, Cookies, Middleware } from '@cfworker/web';
-import { TokenResponse } from './token-response';
+import { Context, Cookies, HttpError, Middleware } from '@cfworker/web';
+import { TokenResponse } from './token-response.js';
 
 export function getAuthorizeUrl({ origin, href }: URL) {
   const domain = process.env.AUTH0_DOMAIN;
@@ -54,31 +53,44 @@ export function setTokenCookie(
 
   const secure = production;
 
+  const sameSite = 'strict';
+
   const expires = tokenResponse
     ? new Date(new Date().getTime() + tokenResponse.expires_in * 1000)
     : new Date('Thu, 01 Jan 1970 00:00:00 GMT');
 
-  // Can't use SameSite=Strict in Chrome: https://bugs.chromium.org/p/chromium/issues/detail?id=696204
-  // Can't use SameSite=Strict or Lax on Safari: https://github.com/IdentityServer/IdentityServer4/issues/2595
-  cookies.set('token', token, { path: '/', httpOnly: true, secure, expires });
+  cookies.set('token', token, {
+    path: '/',
+    httpOnly: true,
+    secure,
+    sameSite,
+    expires
+  });
 }
 
 export async function handleTokenCallback(context: Context) {
-  const code = context.url.searchParams.get('code');
-  const redirect_uri = context.url.searchParams.get('redirect_uri');
+  const code = context.req.url.searchParams.get('code');
+  const redirect_uri = context.req.url.searchParams.get('redirect_uri');
   if (!code) {
-    throw new BadRequestError('code is expected.');
+    throw new HttpError(400, 'code is expected.');
   }
   if (!redirect_uri) {
-    throw new BadRequestError('redirect_uri is expected.');
+    throw new HttpError(400, 'redirect_uri is expected.');
   }
+
+  let tokenResponse: TokenResponse;
   try {
-    const tokenResponse = await exchangeCode(code, redirect_uri);
-    setTokenCookie(context.cookies, tokenResponse);
-    context.res.redirect(redirect_uri);
+    tokenResponse = await exchangeCode(code, redirect_uri);
   } catch (err) {
-    throw new BadRequestError(err.message);
+    throw new HttpError(400, err.message);
   }
+
+  setTokenCookie(context.cookies, tokenResponse);
+
+  // https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
+  context.res.status = 200;
+  context.res.headers.set('content-type', 'text/html');
+  context.res.body = `<!doctype html><html><head><meta http-equiv="Refresh" content="0; URL=${redirect_uri}"></head></html>`;
 }
 
 export const auth0Origin = new URL('https://' + process.env.AUTH0_DOMAIN)
@@ -116,9 +128,8 @@ export const authentication: Middleware = async ({ cookies, state }, next) => {
   await next();
 };
 
-export function handleSignout({ cookies, url, res }: Context) {
-  const returnTo = new URL(url.origin);
-  returnTo.pathname = '/signed-out';
+export function handleSignout({ cookies, req, res }: Context) {
+  const returnTo = new URL('/signed-out', req.url.origin);
   const signOutUrl = new URL(`https://${process.env.AUTH0_DOMAIN}/v2/logout`);
   signOutUrl.searchParams.set('client_id', process.env.AUTH0_CLIENT_ID);
   signOutUrl.searchParams.set('returnTo', returnTo.href);

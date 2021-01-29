@@ -12,10 +12,23 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
  * @param {string} code The worker script.
  * @param {string} sourcePathname Where to list the script in the chrome devtools sources tree.
  * @param {string[]} globals Names of additional globals to expose.
+ * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
+ * @param {import('../kv.js').KVNamespaceInit[]} kvNamespaces Workers KV namespaces.
  */
-export function executeWorkerScript(code, sourcePathname, globals = []) {
+export async function executeWorkerScript(
+  code,
+  sourcePathname,
+  globals = [],
+  staticContentManifest,
+  kvNamespaces
+) {
   resetFetchHandler();
-  const scope = new ServiceWorkerGlobalScope(globals);
+  const scope = new ServiceWorkerGlobalScope(
+    globals,
+    staticContentManifest,
+    kvNamespaces
+  );
+  await scope.init();
   const guardedScope = new Proxy(scope, scopeGuard);
   const sourceUrl = `//# sourceURL=${location.origin}${sourcePathname}`;
   const fn = new AsyncFunction(
@@ -37,7 +50,13 @@ export async function dispatchFetchEvent(url, init) {
   const event = new FetchEvent(request);
   fetchHandler(event);
   const response = await event.__responded__;
-  const body = await response.text();
+  const blob = await response.blob();
+  const body = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject('Error reading body.');
+    reader.readAsBinaryString(blob);
+  });
   /** @type {Record<string, string>} */
   const headers = Object.create(null);
   response.headers.forEach((v, k) => (headers[k] = v));

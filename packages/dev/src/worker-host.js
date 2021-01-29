@@ -1,23 +1,32 @@
 import chalk from 'chalk';
 import { EventEmitter } from 'events';
 import puppeteer from 'puppeteer';
+import { getLocalhostIP } from './ip.js';
+import { KV } from './kv.js';
 import { logger } from './logger.js';
 import { escapeHeaderName, unescapeHeaderName } from './runtime/headers.js';
 import { Server } from './server.js';
+import { StaticSite } from './static-site.js';
 
 export class WorkerHost extends EventEmitter {
   /** @type {import('puppeteer').Browser | undefined} */
   browser = undefined;
 
+  /** @type {string|null} */
+  localIP = null;
+
   /**
    * @param {number} port
    * @param {boolean} inspect
+   * @param {StaticSite | null} site
+   * @param {KV} kv
    */
-  constructor(port, inspect) {
+  constructor(port, inspect, site, kv) {
     super();
     this.port = port;
     this.inspect = inspect;
-    this.server = new Server(port);
+    this.server = new Server(port, site);
+    this.kv = kv;
     /** @type {Promise<import('puppeteer').Page>} */
     this.pageReady = new Promise(resolve => (this.resolvePage = resolve));
   }
@@ -32,11 +41,15 @@ export class WorkerHost extends EventEmitter {
     logger.progress('Starting server...');
     this.server.serve();
 
+    const ipPromise = getLocalhostIP();
+
     logger.progress('Starting chrome...');
     const browser = (this.browser = await puppeteer.launch({
       headless: !this.inspect,
       devtools: this.inspect,
+      // userDataDir: this.inspect ? './.cfworker' : undefined,
       args: [
+        '--start-maximized', // https://peter.sh/experiments/chromium-command-line-switches/
         '--disable-web-security' // Cloudflare workers are not subject to CORS rules.
       ]
     }));
@@ -57,6 +70,8 @@ export class WorkerHost extends EventEmitter {
     });
     await this.forkConsoleLog(page);
 
+    this.localIP = await ipPromise;
+
     this.server.on('request', this.handleRequestWithWorker);
 
     logger.success('Worker host ready', Date.now() - startTime);
@@ -67,19 +82,41 @@ export class WorkerHost extends EventEmitter {
    * @param {string} code The worker script.
    * @param {string} sourcePathname Where to list the script in the chrome devtools sources tree.
    * @param {string[]} globals Names of additional globals to expose.
+   * @param {Record<string, string> | null} staticContentManifest Workers site manifest.
+   * @param {import('./kv.js').KVNamespaceInit[]} kvNamespaces
    */
-  async setWorkerCode(code, sourcePathname = '/worker.js', globals = []) {
+  async setWorkerCode(
+    code,
+    sourcePathname = '/worker.js',
+    globals = [],
+    staticContentManifest = null,
+    kvNamespaces = []
+  ) {
     const startTime = Date.now();
     logger.progress('Updating worker script...');
     const page = await this.pageReady;
     await page.evaluate(
-      async (code, sourcePathname, globals) => {
+      async (
+        code,
+        sourcePathname,
+        globals,
+        staticContentManifest,
+        kvNamespaces
+      ) => {
         const { executeWorkerScript } = await import('./runtime/index.js');
-        executeWorkerScript(code, sourcePathname, globals);
+        await executeWorkerScript(
+          code,
+          sourcePathname,
+          globals,
+          staticContentManifest,
+          kvNamespaces
+        );
       },
       code,
       sourcePathname,
-      globals
+      globals,
+      staticContentManifest,
+      kvNamespaces
     );
     logger.success('Worker script updated', Date.now() - startTime);
     this.emit('worker-updated');
@@ -96,7 +133,8 @@ export class WorkerHost extends EventEmitter {
    * @param {import('http').ServerResponse} res
    */
   handleRequestWithWorker = async (req, res) => {
-    const url = `http://localhost:${this.port}${req.url}`;
+    const host = req.headers.host || `localhost:${this.port}`;
+    const url = `http://${host}${req.url}`;
     const method = req.method || 'GET';
 
     this.emit('request-start', method, req.url);
@@ -116,7 +154,17 @@ export class WorkerHost extends EventEmitter {
       delete req.headers[key];
       req.headers[newKey] = value;
     }
-    req.headers['CF-Connecting-IP'] = req.connection.remoteAddress;
+
+    if (
+      this.localIP &&
+      (!req.connection.remoteAddress ||
+        req.connection.remoteAddress === '::1' ||
+        req.connection.remoteAddress.endsWith('127.0.0.1'))
+    ) {
+      req.headers['CF-Connecting-IP'] = this.localIP;
+    } else {
+      req.headers['CF-Connecting-IP'] = req.connection.remoteAddress;
+    }
 
     const init = {
       method,
@@ -142,7 +190,7 @@ export class WorkerHost extends EventEmitter {
     }
 
     res.writeHead(status, statusText, headers);
-    res.write(body);
+    res.write(Buffer.from(body, 'binary'));
     res.end();
     logger.log(statusChalk(status)(`${status} ${method.padEnd(7)} ${url}`));
     this.emit('request-end', method, url, status, statusText);

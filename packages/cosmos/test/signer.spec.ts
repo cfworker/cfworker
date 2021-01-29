@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { getSigner } from '../src/index';
+import { getSigner } from '../src/index.js';
 
 describe('Signer', () => {
   const masterKey =

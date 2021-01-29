@@ -7,6 +7,7 @@ import { captureError } from '@cfworker/sentry';
 
 const sentryDsn = '...';
 const environment = 'production'; // development, etc.
+const release = '...';
 
 addEventListener('fetch', event => {
   try {
@@ -15,9 +16,10 @@ addEventListener('fetch', event => {
     const { event_id, promise } = captureError(
       sentryDsn,
       environment,
+      release,
       err,
       event.request,
-      user // optional
+      user // optional, eg { name: 'octocat' }
     );
     event.waitUntil(promise);
   }

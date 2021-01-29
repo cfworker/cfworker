@@ -1,5 +1,7 @@
 import { EventEmitter } from 'events';
+import { KV } from './kv.js';
 import { logger } from './logger.js';
+import { StaticSite } from './static-site.js';
 import { WorkerHost } from './worker-host.js';
 
 export class TestHost extends EventEmitter {
@@ -17,11 +19,13 @@ export class TestHost extends EventEmitter {
   /**
    * @param {number} port
    * @param {boolean} inspect
+   * @param {StaticSite | null} site
+   * @param {KV} kv
    */
-  constructor(port, inspect) {
+  constructor(port, inspect, site, kv) {
     super();
     this.inspect = inspect;
-    this.workerHost = new WorkerHost(port, inspect);
+    this.workerHost = new WorkerHost(port, inspect, site, kv);
   }
 
   start() {
@@ -34,8 +38,9 @@ export class TestHost extends EventEmitter {
 
   /**
    * @param {string} code
+   * @param {Record<string, string> | null} manifest
    */
-  async runTests(code) {
+  async runTests(code, manifest) {
     this.emit('test-start');
     const startTime = Date.now();
     const testsRan = this.testsRan;
@@ -50,7 +55,7 @@ export class TestHost extends EventEmitter {
     logger.progress('Loading mocha and chai...');
     await this.loadMocha(page, this.workerHost.server.pathPrefix);
     const globals = ['mocha', 'chai', ...this.mochaGlobals];
-    await this.workerHost.setWorkerCode(code, '/test.js', globals);
+    await this.workerHost.setWorkerCode(code, '/test.js', globals, manifest);
     /** @type {number} */
     logger.progress('Running tests...');
     const failures = await page.evaluate(
@@ -85,7 +90,7 @@ export class TestHost extends EventEmitter {
         mocha.setup({
           ui: 'bdd',
           reporter: inspect ? 'html' : 'spec',
-          useColors: !this.inspect
+          color: !this.inspect
         });
 
         mocha.checkLeaks();

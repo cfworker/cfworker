@@ -91,4 +91,13 @@ export function wrapHeaders(Headers) {
   Headers.prototype.keys = function () {
     return Array.from(standardKeys.call(this)).map(unescapeHeaderName);
   };
+
+  // // @ts-ignore
+  // const standardIterator = Headers.prototype[Symbol.iterator];
+  // // @ts-ignore
+  // Headers.prototype[Symbol.iterator] = function* () {
+  //   for (const [k, v] of standardIterator.call(this)) {
+  //     yield [unescapeHeaderName(k), v];
+  //   }
+  // };
 }

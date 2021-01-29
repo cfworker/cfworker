@@ -1,6 +1,6 @@
 import { Context } from '@cfworker/web';
-import { validateEmail } from './email';
-import { TokenResponse } from './token-response';
+import { validateEmail } from './email.js';
+import { TokenResponse } from './token-response.js';
 
 let managementToken: string;
 
@@ -112,7 +112,7 @@ interface CreateUserResponse {
 }
 
 export async function handleRegister({ req, res }: Context) {
-  const createUserArgs = await req.json();
+  const createUserArgs = await req.body.json();
   const user = await createUser(createUserArgs);
   // const evArgs = {
   //   result_url: `${req.url.origin}/email-verified`,

@@ -1,4 +1,4 @@
-import { PersistedResource } from './types';
+import { PersistedResource } from './types.js';
 
 export abstract class CosmosResponse {
   constructor(protected readonly response: Response) {}
@@ -20,6 +20,9 @@ export abstract class CosmosResponse {
   }
   get requestCharge() {
     return parseInt(this.response.headers.get('x-ms-request-charge')!);
+  }
+  get raw() {
+    return this.response;
   }
 }
 

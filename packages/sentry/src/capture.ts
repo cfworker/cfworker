@@ -1,5 +1,5 @@
 import { uuid } from '@cfworker/uuid';
-import { serializeError } from './tracekit';
+import { serializeError } from './tracekit.js';
 
 const sentryClient = 'cfworker-sentry';
 
@@ -9,11 +9,12 @@ const sentryClient = 'cfworker-sentry';
 export function captureError(
   sentryDsn: string,
   environment: string,
+  release: string,
   err: any,
   request: Request,
   user: any
 ) {
-  const event_id = uuid('');
+  const event_id = uuid();
   const timestamp = new Date().toISOString().substr(0, 19);
   if (!(err instanceof Error)) {
     err = Object.prototype.valueOf.call(err);
@@ -30,7 +31,7 @@ export function captureError(
     level: 'error',
     transaction: request.url,
     server_name: 'cloudflare',
-    release: 'todo',
+    release,
     // tags: {},
     environment,
     // modules: {},
@@ -61,11 +62,11 @@ export function captureError(
   };
   const { origin, pathname: project, username: key } = new URL(sentryDsn);
   const api = `${origin}/api${project}/store/?sentry_key=${key}&sentry_version=7&sentry_client=${sentryClient}`;
-  const promise = fetch(api, {
+  const posted = fetch(api, {
     method: 'POST',
     body: JSON.stringify(body)
   });
-  return { event_id, promise };
+  return { event_id, posted };
 }
 
 function serializeHeaders(headers: Headers) {

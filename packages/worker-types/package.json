@@ -1,0 +1,32 @@
+{
+  "name": "@cfworker/worker-types",
+  "version": "1.6.0",
+  "description": "TypeScript type definitions for Cloudflare workers",
+  "keywords": [
+    "cloudflare",
+    "worker",
+    "workers"
+  ],
+  "types": "dist/index.d.ts",
+  "files": [
+    "**/*.d.ts",
+    "tsconfig.json",
+    "README.md",
+    "package.json"
+  ],
+  "repository": "https://github.com/cfworker/cfworker",
+  "author": "Jeremy Danyow <jdanyow@gmail.com>",
+  "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/worker-types/README.md",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
+    "test": "echo test"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  }
+}

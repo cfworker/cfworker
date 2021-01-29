@@ -1,4 +1,6 @@
 import { Bundler } from '../bundler.js';
+import { KV } from '../kv.js';
+import { StaticSite } from '../static-site.js';
 import { TestHost } from '../test-host.js';
 
 /**
@@ -8,6 +10,8 @@ import { TestHost } from '../test-host.js';
  * @property {boolean} watch
  * @property {boolean} inspect
  * @property {boolean} check
+ * @property {string} [site]
+ * @property {string[]} kv
  */
 
 export class TestCommand {
@@ -22,7 +26,9 @@ export class TestCommand {
       ['mocha', 'chai'],
       args.check
     );
-    this.testHost = new TestHost(args.port, args.inspect);
+    this.site = args.site ? new StaticSite(args.site, args.watch) : null;
+    this.kv = new KV(args.kv, args.watch);
+    this.testHost = new TestHost(args.port, args.inspect, this.site, this.kv);
   }
 
   async execute() {
@@ -33,14 +39,30 @@ export class TestCommand {
       }
     }
 
-    await Promise.all([this.bundler.bundle(), this.testHost.start()]);
+    const siteInitialized = this.site ? this.site.init() : Promise.resolve();
 
-    const failures = await this.testHost.runTests(this.bundler.code);
+    await Promise.all([
+      this.bundler.bundle(),
+      this.testHost.start(),
+      siteInitialized,
+      this.kv.init()
+    ]);
+
+    const failures = await this.testHost.runTests(
+      this.bundler.code,
+      this.site ? this.site.manifest : null
+    );
 
     if (this.args.watch) {
-      this.bundler.on('bundle-end', () =>
-        this.testHost.runTests(this.bundler.code)
-      );
+      const update = () =>
+        this.testHost.runTests(
+          this.bundler.code,
+          this.site ? this.site.manifest : null
+        );
+      this.bundler.on('bundle-end', update);
+      if (this.site) {
+        this.site.on('change', update);
+      }
     } else {
       this.dispose();
       process.exit(failures ? 1 : 0);
@@ -50,5 +72,9 @@ export class TestCommand {
   dispose() {
     this.bundler.dispose();
     this.testHost.dispose();
+    if (this.site) {
+      this.site.dispose();
+    }
+    this.kv.dispose();
   }
 }

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { assertArg, escapeNonASCII } from '../src/index';
+import { assertArg, escapeNonASCII } from '../src/index.js';
 
 describe('util', () => {
   describe('escapeNonASCII', () => {

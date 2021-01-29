@@ -3,10 +3,11 @@
 Run, test and deploy Cloudflare workers.
 Opinionated CLI for Cloudflare Worker development and deployment.
 Uses Rollup for clean packaging of code and dependencies and .env files for secret management.
-Supports JavaScript or TypeScript with `process.env.*` environment variable substitution with zero configuration.
+Supports JavaScript or TypeScript with `process.env.*` environment variable substitution, no configuration required.
 Simulates the Cloudflare Worker runtime using puppeteer, restricting access to the subset of APIs supported in workers.
+Supports local development of Workers Sites, as well as deployment.
 
-Create a `.env` file (and optionally a `.env.production` file) at the root of your project with the following values:
+To deploy you'll need to create a `.env` file (and optionally a `.env.production` file) at the root of your project with the following values:
 
 ```
 CLOUDFLARE_EMAIL=xxxxxxxxxxxxxxx
@@ -57,10 +58,12 @@ cfworker run [options] [input...]
 Options:
 
 ```
-  -p, --port <port>  set the port to serve on (default: 7000)
-  -w, --watch        enable watch mode (default: false)
-  -i, --inspect      open browser window with devtools enabled (default: false)
-  -h, --help         output usage information
+  -p, --port <port>       set the port to serve on (default: 7000)
+  -w, --watch             enable watch mode (default: false)
+  -i, --inspect           open browser window with devtools enabled (default: false)
+  -n, --nocheck           disable diagnostic checks on TypeScript code (default: false)
+  -s, --site <directory>  static site directory
+  -h, --help              output usage information
 ```
 
 Examples:
@@ -86,10 +89,12 @@ cfworker test [options] [globs...]
 Options:
 
 ```
-  -p, --port <port>  set the port to serve on (default: 7000)
-  -w, --watch        enable watch mode (default: false)
-  -i, --inspect      open browser window with devtools enabled (default: false)
-  -h, --help         output usage information
+  -p, --port <port>       set the port to serve on (default: 7000)
+  -w, --watch             enable watch mode (default: false)
+  -i, --inspect           open browser window with devtools enabled (default: false)
+  -n, --nocheck           disable diagnostic checks on TypeScript code (default: false)
+  -s, --site <directory>  static site directory
+  -h, --help              output usage information
 ```
 
 Examples:

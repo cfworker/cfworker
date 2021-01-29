@@ -21,6 +21,7 @@
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
     "release": "yarn run lint && yarn run test && yarn run clean && yarn run build && lerna publish",
+    "reinstall": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' + && rm -f yarn.lock && yarn install",
     "readme-gen": "node readme-gen.js"
   },
   "commitlint": {
@@ -35,11 +36,11 @@
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
-    "husky": "^4.2.3",
-    "lerna": "^3.20.2",
-    "prettier": "2.0.2",
-    "pretty-quick": "^2.0.1"
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "husky": "^4.3.0",
+    "lerna": "^3.22.1",
+    "prettier": "2.1.2",
+    "pretty-quick": "^3.0.2"
   }
 }

@@ -5,11 +5,13 @@ import {
   deployToWorkersDev,
   getWorkersDevSubdomain
 } from '../cloudflare-api.js';
+import { KV } from '../kv.js';
 import { logger } from '../logger.js';
+import { StaticSite } from '../static-site.js';
 
 export class DeployDevCommand {
   /**
-   * @param {{ project: string; entry: string; watch: boolean; }} args
+   * @param {{ project: string; entry: string; watch: boolean; site?: string; kv: string[]; }} args
    */
   constructor(args) {
     const {
@@ -43,10 +45,16 @@ export class DeployDevCommand {
     this.project = CLOUDFLARE_WORKERS_DEV_PROJECT;
     this.watch = args.watch;
     this.bundler = new Bundler([args.entry], args.watch);
+    this.site = args.site ? new StaticSite(args.site, false) : null;
+    this.kv = new KV(args.kv, false);
   }
 
   async execute() {
-    await this.bundler.bundle();
+    await Promise.all([
+      this.bundler.bundle(),
+      this.site ? this.site.init() : Promise.resolve(),
+      this.kv.init()
+    ]);
 
     logger.progress('Getting subdomain...');
     const subdomain = await getWorkersDevSubdomain(
@@ -57,7 +65,11 @@ export class DeployDevCommand {
     const url = `https://${this.project}.${subdomain}.workers.dev`;
 
     if (this.watch) {
-      this.bundler.on('bundle-end', () => this.deploy(url));
+      const update = () => this.deploy(url);
+      this.bundler.on('bundle-end', update);
+      if (this.site) {
+        this.site.on('change', update);
+      }
     }
 
     await this.deploy(url);
@@ -75,7 +87,9 @@ export class DeployDevCommand {
       accountEmail: this.accountEmail,
       accountId: this.accountId,
       apiKey: this.apiKey,
-      project: this.project
+      name: this.project,
+      site: this.site,
+      kv: this.kv
     });
 
     logger.success(
@@ -86,12 +100,16 @@ export class DeployDevCommand {
 
   dispose() {
     this.bundler.dispose();
+    if (this.site) {
+      this.site.dispose();
+    }
+    this.kv.dispose();
   }
 }
 
 export class DeployCommand {
   /**
-   * @param {{ entry: string; name: string; route: string; purgeCache: boolean; }} args
+   * @param {{ entry: string; name: string; route: string; purgeCache: boolean; site?: string; kv: string[]; }} args
    */
   constructor(args) {
     const {
@@ -128,12 +146,18 @@ export class DeployCommand {
     this.zoneId = CLOUDFLARE_ZONE_ID;
     this.args = args;
     this.bundler = new Bundler([args.entry], false);
+    this.site = args.site ? new StaticSite(args.site, false) : null;
+    this.kv = new KV(args.kv, false);
   }
 
   async execute() {
     const startTime = Date.now();
 
-    await this.bundler.bundle();
+    await Promise.all([
+      this.bundler.bundle(),
+      this.site ? this.site.init() : Promise.resolve(),
+      this.kv.init()
+    ]);
 
     logger.progress('Deploying worker...');
 
@@ -145,7 +169,9 @@ export class DeployCommand {
       zoneId: this.zoneId,
       apiKey: this.apiKey,
       purgeCache: this.args.purgeCache,
-      routePattern: this.args.route
+      routePattern: this.args.route,
+      site: this.site,
+      kv: this.kv
     });
 
     const url = 'https://' + (this.args.route ? this.args.route : zoneName);
@@ -155,5 +181,11 @@ export class DeployCommand {
     );
   }
 
-  dispose() {}
+  dispose() {
+    this.bundler.dispose();
+    if (this.site) {
+      this.site.dispose();
+    }
+    this.kv.dispose();
+  }
 }

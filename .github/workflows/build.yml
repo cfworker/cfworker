@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [13.x]
+        node-version: [14.x]
     env:
       COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
       COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}

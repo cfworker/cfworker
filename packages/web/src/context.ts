@@ -1,25 +1,20 @@
-import { Accepts } from './accepts';
-import { Cookies } from './cookies';
-import { ResponseBuilder } from './response-builder';
-import { safeParse, Reviver } from 'secure-json-parse';
+import { Cookies } from './cookies.js';
+import { Req } from './req.js';
+import { ResponseBuilder } from './response-builder.js';
 
 export class Context {
-  public readonly req: Request;
+  public readonly req: Req;
   public readonly res: ResponseBuilder;
-  public readonly url: URL;
   public readonly cookies: Cookies;
-  public readonly accepts: Accepts;
   public readonly respondWith!: (response: Response) => void;
   public readonly responded: Promise<Response>;
   public readonly state: any;
 
   constructor(private readonly event: FetchEvent) {
-    const req = (this.req = event.request);
-    this.url = new URL(req.url);
-    this.url.pathname = decodeURIComponent(this.url.pathname);
+    const request = event.request;
+    this.req = new Req(request);
     this.res = new ResponseBuilder();
-    this.cookies = new Cookies(req.headers, this.res.headers);
-    this.accepts = new Accepts(req.headers);
+    this.cookies = new Cookies(request.headers, this.res.headers);
     this.responded = new Promise<Response>(resolve => {
       // @ts-ignore
       this.respondWith = resolve;
@@ -29,10 +24,5 @@ export class Context {
 
   public waitUntil(promise: Promise<any>) {
     this.event.waitUntil(promise);
-  }
-
-  public async safeJson(reviver?: Reviver) {
-    const json = await this.req.text();
-    return safeParse(json, reviver);
   }
 }
