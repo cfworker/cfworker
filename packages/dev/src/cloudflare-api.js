@@ -8,20 +8,31 @@ import { StaticSite } from './static-site.js';
 const apiBase = 'https://api.cloudflare.com/client/v4';
 
 /**
- * @param {string} accountId Cloudflare account id
- * @param {string} accountEmail Cloudflare account email
  * @param {string} apiKey Cloudflare API key
+ * @param {string} [accountEmail] Cloudflare account email
+ * @returns {Object.<string, string>}
  */
-export async function getWorkersDevSubdomain(accountId, accountEmail, apiKey) {
+function buildAuthHeaders(apiKey, accountEmail) {
+  return accountEmail
+    ? {
+        'X-Auth-Email': accountEmail,
+        'X-Auth-Key': apiKey
+      }
+    : {
+        Authorization: 'Bearer ' + apiKey
+      };
+}
+
+/**
+ * @param {string} accountId Cloudflare account id
+ * @param {string} apiKey Cloudflare API key
+ * @param {string} [accountEmail] Cloudflare account email
+ */
+export async function getWorkersDevSubdomain(accountId, apiKey, accountEmail) {
   const response = await fetch(
     `${apiBase}/accounts/${accountId}/workers/subdomain`,
     {
-      headers: accountEmail ? {
-        'X-Auth-Email': accountEmail,
-        'X-Auth-Key': apiKey
-      } : {
-        'Authorization': 'Bearer ' + apiKey
-      }
+      headers: buildAuthHeaders(apiKey, accountEmail)
     }
   );
   if (!response.ok) {
@@ -41,7 +52,7 @@ export async function getWorkersDevSubdomain(accountId, accountEmail, apiKey) {
  * @property {string} code Worker javascript code
  * @property {string} name workers.dev project name
  * @property {string} accountId Cloudflare account id
- * @property {string} accountEmail Cloudflare account email
+ * @property {string} [accountEmail] Cloudflare account email
  * @property {string} apiKey Cloudflare API key
  * @property {StaticSite | null} site Workers Site
  * @property {KV} kv Workers KV
@@ -79,12 +90,11 @@ export async function deployToWorkersDev(args) {
     `${apiBase}/accounts/${args.accountId}/workers/scripts/${args.name}`,
     {
       method: 'PUT',
-      headers: Object.assign({}, form.getHeaders(), args.accountEmail ? {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey
-      } : {
-        'Authorization': 'Bearer ' + args.apiKey
-      }),
+      headers: Object.assign(
+        {},
+        form.getHeaders(),
+        buildAuthHeaders(args.apiKey, args.accountEmail)
+      ),
       body: form.getBuffer()
     }
   );
@@ -106,7 +116,7 @@ export async function deployToWorkersDev(args) {
  * @property {string} code Worker javascript code
  * @property {string} routePattern Worker route pattern
  * @property {string} accountId Cloudflare account id
- * @property {string} accountEmail Cloudflare account email
+ * @property {string} [accountEmail] Cloudflare account email
  * @property {string} zoneId Cloudflare zone id
  * @property {string} apiKey Cloudflare API key
  * @property {boolean} purgeCache Whether to purge the cache (purges everything)
@@ -119,12 +129,7 @@ export async function deployToWorkersDev(args) {
  * @param {DeployArgs} args
  */
 export async function deploy(args) {
-  const authHeaders = args.accountEmail ? {
-    'X-Auth-Email': args.accountEmail,
-    'X-Auth-Key': args.apiKey
-  } : {
-    'Authorization': 'Bearer ' + args.apiKey
-  };
+  const authHeaders = buildAuthHeaders(args.apiKey, args.accountEmail);
 
   logger.progress('Getting zone...');
   let response = await fetch(`${apiBase}/zones/${args.zoneId}`, {
