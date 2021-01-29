@@ -51,8 +51,8 @@ export class DeployDevCommand {
     logger.progress('Getting subdomain...');
     const subdomain = await getWorkersDevSubdomain(
       this.accountId,
-      this.accountEmail,
-      this.apiKey
+      this.apiKey,
+      this.accountEmail
     );
     const url = `https://${this.project}.${subdomain}.workers.dev`;
 
