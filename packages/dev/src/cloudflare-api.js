@@ -9,7 +9,7 @@ const apiBase = 'https://api.cloudflare.com/client/v4';
 
 /**
  * @param {string} apiKey Cloudflare API key
- * @param {string} [accountEmail] Cloudflare account email
+ * @param {string | undefined} accountEmail Cloudflare account email
  * @returns {Object.<string, string>}
  */
 function buildAuthHeaders(apiKey, accountEmail) {
@@ -26,7 +26,7 @@ function buildAuthHeaders(apiKey, accountEmail) {
 /**
  * @param {string} accountId Cloudflare account id
  * @param {string} apiKey Cloudflare API key
- * @param {string} [accountEmail] Cloudflare account email
+ * @param {string | undefined} accountEmail Cloudflare account email
  */
 export async function getWorkersDevSubdomain(accountId, apiKey, accountEmail) {
   const response = await fetch(
@@ -52,7 +52,7 @@ export async function getWorkersDevSubdomain(accountId, apiKey, accountEmail) {
  * @property {string} code Worker javascript code
  * @property {string} name workers.dev project name
  * @property {string} accountId Cloudflare account id
- * @property {string} [accountEmail] Cloudflare account email
+ * @property {string|undefined} accountEmail Cloudflare account email
  * @property {string} apiKey Cloudflare API key
  * @property {StaticSite | null} site Workers Site
  * @property {KV} kv Workers KV
@@ -116,7 +116,7 @@ export async function deployToWorkersDev(args) {
  * @property {string} code Worker javascript code
  * @property {string} routePattern Worker route pattern
  * @property {string} accountId Cloudflare account id
- * @property {string} [accountEmail] Cloudflare account email
+ * @property {string|undefined} accountEmail Cloudflare account email
  * @property {string} zoneId Cloudflare zone id
  * @property {string} apiKey Cloudflare API key
  * @property {boolean} purgeCache Whether to purge the cache (purges everything)
@@ -175,10 +175,11 @@ export async function deploy(args) {
     `${apiBase}/accounts/${args.accountId}/workers/scripts/${args.name}`,
     {
       method: 'PUT',
-      headers: Object.assign({}, form.getHeaders(), {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey
-      }),
+      headers: Object.assign(
+        {},
+        form.getHeaders(),
+        buildAuthHeaders(args.apiKey, args.accountEmail)
+      ),
       body: form.getBuffer()
     }
   );
@@ -276,16 +277,13 @@ export async function deploy(args) {
 /**
  *
  * @param {string} title
- * @param {{ accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  */
 async function getNamespace(title, args) {
   const response = await fetch(
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces?per_page=100`,
     {
-      headers: {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey
-      }
+      headers: buildAuthHeaders(args.apiKey, args.accountEmail)
     }
   );
   if (!response.ok) {
@@ -303,17 +301,14 @@ async function getNamespace(title, args) {
 /**
  *
  * @param {string} id
- * @param {{ accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  * @returns {Promise<{ name: string; }[]>}
  */
 async function getNamespaceKeys(id, args) {
   const response = await fetch(
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces/${id}/keys?limit=1000`,
     {
-      headers: {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey
-      }
+      headers: buildAuthHeaders(args.apiKey, args.accountEmail)
     }
   );
   if (!response.ok) {
@@ -331,18 +326,17 @@ async function getNamespaceKeys(id, args) {
 /**
  *
  * @param {string} title
- * @param {{ accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  */
 async function createNamespace(title, args) {
   const response = await fetch(
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces`,
     {
       method: 'POST',
-      headers: {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey,
-        'content-type': 'application/json'
-      },
+      headers: Object.assign(
+        { 'content-type': 'application/json' },
+        buildAuthHeaders(args.apiKey, args.accountEmail)
+      ),
       body: JSON.stringify({ title })
     }
   );
@@ -358,7 +352,7 @@ async function createNamespace(title, args) {
 }
 
 /**
- * @param {{ site: StaticSite | null; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ site: StaticSite | null; name: string; accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  * @returns {Promise<{ bindings: any[]; kvCleanup: () => Promise<void>; manifest?: string }>}
  */
 async function getSiteBindings(args) {
@@ -392,7 +386,7 @@ async function getSiteBindings(args) {
 }
 
 /**
- * @param {{ kv: KV; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ kv: KV; name: string; accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  * @returns {Promise<{ bindings: any[]; kvCleanup: () => Promise<void>; }>}
  */
 async function getKVBindings(args) {
@@ -421,7 +415,7 @@ async function getKVBindings(args) {
 }
 
 /**
- * @param {{ site: StaticSite; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ site: StaticSite; name: string; accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  * @param {{ id: string; }} namespace
  */
 async function publishSiteToKV(args, namespace) {
@@ -436,7 +430,7 @@ async function publishSiteToKV(args, namespace) {
 }
 
 /**
- * @param {{ accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  * @param {{ id: string; }} namespace
  * @param {import('./kv.js').KVItem[]} items
  */
@@ -445,11 +439,10 @@ async function bulkKV(args, namespace, items) {
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces/${namespace.id}/bulk`,
     {
       method: 'PUT',
-      headers: {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey,
-        'content-type': 'application/json'
-      },
+      headers: Object.assign(
+        { 'content-type': 'application/json' },
+        buildAuthHeaders(args.apiKey, args.accountEmail)
+      ),
       body: JSON.stringify(items)
     }
   );
@@ -463,7 +456,7 @@ async function bulkKV(args, namespace, items) {
 }
 
 /**
- * @param {{ site: StaticSite; name: string; accountId: string; accountEmail: string; apiKey: string; }} args
+ * @param {{ site: StaticSite; name: string; accountId: string; accountEmail: string | undefined; apiKey: string; }} args
  * @param {{ id: string; }} namespace
  */
 async function bulkDelete(args, namespace) {
@@ -476,11 +469,10 @@ async function bulkDelete(args, namespace) {
     `${apiBase}/accounts/${args.accountId}/storage/kv/namespaces/${namespace.id}/bulk`,
     {
       method: 'DELETE',
-      headers: {
-        'X-Auth-Email': args.accountEmail,
-        'X-Auth-Key': args.apiKey,
-        'content-type': 'application/json'
-      },
+      headers: Object.assign(
+        { 'content-type': 'application/json' },
+        buildAuthHeaders(args.apiKey, args.accountEmail)
+      ),
       body
     }
   );
