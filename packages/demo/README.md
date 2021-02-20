@@ -41,7 +41,7 @@ custom rules:
 
 ```js
 function (user, context, callback) {
-  const namespace = 'https://auth.cumulus.care/';
+  const namespace = 'https://auth.cfworker.dev/';
   context.idToken[namespace + 'tenant'] = user.app_metadata.tenant || 'demo';
   callback(null, user, context);
 }

@@ -16,7 +16,7 @@
     "build": "cfworker build src/index.ts --out-file dist/index.js",
     "start": "cfworker run src/index.ts --watch",
     "deploy-dev": "cfworker deploy-dev src/index.ts --project test",
-    "deploy": "cfworker deploy src/index.ts --name cumulus-care --route 'cumulus.care/*' --purge-cache",
+    "deploy": "cfworker deploy src/index.ts --name cfworker --route 'cfworker.dev/*' --purge-cache",
     "clean": "rm -rf dist",
     "test": "cfworker test test/**/*.spec.ts"
   },
