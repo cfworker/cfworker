@@ -26,10 +26,10 @@
     "@cfworker/sentry": "^1.6.5",
     "@cfworker/web": "^1.6.5",
     "@cfworker/worker-types": "^1.6.0",
-    "@cloudflare/workers-types": "^2.0.0"
+    "@cloudflare/workers-types": "^2.1.0"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.6.5",
-    "typescript": "^4.0.3"
+    "typescript": "^4.1.5"
   }
 }

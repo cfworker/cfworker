@@ -47,19 +47,24 @@ export class Bundler extends EventEmitter {
     this.inputOptions.input = globs;
     this.inputOptions.external = external;
     // add rollup-plugin-typescript2 when globs include typescript file extension
-    if (globs.find(g => /\.ts(?:$|,)/.test(g))) {
-      // @ts-ignore
+    if (globs.find(g => /\.ts(?:$|,)/.test(g)) && this.inputOptions.plugins) {
       this.inputOptions.plugins.splice(
         2,
         0,
         typescript({
           check,
-          include: ['*.ts', '**/*.ts', '../**/*.ts']
+          // verbosity: 3,
+          tsconfigOverride: {
+            compilerOptions: {
+              rootDir: '/'
+            }
+          }
         })
       );
     }
     this.watch = watch;
     this.code = '';
+    /** @type {Promise<void>} */
     this.bundled = new Promise(resolve => (this.setBundled = resolve));
   }
 

@@ -1,7 +1,7 @@
 /** @type {ProxyHandler<any>} */
 export const scopeGuard = {
-  has: () => {
-    return true;
+  has: (obj, propertyKey) => {
+    return propertyKey in obj;
   },
   get: (obj, propertyKey) => {
     if (obj.hasOwnProperty(propertyKey)) {
@@ -18,9 +18,6 @@ export const scopeGuard = {
   },
   deleteProperty: () => {
     throw new Error('"deleteProperty" not implemented');
-  },
-  enumerate: () => {
-    throw new Error('"enumerate" not implemented');
   },
   ownKeys: () => {
     throw new Error('"ownKeys" not implemented');

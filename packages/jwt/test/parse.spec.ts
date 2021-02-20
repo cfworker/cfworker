@@ -101,7 +101,7 @@ async function generateKey() {
     ['sign', 'verify']
   );
 
-  const jwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
+  const jwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey!);
   await importKey(iss, { ...jwk, kid } as JsonWebKey);
-  return keyPair.privateKey;
+  return keyPair.privateKey!;
 }
