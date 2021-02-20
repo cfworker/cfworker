@@ -132,9 +132,8 @@ program
   )
   .option('-s --site <directory>', 'static site directory')
   .option('-k --kv <filename>', 'kv json file', collect, [])
-  .action((main, command) => {
+  .action((main, options) => {
     loadEnv('production');
-    const options = command.opts();
     currentCommand = new DeployCommand({
       entry: main[0],
       name: options.name,

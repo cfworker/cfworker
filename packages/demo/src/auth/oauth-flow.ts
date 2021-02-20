@@ -117,7 +117,7 @@ export const authentication: Middleware = async ({ cookies, state }, next) => {
   const payload = result.payload as any;
   const { given_name, family_name, name, nickname, picture } = payload;
   state.user = {
-    tenant: payload['https://auth.cumulus.care/tenant'],
+    tenant: payload['https://auth.cfworker.dev/tenant'],
     given_name,
     family_name,
     name,
