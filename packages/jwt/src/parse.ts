@@ -16,12 +16,6 @@ export async function parseJwt(
   } catch {
     return { valid: false, reason: `Unable to decode JWT.` };
   }
-  if (decoded.header.typ !== 'JWT') {
-    return {
-      valid: false,
-      reason: `Invalid JWT type "${decoded.header.typ}". Expected "JWT".`
-    };
-  }
   if (decoded.header.alg !== 'RS256') {
     return {
       valid: false,
@@ -34,8 +28,8 @@ export async function parseJwt(
       reason: `Invalid JWT audience "${decoded.payload.aud}". Expected "${audience}".`
     };
   }
-  const iss = new URL(decoded.payload.iss);
-  if (iss.origin !== issuerOrigin) {
+
+  if (decoded.payload.iss !== issuerOrigin) {
     return {
       valid: false,
       reason: `Invalid JWT issuer "${decoded.payload.iss}". Expected "${issuerOrigin}".`

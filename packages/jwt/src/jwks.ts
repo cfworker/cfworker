@@ -5,7 +5,7 @@ import { DecodedJwt, JsonWebKeyset } from './types.js';
  */
 export async function getJwks(issuer: string): Promise<JsonWebKeyset> {
   const url = new URL(issuer);
-  url.pathname = '/.well-known/jwks.json';
+  url.pathname += '/.well-known/jwks.json';
   const response = await fetch(url.href);
   if (!response.ok) {
     throw new Error(
