@@ -44,13 +44,14 @@ If possible use Ajv in a build step to precompile your schema. Otherwise use thi
    ```js
    const validator = new Validator(
      {
-       type: 'object',
-       properties: {
-         name: { type: 'string' },
-         email: { type: 'string' },
-         number: { type: 'number' },
-         required: ['name', 'email', 'number']
-       }
+      type: 'object',
+      required: ['name', 'email', 'number', 'bool'],
+      properties: {
+        name: { type: 'string' },
+        email: { type: 'string', format: 'email' },
+        number: { type: 'number' },
+        bool: { type: 'boolean' }
+      }
      },
      '2019-09',
      false
@@ -58,7 +59,8 @@ If possible use Ajv in a build step to precompile your schema. Otherwise use thi
 
    const result = validator.validate({
      name: 'hello',
-     email: 5, //invalid type
-     number: 'Hello' //invalid type
+     email: 5, // invalid type
+     number: 'Hello' // invalid type
+     bool: 'false' // invalid type
    });
    ```
