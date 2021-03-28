@@ -40,9 +40,14 @@ export async function executeWorkerScript(
 
 /**
  * @param {string} url
+ * @param {string | undefined} bodyUrl
  * @param {RequestInit} init
  */
-export async function dispatchFetchEvent(url, init) {
+export async function dispatchFetchEvent(url, bodyUrl, init) {
+  if (bodyUrl) {
+    const response = await fetch(bodyUrl);
+    init.body = await response.arrayBuffer();
+  }
   const request = new Request(url, init);
   // @ts-ignore
   request.body = init.body;

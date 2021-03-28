@@ -139,15 +139,8 @@ export class WorkerHost extends EventEmitter {
 
     this.emit('request-start', method, req.url);
 
-    /** @type {undefined | string} */
-    let reqBody = undefined;
-    if (method !== 'GET' && method !== 'HEAD') {
-      reqBody = '';
-      await new Promise(resolve => {
-        req.on('data', chunk => (reqBody += chunk));
-        req.on('end', resolve);
-      });
-    }
+    const bodyUrl =
+      method === 'GET' || method === 'HEAD' ? '' : this.server.setReq(req);
 
     for (const [key, value] of Array.from(Object.entries(req.headers))) {
       const newKey = escapeHeaderName(key);
@@ -168,17 +161,17 @@ export class WorkerHost extends EventEmitter {
 
     const init = {
       method,
-      headers: req.headers,
-      body: reqBody
+      headers: req.headers
     };
 
     const page = await this.pageReady;
     const { status, statusText, headers, body } = await page.evaluate(
-      async (url, init) => {
+      async (url, bodyUrl, init) => {
         const { dispatchFetchEvent } = await import('./runtime/index.js');
-        return dispatchFetchEvent(url, init);
+        return dispatchFetchEvent(url, bodyUrl, init);
       },
       url,
+      bodyUrl,
       // @ts-ignore
       init
     );
