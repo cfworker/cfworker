@@ -8,6 +8,8 @@ import { StaticSite } from './static-site.js';
 export class Server extends EventEmitter {
   pathPrefix = '/__debug__';
   staticContentPrefix = '/static-content/';
+  reqPrefix = `/req/`;
+  nextReqKey = 0;
 
   indexHtml = `<!DOCTYPE html>
 <html lang="en">
@@ -21,6 +23,9 @@ export class Server extends EventEmitter {
   <body>
   </body>
 </html>`;
+
+  /** @type {Map<number, import('http').IncomingMessage>} */
+  reqs = new Map();
 
   /**
    * @param {number} port
@@ -41,6 +46,15 @@ export class Server extends EventEmitter {
 
   dispose() {
     return new Promise(resolve => this.server.close(resolve));
+  }
+
+  /**
+   * @param {import('http').IncomingMessage} req
+   */
+  setReq(req) {
+    this.nextReqKey++;
+    this.reqs.set(this.nextReqKey, req);
+    return `${this.pathPrefix}${this.reqPrefix}${this.nextReqKey}`;
   }
 
   /** @type {import('http').RequestListener} */
@@ -66,6 +80,20 @@ export class Server extends EventEmitter {
           res.writeHead(404, 'Not found', { 'cache-control': 'no-store' });
           res.end();
         }
+        return;
+      }
+
+      if (url.startsWith(this.reqPrefix)) {
+        const key = +url.substr(this.reqPrefix.length);
+        const req = this.reqs.get(key);
+        if (!req) {
+          res.writeHead(404, 'Not found', { 'cache-control': 'no-store' });
+          res.end();
+          return;
+        }
+        this.reqs.delete(key);
+        res.writeHead(200);
+        req.pipe(res);
         return;
       }
 
