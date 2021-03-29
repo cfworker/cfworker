@@ -47,6 +47,7 @@ export class WorkerHost extends EventEmitter {
     const browser = (this.browser = await puppeteer.launch({
       headless: !this.inspect,
       devtools: this.inspect,
+      executablePath: puppeteer.executablePath(),
       // userDataDir: this.inspect ? './.cfworker' : undefined,
       args: [
         '--start-maximized', // https://peter.sh/experiments/chromium-command-line-switches/
