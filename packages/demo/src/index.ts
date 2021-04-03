@@ -93,7 +93,8 @@ const router = new Router();
 
 router
   .get('/', ({ res }) => {
-    res.body = '<h1>This is it!</h1>';
+    res.body =
+      '<h1>cfworker</h1><a href="https://github.com/cfworker/cfworker">GitHub</a>';
   })
   .get('/echo-headers', ({ req, res }) => {
     res.status = 200;
