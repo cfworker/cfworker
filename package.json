@@ -24,20 +24,12 @@
     "reinstall": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' + && rm -f yarn.lock && yarn install",
     "readme-gen": "node readme-gen.js"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "pretty-quick --staged"
     }
   },
   "devDependencies": {
-    "@commitlint/cli": "^11.0.0",
-    "@commitlint/config-conventional": "^11.0.0",
     "husky": "^4.3.0",
     "lerna": "^3.22.1",
     "prettier": "2.2.1",
