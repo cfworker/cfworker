@@ -15,7 +15,7 @@ export class Bundler extends EventEmitter {
     plugins: [
       // @ts-ignore
       multiEntry({ exports: false }),
-      replace({ values: this.envReplacements() }),
+      replace({ values: this.envReplacements(), preventAssignment: true }),
       // @ts-ignore
       ...(process.env.NODE_ENV === 'production' ? [minifyHTML.default()] : []),
       resolve(),
