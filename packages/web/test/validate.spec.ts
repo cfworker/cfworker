@@ -1,10 +1,10 @@
 import { Schema } from '@cfworker/json-schema';
 import { expect } from 'chai';
+import { set } from 'json-pointer';
 import { describe, it } from 'mocha';
-import qs from 'qs';
 import { Context } from '../src/context.js';
 import { HttpError } from '../src/http-error.js';
-import { RequestParser, validate } from '../src/validate.js';
+import { validate } from '../src/validate.js';
 
 describe('validate', () => {
   const middleware = validate({
@@ -183,6 +183,14 @@ describe('validate', () => {
   });
 
   it('supports custom parsers', async () => {
+    function parseForm(data: FormData | URLSearchParams) {
+      const obj = Object.create(null);
+      for (const [pointer, value] of data) {
+        set(obj, '/' + pointer, value);
+      }
+      return obj;
+    }
+
     const validObj = { a: ['b', 'c'] };
 
     const schema: Schema = {
@@ -190,18 +198,14 @@ describe('validate', () => {
       const: validObj
     };
 
-    const stringified = qs.stringify(validObj);
+    const stringified = new URLSearchParams({
+      'a/0': 'b',
+      'a/1': 'c'
+    });
 
-    const qsParser: RequestParser = data => {
-      if (data instanceof FormData) {
-        data = new URLSearchParams(data as any);
-      }
-      return qs.parse(data.toString());
-    };
+    const middleware = validate({ search: schema, body: schema }, parseForm);
 
-    const middleware = validate({ search: schema, body: schema }, qsParser);
-
-    let request = new Request('https:/a.b/?' + stringified, {
+    let request = new Request('https://a.b/?' + stringified, {
       method: 'POST',
       body: new URLSearchParams(stringified)
     });
@@ -210,9 +214,9 @@ describe('validate', () => {
     expect(resolved).to.be.true;
 
     const form = new FormData();
-    form.append('a[]', 'b');
-    form.append('a[]', 'c');
-    request = new Request('https:/a.b/?' + stringified, {
+    form.append('a/0', 'b');
+    form.append('a/1', 'c');
+    request = new Request('https://a.b/?' + stringified, {
       method: 'POST',
       body: form
     });
