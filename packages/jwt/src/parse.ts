@@ -1,4 +1,5 @@
 import { decodeJwt } from './decode.js';
+import { getKey } from './jwks.js';
 import { DecodedJwt, JwtParseResult } from './types.js';
 import { verifyJwtSignature } from './verify.js';
 
@@ -54,9 +55,18 @@ export async function parseJwt(
       reason: `JWT is expired. Expiry date: ${expiryDate}; Current date: ${currentDate};`
     };
   }
+  let key: CryptoKey;
+  try {
+    key = await getKey(decoded);
+  } catch {
+    return {
+      valid: false,
+      reason: `Error retrieving key to verify JWT signature.`
+    };
+  }
   let signatureValid: boolean;
   try {
-    signatureValid = await verifyJwtSignature(decoded);
+    signatureValid = await verifyJwtSignature(decoded, key);
   } catch {
     return { valid: false, reason: `Error verifying JWT signature.` };
   }
