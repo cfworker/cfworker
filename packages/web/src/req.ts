@@ -1,5 +1,6 @@
 import { Reviver, safeParse } from 'secure-json-parse';
 import { Accepts } from './accepts.js';
+import { HttpError } from './http-error.js';
 
 export class Req {
   public readonly raw: Request;
@@ -14,7 +15,19 @@ export class Req {
     this.raw = request;
     this.method = request.method;
     this.url = new URL(request.url);
-    this.url.pathname = decodeURIComponent(this.url.pathname);
+    try {
+      this.url.pathname = decodeURIComponent(this.url.pathname)
+        .replace(/\/\/+/g, '/')
+        .normalize();
+    } catch (err) {
+      if (err instanceof URIError) {
+        throw new HttpError(
+          400,
+          `Unable to decode pathname "${this.url.pathname}".`
+        );
+      }
+      throw err;
+    }
     this.headers = request.headers;
     this.params = Object.create(null);
     this.accepts = new Accepts(request.headers);
