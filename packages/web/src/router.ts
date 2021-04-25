@@ -1,7 +1,13 @@
-import { Key, pathToRegexp } from 'path-to-regexp';
+import {
+  Key,
+  ParseOptions,
+  pathToRegexp,
+  TokensToRegexpOptions
+} from 'path-to-regexp';
 import { Context } from './context.js';
-import { HttpError } from './http-error.js';
 import { composeMiddleware, Middleware } from './middleware.js';
+
+export type PathToRegExpOptions = TokensToRegexpOptions & ParseOptions;
 
 export const Method = (method: string) => {
   method = method.toUpperCase();
@@ -22,9 +28,9 @@ export const Header = (header: string, value: string) => {
 export const Host = (host: string) => Header('host', host);
 export const Referer = (host: string) => Header('referer', host);
 
-export const Path = (pattern: string) => {
+export const Path = (pattern: string, options?: PathToRegExpOptions) => {
   const keys: Key[] = [];
-  const regExp = pathToRegexp(pattern, keys);
+  const regExp = pathToRegexp(pattern, keys, options);
 
   return ({ req: { url, params } }: Context) => {
     const match = url.pathname.match(regExp);
@@ -43,39 +49,54 @@ export interface Route {
   middleware: Middleware;
 }
 
+export interface RouterOptions {
+  pathToRegExpOptions?: PathToRegExpOptions;
+}
+
+export const defaultRouterOptions: RouterOptions = {
+  pathToRegExpOptions: { strict: true }
+};
+
 export class Router {
   private readonly routes: Route[];
 
-  constructor() {
+  constructor(private readonly options: RouterOptions = defaultRouterOptions) {
     this.routes = [];
   }
 
   public get(pathname: string, ...middleware: Middleware[]) {
-    return this.compose([Get, Path(pathname)], ...middleware);
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Get, Path(pathname, opts)], ...middleware);
   }
 
   public post(pathname: string, ...middleware: Middleware[]) {
-    return this.compose([Post, Path(pathname)], ...middleware);
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Post, Path(pathname, opts)], ...middleware);
   }
 
   public put(pathname: string, ...middleware: Middleware[]) {
-    return this.compose([Put, Path(pathname)], ...middleware);
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Put, Path(pathname, opts)], ...middleware);
   }
 
   public patch(pathname: string, ...middleware: Middleware[]) {
-    return this.compose([Patch, Path(pathname)], ...middleware);
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Patch, Path(pathname, opts)], ...middleware);
   }
 
   public delete(pathname: string, ...middleware: Middleware[]) {
-    return this.compose([Delete, Path(pathname)], ...middleware);
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Delete, Path(pathname, opts)], ...middleware);
   }
 
   public head(pathname: string, ...middleware: Middleware[]) {
-    return this.compose([Head, Path(pathname)], ...middleware);
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Head, Path(pathname, opts)], ...middleware);
   }
 
-  public all(...middleware: Middleware[]) {
-    return this.compose([], ...middleware);
+  public all(pathname: string, ...middleware: Middleware[]) {
+    const opts = this.options.pathToRegExpOptions;
+    return this.compose([Path(pathname, opts)], ...middleware);
   }
 
   public middleware: Middleware = async (ctx, next) => {
@@ -115,24 +136,6 @@ function collectParameters(
     if (!value) {
       continue;
     }
-    params[name] = decodePathnameComponent(value);
-  }
-}
-
-function decodePathnameComponent(component: string): string {
-  if (component.length === 0) {
-    return component;
-  }
-
-  try {
-    return decodeURIComponent(component);
-  } catch (err) {
-    if (err instanceof URIError) {
-      throw new HttpError(
-        400,
-        `Unable to decode pathname component "${component}".`
-      );
-    }
-    throw err;
+    params[name] = decodeURIComponent(value);
   }
 }
