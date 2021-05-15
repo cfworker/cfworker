@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/dev",
   "type": "module",
-  "version": "1.6.11",
+  "version": "1.8.0",
   "description": "Run, test and deploy Cloudflare workers",
   "main": "src/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -23,7 +23,7 @@
     "test": "node --experimental-modules --experimental-json-modules --no-warnings test/index.js"
   },
   "dependencies": {
-    "@cfworker/worker-types": "^1.6.11",
+    "@cfworker/worker-types": "^1.8.0",
     "@cloudflare/workers-types": "^2.2.1",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-json": "^4.1.0",
