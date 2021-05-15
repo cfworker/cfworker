@@ -1,8 +1,12 @@
 # @cfworker/csv
 
-Streaming CSV encoding for Cloudflare Workers and service workers.
+![](https://badgen.net/bundlephobia/minzip/@cfworker/csv)
+![](https://badgen.net/bundlephobia/min/@cfworker/csv)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/csv)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/csv)
+![](https://badgen.net/npm/types/@cfworker/csv?icon=typescript)
 
-No dependencies.
+Streaming CSV encoding for Cloudflare Workers and service workers.
 
 ## usage
 

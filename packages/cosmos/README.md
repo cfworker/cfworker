@@ -1,7 +1,13 @@
 # @cfworker/cosmos
 
+![](https://badgen.net/bundlephobia/minzip/@cfworker/cosmos)
+![](https://badgen.net/bundlephobia/min/@cfworker/cosmos)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/cosmos)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/cosmos)
+![](https://badgen.net/npm/types/@cfworker/cosmos?icon=typescript)
+
 Azure Cosmos DB client for Cloudflare Workers and web.
-Tiny package, [minimal dependencies](/packages/cosmos/package.json), streaming optimized.
+Tiny package, minimal dependencies, streaming optimized.
 
 - [Getting started](#getting-started)
   - [Specify consistency level](#specify-consistency-level)
