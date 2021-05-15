@@ -1,8 +1,12 @@
 # @cfworker/base64url
 
-base64 URL encoding for Cloudflare Workers and service workers.
+![](https://badgen.net/bundlephobia/minzip/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/min/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/base64url)
+![](https://badgen.net/npm/types/@cfworker/base64url?icon=typescript)
 
-No dependencies.
+base64 URL encoding for Cloudflare Workers and service workers.
 
 ## usage
 

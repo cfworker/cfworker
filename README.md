@@ -4,47 +4,107 @@
 
 A collection of packages optimized for Cloudflare Workers and service workers.
 
-## packages
+## @cfworker/base64url
 
-- `@cfworker/base64url`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/base64url/README.md) | [npm](https://www.npmjs.com/package/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/minzip/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/min/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/base64url)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/base64url)
+![](https://badgen.net/npm/types/@cfworker/base64url?icon=typescript)
 
-  base64 URL encoding for Cloudflare Workers and service workers
+base64 URL encoding for Cloudflare Workers and service workers
 
-- `@cfworker/cosmos`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/cosmos/README.md) | [npm](https://www.npmjs.com/package/@cfworker/cosmos)
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/base64url/README.md) | [npm](https://www.npmjs.com/package/@cfworker/base64url)
 
-  Azure Cosmos DB client for Cloudflare Workers and service workers
+## @cfworker/cosmos
 
-- `@cfworker/csv`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md) | [npm](https://www.npmjs.com/package/@cfworker/csv)
+![](https://badgen.net/bundlephobia/minzip/@cfworker/cosmos)
+![](https://badgen.net/bundlephobia/min/@cfworker/cosmos)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/cosmos)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/cosmos)
+![](https://badgen.net/npm/types/@cfworker/cosmos?icon=typescript)
 
-  Streaming CSV encoding for Cloudflare Workers and service workers
+Azure Cosmos DB client for Cloudflare Workers and service workers
 
-- `@cfworker/demo`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/demo/README.md) | [npm](https://www.npmjs.com/package/@cfworker/demo)
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/cosmos/README.md) | [npm](https://www.npmjs.com/package/@cfworker/cosmos)
 
-  Web app demo
+## @cfworker/csv
 
-- `@cfworker/dev`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/dev/README.md) | [npm](https://www.npmjs.com/package/@cfworker/dev)
+![](https://badgen.net/bundlephobia/minzip/@cfworker/csv)
+![](https://badgen.net/bundlephobia/min/@cfworker/csv)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/csv)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/csv)
+![](https://badgen.net/npm/types/@cfworker/csv?icon=typescript)
 
-  Run, test and deploy Cloudflare workers
+Streaming CSV encoding for Cloudflare Workers and service workers
 
-- `@cfworker/json-schema`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/json-schema/README.md) | [npm](https://www.npmjs.com/package/@cfworker/json-schema)
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md) | [npm](https://www.npmjs.com/package/@cfworker/csv)
 
-  A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.
+## @cfworker/dev
 
-- `@cfworker/jwt`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/jwt/README.md) | [npm](https://www.npmjs.com/package/@cfworker/jwt)
+Run, test and deploy Cloudflare workers
 
-  Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/dev/README.md) | [npm](https://www.npmjs.com/package/@cfworker/dev)
 
-- `@cfworker/sentry`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/sentry/README.md) | [npm](https://www.npmjs.com/package/@cfworker/sentry)
+## @cfworker/json-schema
 
-  Minimalist Sentry client for Cloudflare workers and service workers
+![](https://badgen.net/bundlephobia/minzip/@cfworker/json-schema)
+![](https://badgen.net/bundlephobia/min/@cfworker/json-schema)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/json-schema)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/json-schema)
+![](https://badgen.net/npm/types/@cfworker/json-schema?icon=typescript)
 
-- `@cfworker/uuid`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/uuid/README.md) | [npm](https://www.npmjs.com/package/@cfworker/uuid)
+A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.
 
-  Fast UUID generator with no dependencies. Generate V4 compliant UUIDs using crypto.getRandomValues
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/json-schema/README.md) | [npm](https://www.npmjs.com/package/@cfworker/json-schema)
 
-- `@cfworker/web`: [readme](https://github.com/cfworker/cfworker/tree/master/packages/web/README.md) | [npm](https://www.npmjs.com/package/@cfworker/web)
+## @cfworker/jwt
 
-  Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify
+![](https://badgen.net/bundlephobia/minzip/@cfworker/jwt)
+![](https://badgen.net/bundlephobia/min/@cfworker/jwt)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/jwt)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/jwt)
+![](https://badgen.net/npm/types/@cfworker/jwt?icon=typescript)
+
+Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs
+
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/jwt/README.md) | [npm](https://www.npmjs.com/package/@cfworker/jwt)
+
+## @cfworker/sentry
+
+![](https://badgen.net/bundlephobia/minzip/@cfworker/sentry)
+![](https://badgen.net/bundlephobia/min/@cfworker/sentry)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/sentry)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/sentry)
+![](https://badgen.net/npm/types/@cfworker/sentry?icon=typescript)
+
+Minimalist Sentry client for Cloudflare workers and service workers
+
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/sentry/README.md) | [npm](https://www.npmjs.com/package/@cfworker/sentry)
+
+## @cfworker/uuid
+
+![](https://badgen.net/bundlephobia/minzip/@cfworker/uuid)
+![](https://badgen.net/bundlephobia/min/@cfworker/uuid)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/uuid)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/uuid)
+![](https://badgen.net/npm/types/@cfworker/uuid?icon=typescript)
+
+Fast UUID generator with no dependencies. Generate V4 compliant UUIDs using crypto.getRandomValues
+
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/uuid/README.md) | [npm](https://www.npmjs.com/package/@cfworker/uuid)
+
+## @cfworker/web
+
+![](https://badgen.net/bundlephobia/minzip/@cfworker/web)
+![](https://badgen.net/bundlephobia/min/@cfworker/web)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/web)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/web)
+![](https://badgen.net/npm/types/@cfworker/web?icon=typescript)
+
+Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify
+
+[readme](https://github.com/cfworker/cfworker/tree/master/packages/web/README.md) | [npm](https://www.npmjs.com/package/@cfworker/web)
 
 ## contributing
 

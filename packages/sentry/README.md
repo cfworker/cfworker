@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+![](https://badgen.net/bundlephobia/minzip/@cfworker/sentry)
+![](https://badgen.net/bundlephobia/min/@cfworker/sentry)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/sentry)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/sentry)
+![](https://badgen.net/npm/types/@cfworker/sentry?icon=typescript)
+
 Minimalist Sentry client for Cloudflare workers and service workers.
 
 ```js

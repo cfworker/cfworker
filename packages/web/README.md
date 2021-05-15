@@ -1,5 +1,11 @@
 # @cfworker/web
 
+![](https://badgen.net/bundlephobia/minzip/@cfworker/web)
+![](https://badgen.net/bundlephobia/min/@cfworker/web)
+![](https://badgen.net/bundlephobia/dependency-count/@cfworker/web)
+![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/web)
+![](https://badgen.net/npm/types/@cfworker/web?icon=typescript)
+
 Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify.
 
 ```ts
