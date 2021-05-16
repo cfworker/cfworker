@@ -9,7 +9,13 @@
 Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify.
 
 ```ts
-import { Application, Middleware, Router, validate } from '@cfworker/web';
+import {
+  Application,
+  Middleware,
+  Router,
+  validate,
+  normalizePathnameMiddleware
+} from '@cfworker/web';
 
 const router = new Router();
 
@@ -68,7 +74,11 @@ const cors: Middleware = async ({ res }, next) => {
 };
 
 // Compose the application
-new Application().use(cors).use(router.middleware).listen();
+new Application()
+  .use(normalizePathnameMiddleware)
+  .use(cors)
+  .use(router.middleware)
+  .listen();
 ```
 
 [To run this example](/packages/web/examples/worker.ts):
