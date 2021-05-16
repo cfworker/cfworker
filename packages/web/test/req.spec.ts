@@ -3,7 +3,7 @@ import { describe, it } from 'mocha';
 import { Req, ReqBody } from '../src/req.js';
 
 describe('Req', () => {
-  const request = new Request('https://foo.com/hello-%28world%29', {
+  const request = new Request('https://foo.com/hello-world', {
     method: 'POST',
     body: JSON.stringify({ foo: 'bar' })
   });
@@ -13,26 +13,6 @@ describe('Req', () => {
 
   it('parses request url', () => {
     expect(req.url.origin).to.equal('https://foo.com');
-  });
-
-  it('normalizes request pathname', () => {
-    expect(req.url.pathname).to.equal('/hello-(world)');
-    const req2 = new Req(new Request('https://foo.com/caf\u00E9'));
-    expect(req2.url.pathname).to.equal('/caf%C3%A9');
-    const req3 = new Req(new Request('https://foo.com/cafe\u0301'));
-    expect(req3.url.pathname).to.equal('/caf%C3%A9');
-    const req4 = new Req(new Request('https://foo.com/hello//world'));
-    expect(req4.url.pathname).to.equal('/hello/world');
-    const req5 = new Req(new Request('https://foo.com/JavaScript_шеллы'));
-    expect(req5.url.pathname).to.equal(
-      '/JavaScript_%D1%88%D0%B5%D0%BB%D0%BB%D1%8B'
-    );
-  });
-
-  it('throws 400 when escape sequence cannot be represented', () => {
-    expect(() => new Req(new Request('https://foo.com/%E0%A4%A'))).to.throw(
-      'Bad Request'
-    );
   });
 
   it('exposes accepts', () => {

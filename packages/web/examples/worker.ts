@@ -1,4 +1,10 @@
-import { Application, Middleware, Router, validate } from '@cfworker/web';
+import {
+  Application,
+  Middleware,
+  normalizePathnameMiddleware,
+  Router,
+  validate
+} from '@cfworker/web';
 
 const router = new Router();
 
@@ -57,7 +63,11 @@ const cors: Middleware = async ({ res }, next) => {
 };
 
 // Compose the application
-new Application().use(cors).use(router.middleware).listen();
+new Application()
+  .use(normalizePathnameMiddleware)
+  .use(cors)
+  .use(router.middleware)
+  .listen();
 
 /*
 yarn workspace @cfworker/web cfworker run examples/worker.ts --watch --nocheck
