@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/base64url",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "base64 URL encoding for Cloudflare Workers and service workers",
   "sideEffects": false,
   "main": "dist/index.js",
