@@ -2,6 +2,7 @@
   "name": "@cfworker/csv",
   "version": "1.8.0",
   "description": "Streaming CSV encoding for Cloudflare Workers and service workers",
+  "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",

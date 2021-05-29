@@ -11,6 +11,7 @@
     "workers",
     "service-worker"
   ],
+  "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/index.js",
   "source": "src/index.ts",
