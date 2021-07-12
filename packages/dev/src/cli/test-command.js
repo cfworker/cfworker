@@ -20,11 +20,13 @@ export class TestCommand {
    */
   constructor(args) {
     this.args = args;
+    const treeshake = false;
     this.bundler = new Bundler(
       args.globs,
       args.watch,
       ['mocha', 'chai'],
-      args.check
+      args.check,
+      treeshake
     );
     this.site = args.site ? new StaticSite(args.site, args.watch) : null;
     this.kv = new KV(args.kv, args.watch);

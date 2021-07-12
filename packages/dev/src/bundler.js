@@ -42,10 +42,11 @@ export class Bundler extends EventEmitter {
    * @param {string[]} external
    * @param {boolean} check
    */
-  constructor(globs, watch, external = [], check = true) {
+  constructor(globs, watch, external = [], check = true, treeshake = true) {
     super();
     this.inputOptions.input = globs;
     this.inputOptions.external = external;
+    this.inputOptions.treeshake = treeshake;
     // add rollup-plugin-typescript2 when globs include typescript file extension
     if (globs.find(g => /\.ts(?:$|,)/.test(g)) && this.inputOptions.plugins) {
       this.inputOptions.plugins.splice(
