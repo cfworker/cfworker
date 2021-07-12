@@ -72,6 +72,7 @@ export class RunCommand {
       if (this.site) {
         this.site.on('change', update);
       }
+      this.kv.on('change', update);
     }
 
     const url = `http://localhost:${this.args.port}/`;

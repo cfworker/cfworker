@@ -249,21 +249,21 @@ export async function assertCanCreateKVNamespace() {
     kv: ['./test/fixtures/greetings.json']
   });
   await command.execute();
-  // const response = await fetch('http://localhost:7000');
-  // const html = await response.text();
-  // assert.equal(html, 'world');
+  const response = await fetch('http://localhost:7000');
+  const html = await response.text();
+  assert.equal(html, 'world');
 
-  // const updated = new Promise(resolve =>
-  //   command.host.on('worker-updated', resolve)
-  // );
-  // await fs.outputFile(
-  //   './test/fixtures/greetings.json',
-  //   '[{ "key": "hello", "value": "world 2", "base64": false }]'
-  // );
-  // await updated;
-  // const response2 = await fetch('http://localhost:7000');
-  // const html2 = await response2.text();
-  // assert.equal(html2, 'world 2');
+  const updated = new Promise(resolve =>
+    command.host.on('worker-updated', resolve)
+  );
+  await fs.outputFile(
+    './test/fixtures/greetings.json',
+    '[{ "key": "hello", "value": "world 2", "base64": false }]'
+  );
+  await updated;
+  const response2 = await fetch('http://localhost:7000');
+  const html2 = await response2.text();
+  assert.equal(html2, 'world 2');
 
   command.dispose();
 }
