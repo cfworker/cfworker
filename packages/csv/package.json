@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/csv",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Streaming CSV encoding for Cloudflare Workers and service workers",
   "sideEffects": false,
   "main": "dist/index.js",
@@ -27,7 +27,7 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.8.2",
+    "@cfworker/dev": "^1.8.3",
     "@types/chai": "^4.2.16",
     "@types/mocha": "^8.2.2",
     "chai": "^4.3.4",
