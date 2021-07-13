@@ -57,6 +57,9 @@ export class WorkerHost extends EventEmitter {
 
     logger.progress('Configuring host page...');
     const page = (await browser.pages())[0];
+
+    await page.emulateTimezone('UTC');
+
     page.on('pageerror', e => {
       logger.error(e);
       this.emit('worker-error', e);
