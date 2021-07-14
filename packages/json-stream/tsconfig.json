@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig-base",
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext", "webworker"],
+    "types": ["chai", "mocha"],
+    "outDir": "dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"]
+}
