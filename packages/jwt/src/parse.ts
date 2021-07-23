@@ -32,10 +32,21 @@ export async function parseJwt(
       reason: `Invalid JWT algorithm "${decoded.header.alg}". Expected "RS256".`
     };
   }
-  if (decoded.payload.aud !== audience) {
+  if (
+    typeof decoded.payload.aud === 'string' &&
+    decoded.payload.aud !== audience
+  ) {
     return {
       valid: false,
       reason: `Invalid JWT audience "${decoded.payload.aud}". Expected "${audience}".`
+    };
+  } else if (
+    Array.isArray(decoded.payload.aud) &&
+    !decoded.payload.aud.includes(audience)
+  ) {
+    return {
+      valid: false,
+      reason: `Invalid JWT audience in array "${decoded.payload.aud}". Does not include"${audience}".`
     };
   }
 
