@@ -57,6 +57,15 @@ describe('parseJwt', () => {
     expect(result.valid).to.equal(false);
   });
 
+  it('accepts array audience', async () => {
+    const exp = Math.floor(new Date().getTime() / 1000) + 10;
+    const header: JwtHeader = { alg: 'RS256', kid };
+    const payload = { iss, aud: [aud, 'another-aud'], exp, sub, iat };
+    const jwt = await createJwt(header, payload);
+    const result = await parseJwt(jwt, iss, aud);
+    expect(result.valid).to.equal(true);
+  });
+
   it('rejects invalid audience', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 60;
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
