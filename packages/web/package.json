@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/web",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify",
   "keywords": [
     "middleware",

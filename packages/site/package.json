@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/site",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "The cfworker.dev website",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -20,9 +20,9 @@
     "deploy": "cfworker deploy src/index.ts --name cfworker --route cfworker.dev/*"
   },
   "dependencies": {
+    "@cfworker/web": "^1.8.4",
     "@cfworker/worker-types": "^1.8.0",
-    "@cloudflare/workers-types": "^2.1.0",
-    "@cfworker/web": "^1.8.3"
+    "@cloudflare/workers-types": "^2.1.0"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.8.3",

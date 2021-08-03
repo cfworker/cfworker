@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/examples",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "cfworker examples",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -27,10 +27,10 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/cosmos": "^1.8.3",
-    "@cfworker/jwt": "^1.8.3",
+    "@cfworker/cosmos": "^1.8.4",
+    "@cfworker/jwt": "^1.8.4",
     "@cfworker/sentry": "^1.8.3",
-    "@cfworker/web": "^1.8.3",
+    "@cfworker/web": "^1.8.4",
     "@cfworker/worker-types": "^1.8.0",
     "@cloudflare/workers-types": "^2.1.0"
   },
