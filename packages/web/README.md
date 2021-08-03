@@ -81,11 +81,11 @@ new Application()
   .listen();
 ```
 
-[To run this example](/packages/web/examples/worker.ts):
+[To run this example](/packages/examples/web/index.ts):
 
 ```
 git clone https://github.com/cfworker/cfworker
 cd cfworker
-yarn install
-yarn workspace @cfworker/web cfworker run examples/worker.ts --watch --nocheck
+npm install
+npm run start-web --workspace=@cfworker/examples
 ```

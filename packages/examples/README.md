@@ -3,7 +3,7 @@
 1. Install deps
 
    ```
-   yarn install
+   npm install
    ```
 
 2. Configure environment

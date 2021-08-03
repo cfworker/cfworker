@@ -8,20 +8,24 @@
   "homepage": "https://github.com/cfworker/cfworker/tree/master/README.md",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "npm": ">= 7.18.1",
+    "node": ">= v16.4.2"
+  },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspaces run build",
-    "start": "yarn workspace @cfworker/demo run start",
-    "test": "yarn workspaces run test",
-    "deploy": "yarn workspace @cfworker/demo run deploy",
-    "deploy-dev": "yarn workspace @cfworker/demo run deploy-dev",
-    "clean": "yarn workspaces run clean",
+    "build": "npm run build --workspaces",
+    "start": "npm run start --workspace=@cfworker/examples",
+    "test": "npm run test --workspaces",
+    "deploy": "npm run deploy --workspace=@cfworker/site",
+    "deploy-dev": "npm run deploy-dev --workspace=@cfworker/site",
+    "clean": "npm run clean --workspaces",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
-    "release": "yarn run lint && yarn run test && yarn run clean && yarn run build && lerna publish",
-    "reinstall": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' + && rm -f yarn.lock && yarn install",
+    "release": "npm run lint && npm run test && npm run clean && npm run build && lerna publish",
+    "reinstall": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' + && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js"
   },
   "husky": {
