@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig-base",
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["webworker", "esnext"],
+    "composite": false,
+    "types": ["@cfworker/worker-types", "@cloudflare/workers-types"]
+  }
+}
