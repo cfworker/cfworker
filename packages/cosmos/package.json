@@ -34,8 +34,7 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "cfworker test test/**/*.spec.ts",
-    "example": "cfworker run examples/worker.ts --watch"
+    "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
     "@cfworker/worker-types": "^1.8.0",

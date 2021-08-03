@@ -309,15 +309,13 @@ const metrics = res.headers.get('x-ms-documentdb-query-metrics');
 
 ### Streaming with FetchEvent
 
-[Example Cloudflare Worker](/packages/cosmos/examples/worker.ts)
-
-To run this example:
+[To run this example](/packages/examples/cosmos/index.ts):
 
 ```
 git clone https://github.com/cfworker/cfworker
 cd cfworker
-yarn install
-yarn workspace @cfworker/cosmos cfworker run examples/worker.ts --watch
+npm install
+npm run start-cosmos --workspace=@cfworker/examples
 ```
 
 ## Contributing
@@ -326,7 +324,7 @@ yarn workspace @cfworker/cosmos cfworker run examples/worker.ts --watch
 
    ```
    git clone https://github.com/cfworker/cfworker
-   yarn install
+   npm install
    ```
 
 2. Open with VSCode

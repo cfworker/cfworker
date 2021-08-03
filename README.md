@@ -108,34 +108,34 @@ Web framework for Cloudflare Workers and service workers, inspired by Koa and fa
 
 ## contributing
 
-Install dependencies using yarn. Yarn will ensure cfworker packages that depend on other cfworker packages are linked properly.
+Install dependencies using npm. Npm workspaces will ensure cfworker packages that depend on other cfworker packages are linked properly.
 
 ```
-yarn install
+npm install
 ```
 
 Run all tests
 
 ```
-yarn test
+npm test
 ```
 
 Run a specific package's tests
 
 ```
-yarn workspace @cfworker/base64url test
+npm run test --workspace=@cfworker/base64url
 ```
 
 Watch files for changes and re-run tests
 
 ```
-yarn workspace @cfworker/base64url test --watch
+npm run test --watch --workspace=@cfworker/base64url
 ```
 
 Use chrome devtools to debug tests
 
 ```
-yarn workspace @cfworker/base64url test --watch --inspect
+npm run test --watch --inspect --workspace=@cfworker/base64url
 ```
 
 Refer to each package's README for more specific instructions and examples.

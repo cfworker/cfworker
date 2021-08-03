@@ -68,7 +68,3 @@ new Application()
   .use(cors)
   .use(router.middleware)
   .listen();
-
-/*
-yarn workspace @cfworker/web cfworker run examples/worker.ts --watch --nocheck
- */

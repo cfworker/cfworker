@@ -10,7 +10,7 @@ const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
 
 addEventListener('fetch', async event => {
   const url = new URL(event.request.url);
-  const docId = url.searchParams.get('id') || 'demo';
+  const docId = url.searchParams.get('id') ?? 'demo';
 
   await ensureCollection();
 
@@ -52,9 +52,3 @@ function ensureCollection() {
     }
   });
 }
-
-declare function addEventListener(
-  type: 'fetch',
-  listener: (this: any, ev: any) => any,
-  options?: boolean | AddEventListenerOptions
-): void;

@@ -11,7 +11,7 @@ A collection of packages optimized for Cloudflare Workers and service workers.
 
 `;
   for (const name of packages) {
-    if (name === 'worker-types' || name === 'demo') {
+    if (name === 'worker-types' || name === 'examples' || name === 'site') {
       continue;
     }
     try {
