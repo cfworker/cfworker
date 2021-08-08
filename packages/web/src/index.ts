@@ -1,3 +1,4 @@
+export { escape as htmlEncode } from 'html-escaper';
 export * from './accepts.js';
 export * from './application.js';
 export * from './context.js';
@@ -10,5 +11,3 @@ export * from './response-builder.js';
 export * from './router.js';
 export * from './to-object.js';
 export * from './validate.js';
-import escape_html from 'escape-html';
-export const htmlEncode = escape_html;
