@@ -6,7 +6,7 @@
 ![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/json-schema)
 ![](https://badgen.net/npm/types/@cfworker/json-schema?icon=typescript)
 
-A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.
+A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, 2019-09, and 2020-12.
 
 ## background
 
