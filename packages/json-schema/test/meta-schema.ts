@@ -16,7 +16,15 @@ export async function loadMeta() {
     'https://json-schema.org/draft/2019-09/meta/validation',
     'https://json-schema.org/draft/2019-09/meta/meta-data',
     'https://json-schema.org/draft/2019-09/meta/format',
-    'https://json-schema.org/draft/2019-09/meta/content'
+    'https://json-schema.org/draft/2019-09/meta/content',
+    'https://json-schema.org/draft/2020-12/schema',
+    'https://json-schema.org/draft/2020-12/meta/core',
+    'https://json-schema.org/draft/2020-12/meta/applicator',
+    'https://json-schema.org/draft/2020-12/meta/validation',
+    'https://json-schema.org/draft/2020-12/meta/meta-data',
+    'https://json-schema.org/draft/2020-12/meta/format-annotation',
+    'https://json-schema.org/draft/2020-12/meta/content',
+    'https://json-schema.org/draft/2020-12/meta/unevaluated'
   ];
 
   await Promise.all(

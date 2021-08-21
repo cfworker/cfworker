@@ -1,31 +1,9 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { dereference, validate } from '../src/index.js';
+import { dereference, validate, ValidationResult } from '../src/index.js';
 import { remotes, suites } from './json-schema-test-suite.js';
 import { loadMeta } from './meta-schema.js';
-
-const unsupportedTests = {
-  'draft4/optional/bignum': true,
-  'draft4/optional/ecmascript-regex': true,
-  'draft4/optional/zeroTerminatedFloats': true,
-  'draft4/optional/non-bmp-regex': true,
-
-  'draft7/optional/content': true,
-  'draft7/optional/format/ecmascript-regex': true,
-  'draft7/optional/format/idn-email': true,
-  'draft7/optional/format/idn-hostname': true,
-  'draft7/optional/format/iri-reference': true,
-  'draft7/optional/format/iri': true,
-  'draft7/optional/non-bmp-regex': true,
-
-  'draft2019-09/optional/content': true,
-  'draft2019-09/optional/format/ecmascript-regex': true,
-  'draft2019-09/optional/format/idn-email': true,
-  'draft2019-09/optional/format/idn-hostname': true,
-  'draft2019-09/optional/format/iri-reference': true,
-  'draft2019-09/optional/format/iri': true,
-  'draft2019-09/optional/non-bmp-regex': true
-};
+import { unsupportedTests } from './unsupported.js';
 
 const remotesLookup = Object.create(null);
 for (const { name, schema } of remotes) {
@@ -33,27 +11,44 @@ for (const { name, schema } of remotes) {
 }
 Object.freeze(remotesLookup);
 
-suites.forEach(({ draft, name, tests }) => {
-  if (unsupportedTests[name]) {
-    return;
-  }
-  describe(name, () => {
-    tests.forEach(({ schema, description, tests }) => {
-      const schemaLookup = dereference(schema);
-      describe(description, () => {
-        tests.forEach(({ data, valid, description }) => {
-          it(description, async () => {
-            const metaLookup = await loadMeta();
-            const lookup = {
-              ...metaLookup,
-              ...remotesLookup,
-              ...schemaLookup
-            };
-            const result = validate(data, schema, draft, lookup);
-            expect(result.valid).to.equal(valid, description);
+describe('json-schema', () => {
+  const failures: Record<string, Record<string, Record<string, true>>> = {};
+  suites.forEach(({ draft, name, tests }) => {
+    if (name.endsWith('/unknownKeyword')) {
+      return;
+    }
+    describe(name, () => {
+      tests.forEach(({ schema, description: description1, tests }) => {
+        const schemaLookup = dereference(schema);
+        describe(description1, () => {
+          tests.forEach(({ data, valid, description: description2 }) => {
+            if (unsupportedTests[name]?.[description1]?.[description2]) {
+              return;
+            }
+            it(description2, async () => {
+              const metaLookup = await loadMeta();
+              const lookup = {
+                ...metaLookup,
+                ...remotesLookup,
+                ...schemaLookup
+              };
+              let result: ValidationResult | undefined = undefined;
+              try {
+                result = validate(data, schema, draft, lookup);
+              } catch (err) {}
+              if (result?.valid !== valid) {
+                failures[name] = failures[name] ?? {};
+                failures[name][description1] =
+                  failures[name][description1] ?? {};
+                failures[name][description1][description2] = true;
+              }
+              expect(result?.valid).to.equal(valid, description2);
+            });
           });
         });
       });
     });
   });
+
+  // after(() => console.log(JSON.stringify(failures, null, 2)));
 });
