@@ -16,6 +16,7 @@ export const schemaKeyword: Record<string, boolean> = {
 };
 
 export const schemaArrayKeyword: Record<string, boolean> = {
+  prefixItems: true,
   items: true,
   allOf: true,
   anyOf: true,
