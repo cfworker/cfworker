@@ -1,4 +1,4 @@
-export type SchemaDraft = '4' | '7' | '2019-09';
+export type SchemaDraft = '4' | '7' | '2019-09' | '2020-12';
 
 export const enum OutputFormat {
   Flag = 1 << 0,
@@ -51,6 +51,7 @@ export interface Schema {
   dependentSchemas?: Record<string, Schema>;
   dependencies?: Record<string, Schema | string[]>;
 
+  prefixItems?: Array<Schema | boolean>[];
   items?: Schema | boolean | Array<Schema | boolean>;
   additionalItems?: Schema | boolean;
   unevaluatedItems?: Schema | boolean;

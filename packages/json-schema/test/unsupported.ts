@@ -306,20 +306,6 @@ export const unsupportedTests: Record<
       'Identifier path with base URI change in subschema': true
     }
   },
-  'draft2020-12/items': {
-    'items and subitems': {
-      'valid items': true,
-      'fewer items is valid': true
-    },
-    'prefixItems with no additional items allowed': {
-      'fewer number of items present (1)': true,
-      'fewer number of items present (2)': true,
-      'equal number of items present': true
-    },
-    'prefixItems validation adjusts the starting index for items': {
-      'valid items': true
-    }
-  },
   'draft2020-12/optional/format/date': {
     'validation of date strings': {
       'a invalid date string with 32 days in January': true,
@@ -436,14 +422,6 @@ export const unsupportedTests: Record<
       'unicode character in hex format in string': true
     }
   },
-  'draft2020-12/prefixItems': {
-    'a schema given for prefixItems': {
-      'wrong types': true
-    },
-    'prefixItems with boolean schemas': {
-      'array with two items is invalid': true
-    }
-  },
   'draft2020-12/ref': {
     'relative pointer ref to array': {
       'mismatch array': true
@@ -483,6 +461,9 @@ export const unsupportedTests: Record<
       "only a's are valid": true,
       "a's and b's are valid": true,
       "a's, b's and c's are valid": true
+    },
+    "unevaluatedItems can't see inside cousins": {
+      'always fails': true
     }
   },
   'draft2020-12/unevaluatedProperties': {

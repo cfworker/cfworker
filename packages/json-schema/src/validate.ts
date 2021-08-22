@@ -14,7 +14,7 @@ import { ucs2length } from './ucs2-length.js';
 export function validate(
   instance: any,
   schema: Schema | boolean,
-  draft: SchemaDraft = '2019-09',
+  draft: SchemaDraft = '2020-12',
   lookup = dereference(schema),
   shortCircuit = true,
   recursiveAnchor: Schema | null = null,
@@ -95,6 +95,7 @@ export function validate(
     dependentSchemas: $dependentSchemas,
     dependencies: $dependencies,
 
+    prefixItems: $prefixItems,
     items: $items,
     additionalItems: $additionalItems,
     unevaluatedItems: $unevaluatedItems,
@@ -780,6 +781,39 @@ export function validate(
     const length: number = instance.length;
     let i = 0;
     let stop = false;
+
+    if ($prefixItems !== undefined) {
+      const keywordLocation = `${schemaLocation}/prefixItems`;
+      const length2 = Math.min($prefixItems.length, length);
+      for (; i < length2; i++) {
+        const result = validate(
+          instance[i],
+          $prefixItems[i],
+          draft,
+          lookup,
+          shortCircuit,
+          recursiveAnchor,
+          `${instanceLocation}/${i}`,
+          `${keywordLocation}/${i}`
+        );
+        if (!result.valid) {
+          stop = shortCircuit;
+          errors.push(
+            {
+              instanceLocation,
+              keyword: 'prefixItems',
+              keywordLocation,
+              error: `Items did not match schema.`
+            },
+            ...result.errors
+          );
+          if (stop) break;
+        }
+      }
+    }
+
+    evaluated.items = Math.max(i, evaluated.items);
+
     if ($items !== undefined) {
       const keywordLocation = `${schemaLocation}/items`;
       if (Array.isArray($items)) {
