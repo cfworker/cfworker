@@ -194,27 +194,6 @@ export const unsupportedTests: Record<
       'integer node': true
     }
   },
-  'draft2019-09/unevaluatedItems': {
-    "unevaluatedItems can't see inside cousins": {
-      'always fails': true
-    }
-  },
-  'draft2019-09/unevaluatedProperties': {
-    "unevaluatedProperties can't see inside cousins": {
-      'always fails': true
-    },
-    'cousin unevaluatedProperties, true and false, true with properties': {
-      'with no nested unevaluated properties': true,
-      'with nested unevaluated properties': true
-    },
-    'cousin unevaluatedProperties, true and false, false with properties': {
-      'with nested unevaluated properties': true
-    },
-    'in-place applicator siblings, allOf has unevaluated': {
-      'base case: both properties present': true,
-      'in place applicator siblings, foo is missing': true
-    }
-  },
   'draft2020-12/defs': {
     'validate definition against metaschema': {
       'invalid definition schema': true
@@ -428,29 +407,29 @@ export const unsupportedTests: Record<
     }
   },
   'draft2020-12/unevaluatedItems': {
-    'unevaluatedItems with tuple': {
-      'with no unevaluated items': true
-    },
-    'unevaluatedItems with nested tuple': {
-      'with no unevaluated items': true
-    },
-    'unevaluatedItems with anyOf': {
-      'when one schema matches and has no unevaluated items': true,
-      'when two schemas match and has no unevaluated items': true
-    },
-    'unevaluatedItems with oneOf': {
-      'with no unevaluated items': true
-    },
-    'unevaluatedItems with if/then/else': {
-      'when if matches and it has no unevaluated items': true,
-      "when if doesn't match and it has no unevaluated items": true
-    },
-    'unevaluatedItems with $ref': {
-      'with no unevaluated items': true
-    },
-    'item is evaluated in an uncle schema to unevaluatedItems': {
-      'no extra items': true
-    },
+    //   'unevaluatedItems with tuple': {
+    //     'with no unevaluated items': true
+    //   },
+    //   'unevaluatedItems with nested tuple': {
+    //     'with no unevaluated items': true
+    //   },
+    //   'unevaluatedItems with anyOf': {
+    //     'when one schema matches and has no unevaluated items': true,
+    //     'when two schemas match and has no unevaluated items': true
+    //   },
+    //   'unevaluatedItems with oneOf': {
+    //     'with no unevaluated items': true
+    //   },
+    //   'unevaluatedItems with if/then/else': {
+    //     'when if matches and it has no unevaluated items': true,
+    //     "when if doesn't match and it has no unevaluated items": true
+    //   },
+    //   'unevaluatedItems with $ref': {
+    //     'with no unevaluated items': true
+    //   },
+    //   'item is evaluated in an uncle schema to unevaluatedItems': {
+    //     'no extra items': true
+    //   },
     'unevaluatedItems depends on adjacent contains': {
       'second item is evaluated by contains': true
     },
@@ -461,27 +440,27 @@ export const unsupportedTests: Record<
       "only a's are valid": true,
       "a's and b's are valid": true,
       "a's, b's and c's are valid": true
-    },
-    "unevaluatedItems can't see inside cousins": {
-      'always fails': true
     }
+    //   "unevaluatedItems can't see inside cousins": {
+    //     'always fails': true
+    //   }
   },
-  'draft2020-12/unevaluatedProperties': {
-    "unevaluatedProperties can't see inside cousins": {
-      'always fails': true
-    },
-    'cousin unevaluatedProperties, true and false, true with properties': {
-      'with no nested unevaluated properties': true,
-      'with nested unevaluated properties': true
-    },
-    'cousin unevaluatedProperties, true and false, false with properties': {
-      'with nested unevaluated properties': true
-    },
-    'in-place applicator siblings, allOf has unevaluated': {
-      'base case: both properties present': true,
-      'in place applicator siblings, foo is missing': true
-    }
-  },
+  // 'draft2020-12/unevaluatedProperties': {
+  //   "unevaluatedProperties can't see inside cousins": {
+  //     'always fails': true
+  //   },
+  //   'cousin unevaluatedProperties, true and false, true with properties': {
+  //     'with no nested unevaluated properties': true,
+  //     'with nested unevaluated properties': true
+  //   },
+  //   'cousin unevaluatedProperties, true and false, false with properties': {
+  //     'with nested unevaluated properties': true
+  //   },
+  //   'in-place applicator siblings, allOf has unevaluated': {
+  //     'base case: both properties present': true,
+  //     'in place applicator siblings, foo is missing': true
+  //   }
+  // },
   'draft2020-12/uniqueItems': {
     'uniqueItems with an array of items and additionalItems=false': {
       '[false, true] from items array is valid': true,

@@ -1,5 +1,11 @@
 import { deepCompareStrict } from './deep-compare-strict.js';
 import { dereference } from './dereference.js';
+import {
+  Evaluated,
+  evaluatedItems,
+  evaluatedProto,
+  mergeEvaluated
+} from './evaluated.js';
 import { fastFormat } from './format.js';
 import { encodePointer } from './pointer.js';
 import {
@@ -20,7 +26,7 @@ export function validate(
   recursiveAnchor: Schema | null = null,
   instanceLocation = '#',
   schemaLocation = '#',
-  evaluated?: { properties?: Record<string, boolean>; items?: number }
+  evaluated: Evaluated = Object.create(evaluatedProto)
 ): ValidationResult {
   if (schema === true) {
     return { valid: true, errors: [] };
@@ -53,10 +59,8 @@ export function validate(
         instanceType = 'null';
       } else if (Array.isArray(instance)) {
         instanceType = 'array';
-        evaluated = evaluated || { items: -1 };
       } else {
         instanceType = 'object';
-        evaluated = evaluated || { properties: Object.create(null) };
       }
       break;
     default:
@@ -296,12 +300,15 @@ export function validate(
     }
   }
 
+  let subEvaluateds: Array<Evaluated> = [];
+
   if ($anyOf !== undefined) {
     const keywordLocation = `${schemaLocation}/anyOf`;
     const errorsLength = errors.length;
     let anyValid = false;
     for (let i = 0; i < $anyOf.length; i++) {
       const subSchema = $anyOf[i];
+      const subEvaluated: Evaluated = Object.create(evaluated);
       const result = validate(
         instance,
         subSchema,
@@ -311,10 +318,13 @@ export function validate(
         recursiveAnchor,
         instanceLocation,
         `${keywordLocation}/${i}`,
-        evaluated
+        subEvaluated
       );
       errors.push(...result.errors);
       anyValid = anyValid || result.valid;
+      if (result.valid) {
+        subEvaluateds.push(subEvaluated);
+      }
     }
     if (anyValid) {
       errors.length = errorsLength;
@@ -334,6 +344,7 @@ export function validate(
     let allValid = true;
     for (let i = 0; i < $allOf.length; i++) {
       const subSchema = $allOf[i];
+      const subEvaluated: Evaluated = Object.create(evaluated);
       const result = validate(
         instance,
         subSchema,
@@ -343,10 +354,13 @@ export function validate(
         recursiveAnchor,
         instanceLocation,
         `${keywordLocation}/${i}`,
-        evaluated
+        subEvaluated
       );
       errors.push(...result.errors);
       allValid = allValid && result.valid;
+      if (result.valid) {
+        subEvaluateds.push(subEvaluated);
+      }
     }
     if (allValid) {
       errors.length = errorsLength;
@@ -364,6 +378,7 @@ export function validate(
     const keywordLocation = `${schemaLocation}/oneOf`;
     const errorsLength = errors.length;
     const matches = $oneOf.filter((subSchema, i) => {
+      const subEvaluated: Evaluated = Object.create(evaluated);
       const result = validate(
         instance,
         subSchema,
@@ -373,9 +388,12 @@ export function validate(
         recursiveAnchor,
         instanceLocation,
         `${keywordLocation}/${i}`,
-        evaluated
+        subEvaluated
       );
       errors.push(...result.errors);
+      if (result.valid) {
+        subEvaluateds.push(subEvaluated);
+      }
       return result.valid;
     }).length;
     if (matches === 1) {
@@ -389,6 +407,8 @@ export function validate(
       });
     }
   }
+
+  mergeEvaluated(evaluated, subEvaluateds, instanceType);
 
   if ($if !== undefined) {
     const keywordLocation = `${schemaLocation}/if`;
@@ -609,9 +629,6 @@ export function validate(
     }
 
     const thisEvaluated = Object.create(null);
-    if (!evaluated || !evaluated.properties) {
-      throw new Error('evaluated.properties should be an object');
-    }
 
     let stop = false;
 
@@ -633,7 +650,7 @@ export function validate(
           `${keywordLocation}/${encodePointer(key)}`
         );
         if (result.valid) {
-          evaluated.properties[key] = thisEvaluated[key] = true;
+          evaluated[key] = thisEvaluated[key] = true;
         } else {
           stop = shortCircuit;
           errors.push(
@@ -673,7 +690,7 @@ export function validate(
             `${keywordLocation}/${encodePointer(pattern)}`
           );
           if (result.valid) {
-            evaluated.properties[key] = thisEvaluated[key] = true;
+            evaluated[key] = thisEvaluated[key] = true;
           } else {
             stop = shortCircuit;
             errors.push(
@@ -708,7 +725,7 @@ export function validate(
           keywordLocation
         );
         if (result.valid) {
-          evaluated.properties[key] = true;
+          evaluated[key] = true;
         } else {
           stop = shortCircuit;
           errors.push(
@@ -725,7 +742,7 @@ export function validate(
     } else if (!stop && $unevaluatedProperties !== undefined) {
       const keywordLocation = `${schemaLocation}/unevaluatedProperties`;
       for (const key in instance) {
-        if (!evaluated.properties[key]) {
+        if (!evaluated[key]) {
           const subInstancePointer = `${instanceLocation}/${encodePointer(
             key
           )}`;
@@ -740,7 +757,7 @@ export function validate(
             keywordLocation
           );
           if (result.valid) {
-            evaluated.properties[key] = true;
+            evaluated[key] = true;
           } else {
             errors.push(
               {
@@ -772,10 +789,6 @@ export function validate(
         keywordLocation: `${schemaLocation}/minItems`,
         error: `Array has too few items (${instance.length} < ${$minItems}).`
       });
-    }
-
-    if (!evaluated || evaluated.items === undefined) {
-      throw new Error('evaluated.items should be a number');
     }
 
     const length: number = instance.length;
@@ -812,7 +825,7 @@ export function validate(
       }
     }
 
-    evaluated.items = Math.max(i, evaluated.items);
+    evaluated[evaluatedItems] = Math.max(i, evaluated[evaluatedItems]);
 
     if ($items !== undefined) {
       const keywordLocation = `${schemaLocation}/items`;
@@ -871,7 +884,7 @@ export function validate(
         }
       }
 
-      evaluated.items = Math.max(i, evaluated.items);
+      evaluated[evaluatedItems] = Math.max(i, evaluated[evaluatedItems]);
 
       if (!stop && $additionalItems !== undefined) {
         const keywordLocation = `${schemaLocation}/additionalItems`;
@@ -899,13 +912,13 @@ export function validate(
             );
           }
         }
-        evaluated.items = Math.max(i, evaluated.items);
+        evaluated[evaluatedItems] = Math.max(i, evaluated[evaluatedItems]);
       }
     }
 
     if (!stop && $unevaluatedItems !== undefined) {
       const keywordLocation = `${schemaLocation}/unevaluatedItems`;
-      for (i = Math.max(evaluated.items, 0); i < length; i++) {
+      for (i = Math.max(evaluated[evaluatedItems], 0); i < length; i++) {
         const result = validate(
           instance[i],
           $unevaluatedItems,
@@ -928,7 +941,7 @@ export function validate(
           );
         }
       }
-      evaluated.items = Math.max(i, evaluated.items);
+      evaluated[evaluatedItems] = Math.max(i, evaluated[evaluatedItems]);
     }
 
     if ($contains !== undefined) {
