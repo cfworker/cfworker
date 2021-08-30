@@ -165,35 +165,6 @@ export const unsupportedTests: Record<
       'unicode character in hex format in string': true
     }
   },
-  'draft2019-09/recursiveRef': {
-    '$recursiveRef without $recursiveAnchor works like $ref': {
-      match: true,
-      'recursive match': true,
-      'recursive mismatch': true
-    },
-    '$recursiveRef with $recursiveAnchor: false works like $ref': {
-      'single level match': true,
-      'integer does not match as a property value': true,
-      'two levels, properties match with inner definition': true,
-      'two levels, integer does not match as a property value': true
-    },
-    '$recursiveRef with no $recursiveAnchor works like $ref': {
-      'single level match': true,
-      'integer does not match as a property value': true,
-      'two levels, properties match with inner definition': true,
-      'two levels, integer does not match as a property value': true
-    },
-    '$recursiveRef with no $recursiveAnchor in the initial target schema resource': {
-      'leaf node matches: recursion uses the inner schema': true,
-      'leaf node does not match: recursion uses the inner schema': true
-    },
-    'multiple dynamic paths to the $recursiveRef keyword': {
-      'recurse to integerNode - floats are not allowed': true
-    },
-    'dynamic $recursiveRef destination (not predictable at schema compile time)': {
-      'integer node': true
-    }
-  },
   'draft2020-12/defs': {
     'validate definition against metaschema': {
       'invalid definition schema': true

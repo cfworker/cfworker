@@ -73,6 +73,7 @@ export interface Schema {
   pattern?: string;
 
   __absolute_ref__?: string;
+  __absolute_recursive_ref__?: string;
   __absolute_uri__?: string;
 
   [key: string]: any;

@@ -19,7 +19,7 @@ export function validate(
   draft: SchemaDraft = '2020-12',
   lookup = dereference(schema),
   shortCircuit = true,
-  recursiveAnchor: Schema | boolean | null = null,
+  recursiveAnchor: Schema | null = null,
   instanceLocation = '#',
   schemaLocation = '#',
   evaluated: Evaluated = Object.create(null)
@@ -116,10 +116,45 @@ export function validate(
     maxLength: $maxLength,
     pattern: $pattern,
 
-    __absolute_ref__
+    __absolute_ref__,
+    __absolute_recursive_ref__
   } = schema;
 
   const errors: OutputUnit[] = [];
+
+  if ($recursiveAnchor === true && recursiveAnchor === null) {
+    recursiveAnchor = schema;
+  }
+
+  if ($recursiveRef === '#') {
+    const refSchema =
+      recursiveAnchor === null
+        ? (lookup[__absolute_recursive_ref__!] as Schema)
+        : recursiveAnchor;
+    const keywordLocation = `${schemaLocation}/$recursiveRef`;
+    const result = validate(
+      instance,
+      recursiveAnchor === null ? schema : recursiveAnchor,
+      draft,
+      lookup,
+      shortCircuit,
+      refSchema,
+      instanceLocation,
+      keywordLocation,
+      evaluated
+    );
+    if (!result.valid) {
+      errors.push(
+        {
+          instanceLocation,
+          keyword: '$recursiveRef',
+          keywordLocation,
+          error: 'A subschema had errors.'
+        },
+        ...result.errors
+      );
+    }
+  }
 
   if ($ref !== undefined) {
     const uri = __absolute_ref__ || $ref;
@@ -157,36 +192,6 @@ export function validate(
     }
     if (draft === '4' || draft === '7') {
       return { valid: errors.length === 0, errors };
-    }
-  }
-
-  if ($recursiveAnchor === true && recursiveAnchor === null) {
-    recursiveAnchor = schema;
-  }
-
-  if ($recursiveRef === '#') {
-    const keywordLocation = `${schemaLocation}/$recursiveRef`;
-    const result = validate(
-      instance,
-      recursiveAnchor === null ? schema : recursiveAnchor,
-      draft,
-      lookup,
-      shortCircuit,
-      recursiveAnchor,
-      instanceLocation,
-      keywordLocation,
-      evaluated
-    );
-    if (!result.valid) {
-      errors.push(
-        {
-          instanceLocation,
-          keyword: '$recursiveRef',
-          keywordLocation,
-          error: 'A subschema had errors.'
-        },
-        ...result.errors
-      );
     }
   }
 
@@ -311,7 +316,7 @@ export function validate(
         draft,
         lookup,
         shortCircuit,
-        recursiveAnchor,
+        $recursiveAnchor === true ? recursiveAnchor : null,
         instanceLocation,
         `${keywordLocation}/${i}`,
         subEvaluated
@@ -347,7 +352,7 @@ export function validate(
         draft,
         lookup,
         shortCircuit,
-        recursiveAnchor,
+        $recursiveAnchor === true ? recursiveAnchor : null,
         instanceLocation,
         `${keywordLocation}/${i}`,
         subEvaluated
@@ -381,7 +386,7 @@ export function validate(
         draft,
         lookup,
         shortCircuit,
-        recursiveAnchor,
+        $recursiveAnchor === true ? recursiveAnchor : null,
         instanceLocation,
         `${keywordLocation}/${i}`,
         subEvaluated
