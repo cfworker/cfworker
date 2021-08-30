@@ -21,11 +21,14 @@ describe('json-schema', () => {
       tests.forEach(({ schema, description: description1, tests }) => {
         const schemaLookup = dereference(schema);
         describe(description1, () => {
-          tests.forEach(({ data, valid, description: description2 }) => {
+          tests.forEach(({ data, valid, description: description2, debug }) => {
             if (unsupportedTests[name]?.[description1]?.[description2]) {
               return;
             }
-            it(description2, async () => {
+            (debug ? it.only : it)(description2, async () => {
+              if (debug) {
+                debugger;
+              }
               const metaLookup = await loadMeta();
               const lookup = {
                 ...metaLookup,

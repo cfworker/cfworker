@@ -16,6 +16,7 @@ export interface SchemaTestCase {
   description: string;
   data: any;
   valid: boolean;
+  debug?: true;
 }
 
 export interface Remote {
