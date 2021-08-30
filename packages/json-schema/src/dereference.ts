@@ -125,6 +125,16 @@ export function dereference(
     });
   }
 
+  // if a $recursiveRef is found, resolve it's absolute URI.
+  if (schema.$recursiveRef && schema.__absolute_recursive_ref__ === undefined) {
+    const url = new URL(schema.$recursiveRef, baseURI);
+    url.hash = url.hash; // normalize hash https://url.spec.whatwg.org/#dom-url-hash
+    Object.defineProperty(schema, '__absolute_recursive_ref__', {
+      enumerable: false,
+      value: url.href
+    });
+  }
+
   // if an $anchor is found, compute it's URI and add it to the mapping.
   if (schema.$anchor) {
     const url = new URL('#' + schema.$anchor, baseURI);
