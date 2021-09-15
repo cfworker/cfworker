@@ -16,7 +16,7 @@ export type Evaluated = Record<string | number, boolean>;
 export function validate(
   instance: any,
   schema: Schema | boolean,
-  draft: SchemaDraft = '2020-12',
+  draft: SchemaDraft = '2019-09',
   lookup = dereference(schema),
   shortCircuit = true,
   recursiveAnchor: Schema | null = null,
@@ -543,7 +543,7 @@ export function validate(
       const keywordLocation = `${schemaLocation}/dependantRequired`;
       for (const key in $dependentRequired) {
         if (key in instance) {
-          const required = $dependentRequired[key];
+          const required = $dependentRequired[key] as string[];
           for (const dependantKey of required) {
             if (!(dependantKey in instance)) {
               errors.push({
@@ -592,7 +592,7 @@ export function validate(
       const keywordLocation = `${schemaLocation}/dependencies`;
       for (const key in $dependencies) {
         if (key in instance) {
-          const propsOrSchema = $dependencies[key];
+          const propsOrSchema = $dependencies[key] as Schema | string[];
           if (Array.isArray(propsOrSchema)) {
             for (const dependantKey of propsOrSchema) {
               if (!(dependantKey in instance)) {
