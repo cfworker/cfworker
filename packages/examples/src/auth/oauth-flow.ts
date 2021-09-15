@@ -82,7 +82,7 @@ export async function handleTokenCallback(context: Context) {
   try {
     tokenResponse = await exchangeCode(code, redirect_uri);
   } catch (err) {
-    throw new HttpError(400, err.message);
+    throw new HttpError(400, (err as Error).message);
   }
 
   setTokenCookie(context.cookies, tokenResponse);
