@@ -54,7 +54,7 @@ Run, test and deploy Cloudflare workers
 ![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/json-schema)
 ![](https://badgen.net/npm/types/@cfworker/json-schema?icon=typescript)
 
-A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, and 2019-09.
+A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, 2019-09, and 2020-12.
 
 [readme](https://github.com/cfworker/cfworker/tree/master/packages/json-schema/README.md) | [npm](https://www.npmjs.com/package/@cfworker/json-schema)
 
@@ -90,7 +90,7 @@ Minimalist Sentry client for Cloudflare workers and service workers
 ![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/uuid)
 ![](https://badgen.net/npm/types/@cfworker/uuid?icon=typescript)
 
-Fast UUID generator with no dependencies. Generate V4 compliant UUIDs using crypto.getRandomValues
+Serialize/deserialize V4 UUIDs from a Uint8Array
 
 [readme](https://github.com/cfworker/cfworker/tree/master/packages/uuid/README.md) | [npm](https://www.npmjs.com/package/@cfworker/uuid)
 

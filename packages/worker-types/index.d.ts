@@ -7,3 +7,7 @@ interface JsonWebKey {
   kid?: string;
   x5t?: string;
 }
+
+interface Crypto {
+  randomUUID(): string;
+}

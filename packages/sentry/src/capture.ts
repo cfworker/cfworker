@@ -1,4 +1,3 @@
-import { uuid } from '@cfworker/uuid';
 import { serializeError } from './tracekit.js';
 
 const sentryClient = 'cfworker-sentry';
@@ -14,7 +13,7 @@ export function captureError(
   request: Request,
   user: any
 ) {
-  const event_id = uuid();
+  const event_id = crypto.randomUUID();
   const timestamp = new Date().toISOString().substr(0, 19);
   if (!(err instanceof Error)) {
     err = Object.prototype.valueOf.call(err);

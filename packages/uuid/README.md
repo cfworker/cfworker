@@ -6,20 +6,19 @@
 ![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/uuid)
 ![](https://badgen.net/npm/types/@cfworker/uuid?icon=typescript)
 
-Fast UUID generator with no dependencies.
-Generate V4 compliant UUIDs using crypto.getRandomValues
+Serialize/deserialize V4 UUIDs from a Uint8Array.
+
+🛑 Use [`crypto.randomUUID()`](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID) if you only need to generate V4 UUIDs.
 
 ## usage
 
 ```js
 import { uuid } from '@cfworker/uuid';
 
-// standard uuid
+// generate a uuid (uses crypto.randomUUID())
 const id = uuid();
 
-// custom separator
-const id2 = uuid('_');
-
-// no separator
-const id3 = uuid('');
+// deserialize/serialize Uint8Array
+const array: Uint8Array = parseUuid('129aa5a9-fa7b-4bed-8fb2-d88047926c6f');
+const uuid = uuid(array); // '129aa5a9-fa7b-4bed-8fb2-d88047926c6f'
 ```

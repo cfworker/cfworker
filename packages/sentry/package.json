@@ -35,7 +35,6 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/uuid": "^1.8.3",
     "@cfworker/worker-types": "^1.8.0",
     "@cloudflare/workers-types": "^2.1.0"
   },
