@@ -33,7 +33,7 @@ export class Application {
       await middleware(context, () => resolved);
       return context.res.create();
     } catch (err) {
-      console.error(err.stack || err.toString());
+      console.error(err);
 
       if (err instanceof HttpError) {
         return err.toResponse();
