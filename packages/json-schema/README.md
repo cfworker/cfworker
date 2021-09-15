@@ -8,12 +8,14 @@
 
 A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, 2019-09, and 2020-12.
 
+This library is validated against the [json-schema-test-suite](https://github.com/json-schema-org/JSON-Schema-Test-Suite), a series of approximately 4,500 assertions maintained along with the json-schema specification. A small set of test cases are intentionally not supported due to performance constraints or lack of feature use. These list of unsupported features are maintained in [test/unsupported.ts](./test/unsupported.ts). While this library is not the fastest due to lack of code generation, it's consistently among the [most spec compliant](https://json-schema.org/implementations.html#benchmarks).
+
 ## background
 
 _Why another JSON schema validator?_
 
 Cloudflare workers do not have APIs required by [Ajv](https://ajv.js.org/) schema compilation (`eval` or `new Function(code)`).
-If possible use Ajv in a build step to precompile your schema. Otherwise use this library.
+If possible use Ajv in a build step to precompile your schema. Otherwise this library could work for you.
 
 ## basic usage
 
