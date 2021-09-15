@@ -36,6 +36,6 @@
   },
   "devDependencies": {
     "@cfworker/dev": "^1.8.3",
-    "typescript": "^4.2.3"
+    "typescript": "^4.4.3"
   }
 }
