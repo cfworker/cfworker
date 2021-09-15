@@ -51,7 +51,8 @@ export class WorkerHost extends EventEmitter {
       // userDataDir: this.inspect ? './.cfworker' : undefined,
       args: [
         '--start-maximized', // https://peter.sh/experiments/chromium-command-line-switches/
-        '--disable-web-security' // Cloudflare workers are not subject to CORS rules.
+        '--disable-web-security', // Cloudflare workers are not subject to CORS rules.
+        '--enable-features=SharedArrayBuffer'
       ]
     }));
 
