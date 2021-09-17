@@ -57,6 +57,18 @@ describe('Application', () => {
     const response: Response = await event.__responded__;
     expect(response.status).to.equal(500);
   });
+
+  it('responds with 500 when non-error is thrown', async () => {
+    const app = new Application();
+    app.use(() => {
+      throw undefined;
+    });
+    app.listen();
+    const event = new MockFetchEvent(new Request('/'));
+    self.dispatchEvent(event);
+    const response: Response = await event.__responded__;
+    expect(response.status).to.equal(500);
+  });
 });
 
 export class MockFetchEvent extends Event {
