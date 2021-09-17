@@ -16,7 +16,7 @@ export function captureError(
   const event_id = crypto.randomUUID();
   const timestamp = new Date().toISOString().substr(0, 19);
   if (!(err instanceof Error)) {
-    err = Object.prototype.valueOf.call(err);
+    err = Object.prototype.valueOf.call(err ?? {});
     Error.captureStackTrace(err, captureError);
   }
   const parsed = serializeError(err);
