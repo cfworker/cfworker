@@ -1,3 +1,7 @@
+const supportsRandomUUID = typeof crypto.randomUUID === 'function';
+
+const randomArr = new Uint8Array(16);
+
 const reg = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
 
 const separator = '-';
@@ -7,7 +11,11 @@ const separator = '-';
  */
 export function uuid(arr?: Uint8Array): string {
   if (!arr) {
-    return crypto.randomUUID();
+    if (supportsRandomUUID) {
+      return crypto.randomUUID();
+    }
+    crypto.getRandomValues(randomArr);
+    arr = randomArr;
   }
   // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
   arr[6] = (arr[6] & 0x0f) | 0x40;
