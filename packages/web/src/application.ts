@@ -33,14 +33,14 @@ export class Application {
       await middleware(context, () => resolved);
       return context.res.create();
     } catch (err) {
-      console.error((err ?? ({} as any)).stack ?? err);
+      console.error((err as any)?.stack ?? err);
 
       if (err instanceof HttpError) {
         return err.toResponse();
       }
 
       const status = 500;
-      const statusText = statuses[500]!;
+      const statusText = statuses[500];
       const headers = { 'content-type': 'text/plain' };
       return new Response(statusText, { status, statusText, headers });
     }
