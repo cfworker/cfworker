@@ -46,7 +46,7 @@ export async function parseJwt(
   ) {
     return {
       valid: false,
-      reason: `Invalid JWT audience in array "${decoded.payload.aud}". Does not include"${audience}".`
+      reason: `Invalid JWT audience in array "${decoded.payload.aud}". Does not include "${audience}".`
     };
   }
 
