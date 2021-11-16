@@ -53,7 +53,7 @@ export class FeedResponse<T> extends CosmosResponse {
   }
 
   async json(): Promise<T[]> {
-    const data = await this.response.json();
+    const data: any = await this.response.json();
     return data[this.itemsProperty];
   }
 }
