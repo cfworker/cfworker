@@ -1,5 +1,6 @@
 import { FeedResponse, ItemResponse } from './response.js';
 import { defaultRetryPolicy, RetryContext, RetryPolicy } from './retry.js';
+import { DefaultSessionContainer, SessionContainer } from './session.js';
 import { getSigner, Signer } from './signer.js';
 import {
   Collection,
@@ -49,9 +50,9 @@ export interface CosmosClientConfig {
   collId?: string;
 
   /**
-   * The session token to reuse when ConsistencyLevel is "Session"
+   * Reads, writes, and stores session tokens for requests made with ConsistencyLevel is "Session".
    */
-  sessionToken?: string;
+  sessions?: SessionContainer;
 
   /**
    * System fetch function
@@ -67,19 +68,19 @@ export class CosmosClient {
   private readonly dbId: string | undefined;
   private readonly collId: string | undefined;
   private readonly systemFetch: typeof fetch;
-  public sessionToken = '';
+  public readonly sessions: SessionContainer;
   public requestCharges = 0;
   public retries = { count: 0, delayMs: 0 };
 
   constructor(config: CosmosClientConfig) {
     this.endpoint = config.endpoint;
     this.signer = getSigner(config.masterKey);
-    this.retryPolicy = config.retryPolicy || defaultRetryPolicy;
-    this.consistencyLevel = config.consistencyLevel || 'Session';
+    this.retryPolicy = config.retryPolicy ?? defaultRetryPolicy;
+    this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;
     this.collId = config.collId;
-    this.systemFetch = config.fetch || fetch.bind(self);
-    this.sessionToken = config.sessionToken || '';
+    this.sessions = config.sessions ?? new DefaultSessionContainer();
+    this.systemFetch = config.fetch ?? fetch.bind(self);
   }
 
   public async getDatabases(
@@ -305,40 +306,37 @@ export class CosmosClient {
     };
   }
 
-  private async fetchWithRetry(request: Request): Promise<Response> {
+  private async fetchWithRetry(
+    request: Request,
+    context?: RetryContext
+  ): Promise<Response> {
     const retryRequest = request.clone();
 
     const response = await this.fetch(request);
 
-    const retryContext: RetryContext = (request as any).__retryContext__ || {
-      attempts: 0,
-      cumulativeWaitMs: 0,
-      request,
-      response
-    };
-    retryContext.attempts++;
-    retryContext.request = retryRequest;
-    retryContext.response = response;
+    context ??= { attempts: 0, cumulativeWaitMs: 0, request, response };
+    context.attempts++;
+    context.request = retryRequest;
+    context.response = response;
 
-    const { retry, delayMs } = await this.retryPolicy.shouldRetry(retryContext);
-
+    const { retry, delayMs } = await this.retryPolicy.shouldRetry(context);
     if (!retry) {
       return response;
     }
-
-    await new Promise(resolve => setTimeout(resolve, delayMs));
-    retryContext.cumulativeWaitMs += delayMs;
-    (retryRequest as any).__retryContext__ = retryContext;
+    if (delayMs !== 0) {
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+      context.cumulativeWaitMs += delayMs;
+      this.retries.delayMs += delayMs;
+    }
     this.retries.count++;
-    this.retries.delayMs += delayMs;
-    return this.fetchWithRetry(retryContext.request);
+    return this.fetchWithRetry(retryRequest, context);
   }
 
   private async fetch(request: Request): Promise<Response> {
+    this.sessions.setRequestSession(request);
     await this.signer.sign(request);
     const response = await this.systemFetch(request);
-    this.sessionToken =
-      response.headers.get('x-ms-session-token') || this.sessionToken;
+    this.sessions.readResponseSession(response);
     const requestCharge = +(response.headers.get('x-ms-request-charge') || 0);
     this.requestCharges += requestCharge;
     return response;
@@ -353,9 +351,6 @@ export class CosmosClient {
     }
     const consistencyLevel = args.consistencyLevel || this.consistencyLevel;
     headers.set('x-ms-consistency-level', consistencyLevel);
-    if (consistencyLevel === 'Session' && this.sessionToken) {
-      headers.set('x-ms-session-token', this.sessionToken);
-    }
     if (args.continuation) {
       headers.set('x-ms-continuation', args.continuation);
     }

@@ -1,3 +1,5 @@
+import { readSessionNotAvailable } from './session';
+
 export interface RetryContext {
   request: Request;
   response: Response;
@@ -22,6 +24,9 @@ export class DefaultRetryPolicy implements RetryPolicy {
   ) {}
 
   async shouldRetry(context: RetryContext): Promise<RetryInstruction> {
+    if (readSessionNotAvailable(context.response)) {
+      return { retry: true, delayMs: 0 };
+    }
     if (
       context.response.status !== 429 ||
       context.attempts >= this.maxAttempts ||

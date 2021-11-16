@@ -341,5 +341,63 @@ if (process.env.COSMOS_DB_ORIGIN) {
         }
       });
     });
+
+    describe('sessions', () => {
+      const collId2 = 'integration-test2-' + Date.now();
+      interface MessageDoc {
+        id: string;
+        message: string;
+        _partitionKey: 'test';
+      }
+      const docId = 'test-doc';
+
+      before(() =>
+        Promise.all([
+          client.createCollection({ partitionKey }),
+          client.createCollection({ collId: collId2, partitionKey })
+        ])
+      );
+
+      after(() =>
+        Promise.all([
+          client.deleteCollection(),
+          client.deleteCollection({ collId: collId2 })
+        ])
+      );
+
+      it('handles multiple sessions', async () => {
+        const document: MessageDoc = {
+          id: docId,
+          message: 'a',
+          _partitionKey: 'test'
+        };
+
+        const res1 = await client.createDocument({
+          document,
+          partitionKey: 'test'
+        });
+        expect(res1.status).to.equal(201);
+
+        const res2 = await client.deleteDocument({
+          docId,
+          partitionKey: 'test'
+        });
+        expect(res2.status).to.equal(204);
+
+        const res3 = await client.createDocument({
+          collId: collId2,
+          document,
+          partitionKey: 'test'
+        });
+        expect(res3.status).to.equal(201);
+
+        const res4 = await client.deleteDocument({
+          collId: collId2,
+          docId,
+          partitionKey: 'test'
+        });
+        expect(res4.status).to.equal(204);
+      });
+    });
   }).retries(1);
 }
