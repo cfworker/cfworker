@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig-base",
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2021",
     "lib": ["webworker", "esnext"],
     "composite": false
   }
