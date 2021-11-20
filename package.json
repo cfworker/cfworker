@@ -24,8 +24,8 @@
     "clean": "npm run clean --workspaces",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
-    "release": "npm run lint && npm run test && npm run clean && npm run build && lerna publish",
-    "reinstall": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' + && rm -f package-lock.json && npm install",
+    "release": "npm run lint && npm run test && npm run clean && npm run build && changeset publish",
+    "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js"
   },
   "husky": {
@@ -34,8 +34,8 @@
     }
   },
   "devDependencies": {
+    "@changesets/cli": "^2.18.0",
     "husky": "^4.3.0",
-    "lerna": "^3.22.1",
     "prettier": "2.2.1",
     "pretty-quick": "^3.1.0"
   }
