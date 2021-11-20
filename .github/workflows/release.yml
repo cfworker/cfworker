@@ -9,23 +9,38 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    env:
+      COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
+      COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
+      COSMOS_DB_DATABASE: ${{ secrets.COSMOS_DB_DATABASE }}
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v1
         with:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs
           # with the correct commits
           fetch-depth: 0
-
-      - name: Setup Node.js 16.4.x
-        uses: actions/setup-node@master
+      - name: Use Node.js 16.4.x
+        uses: actions/setup-node@v1
         with:
           node-version: 16.4.x
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Create Release Pull Request or Publish to npm
+      - name: Environment log
+        run: |
+          node --version
+          npm --version
+      - name: Install
+        run: |
+          npm install
+      - name: Lint
+        run: |
+          npm run lint
+      - name: Build
+        run: |
+          npm run build
+      - name: Test
+        run: |
+          npm run test
+      - name: Publish
         id: changesets
         uses: changesets/action@master
         with:
