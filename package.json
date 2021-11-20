@@ -24,7 +24,7 @@
     "clean": "npm run clean --workspaces",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
-    "release": "npm run lint && npm run test && npm run clean && npm run build && changeset publish",
+    "release": "npm run clean && npm run build && changeset publish",
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js"
   },
