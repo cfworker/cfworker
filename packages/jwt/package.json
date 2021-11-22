@@ -34,12 +34,12 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/base64url": "^1.9.0",
-    "@cfworker/worker-types": "^1.9.0",
+    "@cfworker/base64url": "^1.10.2",
+    "@cfworker/worker-types": "^1.10.2",
     "@cloudflare/workers-types": "^3.2.0"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.9.0",
+    "@cfworker/dev": "^1.10.2",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
     "chai": "^4.3.4",
