@@ -31,7 +31,8 @@ export const unsupportedTests: Record<
       'invalid json-pointer string is only an annotation by default': true
     },
     'relative-json-pointer format': {
-      'invalid relative-json-pointer string is only an annotation by default': true
+      'invalid relative-json-pointer string is only an annotation by default':
+        true
     },
     'uri format': {
       'invalid uri string is only an annotation by default': true
@@ -171,30 +172,37 @@ export const unsupportedTests: Record<
     }
   },
   'draft2020-12/dynamicRef': {
-    'A $dynamicRef to a $dynamicAnchor in the same schema resource should behave like a normal $ref to an $anchor': {
-      'An array containing non-strings is invalid': true
-    },
-    'A $dynamicRef to an $anchor in the same schema resource should behave like a normal $ref to an $anchor': {
-      'An array containing non-strings is invalid': true
-    },
-    'A $ref to a $dynamicAnchor in the same schema resource should behave like a normal $ref to an $anchor': {
-      'An array of strings is valid': true,
-      'An array containing non-strings is invalid': true
-    },
-    'A $dynamicRef should resolve to the first $dynamicAnchor still in scope that is encountered when the schema is evaluated': {
-      'An array containing non-strings is invalid': true
-    },
-    "A $dynamicRef with intermediate scopes that don't include a matching $dynamicAnchor should not affect dynamic scope resolution": {
-      'An array containing non-strings is invalid': true
-    },
-    'A $dynamicRef that initially resolves to a schema with a matching $dynamicAnchor should resolve to the first $dynamicAnchor in the dynamic scope': {
-      'The recursive part is not valid against the root': true
-    },
+    'A $dynamicRef to a $dynamicAnchor in the same schema resource should behave like a normal $ref to an $anchor':
+      {
+        'An array containing non-strings is invalid': true
+      },
+    'A $dynamicRef to an $anchor in the same schema resource should behave like a normal $ref to an $anchor':
+      {
+        'An array containing non-strings is invalid': true
+      },
+    'A $ref to a $dynamicAnchor in the same schema resource should behave like a normal $ref to an $anchor':
+      {
+        'An array of strings is valid': true,
+        'An array containing non-strings is invalid': true
+      },
+    'A $dynamicRef should resolve to the first $dynamicAnchor still in scope that is encountered when the schema is evaluated':
+      {
+        'An array containing non-strings is invalid': true
+      },
+    "A $dynamicRef with intermediate scopes that don't include a matching $dynamicAnchor should not affect dynamic scope resolution":
+      {
+        'An array containing non-strings is invalid': true
+      },
+    'A $dynamicRef that initially resolves to a schema with a matching $dynamicAnchor should resolve to the first $dynamicAnchor in the dynamic scope':
+      {
+        'The recursive part is not valid against the root': true
+      },
     'multiple dynamic paths to the $dynamicRef keyword': {
       'recurse to integerNode - floats are not allowed': true
     },
     'after leaving a dynamic scope, it should not be used by a $dynamicRef': {
-      'string matches /$defs/thingy, but the $dynamicRef does not stop here': true,
+      'string matches /$defs/thingy, but the $dynamicRef does not stop here':
+        true,
       'first_scope is not in dynamic scope for the $dynamicRef': true
     }
   },
@@ -227,7 +235,8 @@ export const unsupportedTests: Record<
       'invalid json-pointer string is only an annotation by default': true
     },
     'relative-json-pointer format': {
-      'invalid relative-json-pointer string is only an annotation by default': true
+      'invalid relative-json-pointer string is only an annotation by default':
+        true
     },
     'uri format': {
       'invalid uri string is only an annotation by default': true
@@ -405,9 +414,10 @@ export const unsupportedTests: Record<
     }
   },
   'draft4/optional/zeroTerminatedFloats': {
-    'some languages do not distinguish between different types of numeric value': {
-      'a float is not an integer even without fractional part': true
-    }
+    'some languages do not distinguish between different types of numeric value':
+      {
+        'a float is not an integer even without fractional part': true
+      }
   },
   'draft7/optional/content': {
     'validation of string-encoded content based on media type': {
