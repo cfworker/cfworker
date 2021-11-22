@@ -26,7 +26,8 @@
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
     "release": "npm run clean && npm run build && changeset publish",
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
-    "readme-gen": "node readme-gen.js"
+    "readme-gen": "node readme-gen.js",
+    "update-deps": "npm exec --ws -- npx npm-check-updates -u"
   },
   "husky": {
     "hooks": {
