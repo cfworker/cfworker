@@ -6,8 +6,13 @@ interface JsonWebKey {
   x5c?: string[];
   kid?: string;
   x5t?: string;
+  n?: string;
 }
 
-interface Crypto {
-  randomUUID(): string;
-}
+type BufferSource = ArrayBufferView | ArrayBuffer;
+
+declare function setTimeout(
+  handler: Function,
+  timeout?: number,
+  ...arguments: any[]
+): number;

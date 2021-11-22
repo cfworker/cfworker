@@ -30,7 +30,7 @@ const hasBody: Record<string, true> = {
 
 function middlewareFactory(
   schemas: RequestSchemas,
-  parser: RequestParser = toObject,
+  parser: RequestParser = toObject as RequestParser,
   lookup = Object.create(null)
 ): Middleware {
   const {

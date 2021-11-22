@@ -6,7 +6,7 @@ export class HttpError extends Error {
   public readonly body: string | object;
 
   constructor(status: number, body: string | object) {
-    const statusText = statuses[statuses(status)]!;
+    const statusText = statuses.message[status]!;
 
     super(statusText);
 

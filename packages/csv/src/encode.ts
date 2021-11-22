@@ -4,9 +4,9 @@ const delimiter = ',';
 const rowDelimiter = '\r\n';
 const requiresQuoteRegex = /["\r\n,]/;
 
-export function encode(rows: any[]): ReadableStream<Uint8Array> {
+export function encode(rows: any[]): ReadableStream {
   // Cloudflare Workers cannot construct a ReadableStream
-  const { readable, writable } = new TransformStream<Uint8Array>();
+  const { readable, writable } = new TransformStream();
 
   (async () => {
     const writer = writable.getWriter();
@@ -17,10 +17,7 @@ export function encode(rows: any[]): ReadableStream<Uint8Array> {
   return readable;
 }
 
-async function writeRows(
-  writer: WritableStreamDefaultWriter<Uint8Array>,
-  rows: any[]
-) {
+async function writeRows(writer: WritableStreamDefaultWriter, rows: any[]) {
   const text = new TextEncoder();
   const utf8 = text.encode.bind(text);
   const write = writer.write.bind(writer);

@@ -2,8 +2,13 @@
   "extends": "../../tsconfig-base",
   "compilerOptions": {
     "target": "ES2021",
-    "lib": ["esnext", "webworker"],
-    "types": ["@cfworker/worker-types", "@cloudflare/workers-types"],
+    "lib": ["esnext"],
+    "types": [
+      "chai",
+      "mocha",
+      "@cfworker/worker-types",
+      "@cloudflare/workers-types"
+    ],
     "outDir": "dist",
     "rootDir": "./src"
   },

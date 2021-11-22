@@ -9,6 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
+    "typeRoots": [],
     "types": [],
     "baseUrl": "./packages",
     "paths": {
