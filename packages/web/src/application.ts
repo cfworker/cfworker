@@ -40,7 +40,7 @@ export class Application {
       }
 
       const status = 500;
-      const statusText = statuses[500];
+      const statusText = statuses.message[500];
       const headers = { 'content-type': 'text/plain' };
       return new Response(statusText, { status, statusText, headers });
     }

@@ -404,11 +404,7 @@ export class CosmosClient {
   }
 }
 
-export type DocumentInit =
-  | BufferSource
-  | ReadableStream<Uint8Array>
-  | string
-  | Resource;
+export type DocumentInit = BufferSource | ReadableStream | string | Resource;
 
 function toBodyInit(obj: DocumentInit): BodyInit {
   if (

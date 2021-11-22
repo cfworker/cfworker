@@ -18,13 +18,13 @@ addEventListener('fetch', async event => {
     const res = await client.getDocument({ docId, partitionKey });
     event.respondWith(new Response(res.body, { status: res.status }));
   } else if (event.request.method === 'POST') {
-    const document = await event.request.json();
+    const document: any = await event.request.json();
     document.id = docId;
     document._partitionKey = partitionKey;
     const res = await client.createDocument({ document, partitionKey });
     event.respondWith(new Response(res.body, { status: res.status }));
   } else if (event.request.method === 'PUT') {
-    const document = await event.request.json();
+    const document: any = await event.request.json();
     document.id = docId;
     document._partitionKey = partitionKey;
     const res = await client.replaceDocument({

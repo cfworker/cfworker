@@ -66,8 +66,10 @@ export const ignoredKeyword: Record<string, boolean> = {
  * https://tools.ietf.org/html/rfc3986#section-5.1
  */
 export let initialBaseURI =
+  // @ts-ignore
   typeof self !== 'undefined' && self.location
-    ? new URL(self.location.origin + self.location.pathname + location.search)
+    ? //@ts-ignore
+      new URL(self.location.origin + self.location.pathname + location.search)
     : new URL('https://github.com/cfworker');
 
 export function dereference(
@@ -79,7 +81,7 @@ export function dereference(
   if (schema && typeof schema === 'object' && !Array.isArray(schema)) {
     const id: string = schema.$id || schema.id;
     if (id) {
-      const url = new URL(id, baseURI);
+      const url = new URL(id, baseURI.href);
       if (url.hash.length > 1) {
         lookup[url.href] = schema;
       } else {
@@ -117,7 +119,7 @@ export function dereference(
 
   // if a $ref is found, resolve it's absolute URI.
   if (schema.$ref && schema.__absolute_ref__ === undefined) {
-    const url = new URL(schema.$ref, baseURI);
+    const url = new URL(schema.$ref, baseURI.href);
     url.hash = url.hash; // normalize hash https://url.spec.whatwg.org/#dom-url-hash
     Object.defineProperty(schema, '__absolute_ref__', {
       enumerable: false,
@@ -127,7 +129,7 @@ export function dereference(
 
   // if a $recursiveRef is found, resolve it's absolute URI.
   if (schema.$recursiveRef && schema.__absolute_recursive_ref__ === undefined) {
-    const url = new URL(schema.$recursiveRef, baseURI);
+    const url = new URL(schema.$recursiveRef, baseURI.href);
     url.hash = url.hash; // normalize hash https://url.spec.whatwg.org/#dom-url-hash
     Object.defineProperty(schema, '__absolute_recursive_ref__', {
       enumerable: false,
@@ -137,7 +139,7 @@ export function dereference(
 
   // if an $anchor is found, compute it's URI and add it to the mapping.
   if (schema.$anchor) {
-    const url = new URL('#' + schema.$anchor, baseURI);
+    const url = new URL('#' + schema.$anchor, baseURI.href);
     lookup[url.href] = schema;
   }
 

@@ -28,7 +28,7 @@ export class ResponseBuilder {
   }
 
   get statusText() {
-    return statuses[this._status]!;
+    return statuses.message[this._status]!;
   }
 
   get body() {
@@ -156,6 +156,3 @@ export class ResponseBuilder {
     return new Response(body, { status, statusText, headers });
   }
 }
-
-// Cloudflare workers do not define the Blob class.
-const Blob = self.Blob || ((class {} as any) as Blob);

@@ -3,9 +3,9 @@ import { htmlEncode } from '@cfworker/web';
 export function html(
   strings: TemplateStringsArray,
   ...values: any[]
-): ReadableStream<Uint8Array> {
+): ReadableStream {
   let cancelled = false;
-  const { readable, writable } = new TransformStream<Uint8Array>();
+  const { readable, writable } = new TransformStream();
   (async () => {
     const writer = writable.getWriter();
     const encoder = new TextEncoder();
@@ -33,7 +33,7 @@ interface CancellationToken {
   readonly cancelled: boolean;
 }
 
-type Writer = WritableStreamDefaultWriter<Uint8Array>;
+type Writer = WritableStreamDefaultWriter;
 
 async function pushValue(
   value: any,
@@ -61,7 +61,7 @@ async function pushValue(
 }
 
 async function pushStream(
-  stream: ReadableStream<Uint8Array>,
+  stream: ReadableStream,
   writer: Writer,
   cancellationToken: CancellationToken
 ) {
