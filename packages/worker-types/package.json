@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/worker-types",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "description": "TypeScript type definitions for Cloudflare workers",
   "keywords": [
     "cloudflare",
