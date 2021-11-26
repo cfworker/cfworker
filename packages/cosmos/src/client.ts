@@ -270,7 +270,7 @@ export class CosmosClient {
 
     const headers = Object.assign(
       {
-        enableCrossPartition: false,
+        enableCrossPartition: true,
         enableScan: false,
         maxItems: -1,
         populateMetrics: false,
