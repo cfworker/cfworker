@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/cosmos",
-  "version": "1.10.2",
+  "version": "1.11.0",
   "description": "Azure Cosmos DB client for Cloudflare Workers and service workers",
   "keywords": [
     "azure",
@@ -37,12 +37,12 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/worker-types": "^1.10.2",
+    "@cfworker/worker-types": "^1.11.0",
     "@cloudflare/workers-types": "^3.2.0",
     "base64-arraybuffer": "^1.0.1"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.10.2",
+    "@cfworker/dev": "^1.11.0",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
     "chai": "^4.3.4",
