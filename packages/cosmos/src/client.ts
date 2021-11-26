@@ -284,12 +284,38 @@ export class CosmosClient {
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/query+json');
     const response = await this.fetchWithRetry(request);
+    if (
+      (await response.clone().text()).includes(
+        'The provided cross partition query can not be directly served by the gateway'
+      )
+    ) {
+      const pkr: PartitionKeyRanges = await this.getPartitionKeyRanges({
+        collId,
+        dbId
+      }).then(res => res.json());
+      return this.queryDocuments<T>({
+        ...args,
+        partitionKeyRangeId: `${pkr._rid},0`
+      });
+    }
     const next = this.getNext<QueryDocumentsArgs, T>(
       response,
       args,
       this.queryDocuments
     );
     return new FeedResponse<T>(response, next, 'Documents');
+  }
+
+  public async getPartitionKeyRanges(args: GetPartitionKeyRangesArgs) {
+    const { dbId = this.dbId, collId = this.collId } = args;
+    assertArg('dbId', dbId);
+    assertArg('collId', collId);
+
+    const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}/pkranges`;
+    const request = new Request(url);
+    this.setHeaders(request.headers, {});
+    request.headers.set('content-type', 'application/json');
+    return this.fetchWithRetry(request);
   }
 
   private getNext<TArgs extends CommonGetListArgs, TResult>(
@@ -401,6 +427,12 @@ export class CosmosClient {
         args.enableCrossPartition.toString()
       );
     }
+    if (args.partitionKeyRangeId) {
+      headers.set(
+        'x-ms-documentdb-partitionkeyrangeid',
+        args.partitionKeyRangeId.toString()
+      );
+    }
   }
 }
 
@@ -419,6 +451,24 @@ function toBodyInit(obj: DocumentInit): BodyInit {
   }
   return JSON.stringify(obj);
 }
+
+type PartitionKeyRanges = {
+  _rid: string;
+  PartitionKeyRanges: {
+    _rid: string;
+    id: string;
+    _etag: string;
+    minInclusive: string;
+    maxExclusive: string;
+    ridPrefix: number;
+    _self: string;
+    throughputFraction: number;
+    status: string;
+    parents: unknown[];
+    _ts: number;
+  }[];
+  _count: number;
+};
 
 interface CommonArgs {
   activityId?: string;
@@ -446,6 +496,11 @@ export interface GetCollectionsArgs extends CommonGetListArgs {
 }
 
 export interface GetCollectionArgs extends CommonGetArgs {
+  dbId?: string;
+  collId?: string;
+}
+
+export interface GetPartitionKeyRangesArgs extends CommonGetArgs {
   dbId?: string;
   collId?: string;
 }
@@ -494,6 +549,7 @@ export interface QueryDocumentsArgs extends CommonGetListArgs {
   partitionKey?: string;
   enableCrossPartition?: boolean;
   populateMetrics?: boolean;
+  partitionKeyRangeId?: string;
   enableScan?: boolean;
 }
 
@@ -546,4 +602,5 @@ interface AllHeaders {
   offerThroughput?: number;
   partitionKey?: string;
   populateMetrics?: boolean;
+  partitionKeyRangeId?: string;
 }
