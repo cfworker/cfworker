@@ -1,5 +1,16 @@
 # @cfworker/sentry
 
+## 1.12.0
+
+### Minor Changes
+
+- 5ed7223: Downgrade @cloudflare/workers-types to 2.2.2
+
+### Patch Changes
+
+- Updated dependencies [5ed7223]
+  - @cfworker/worker-types@1.12.0
+
 ## 1.11.0
 
 ### Minor Changes
