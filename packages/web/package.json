@@ -36,7 +36,7 @@
   "dependencies": {
     "@cfworker/json-schema": "^1.11.0",
     "@cfworker/worker-types": "^1.11.0",
-    "@cloudflare/workers-types": "^3.2.0",
+    "@cloudflare/workers-types": "^2.2.2",
     "@types/cookie": "^0.4.1",
     "@types/html-escaper": "^3.0.0",
     "@types/json-pointer": "^1.0.31",

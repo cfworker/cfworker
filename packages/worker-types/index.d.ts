@@ -9,10 +9,6 @@ interface JsonWebKey {
   n?: string;
 }
 
-type BufferSource = ArrayBufferView | ArrayBuffer;
-
-declare function setTimeout(
-  handler: Function,
-  timeout?: number,
-  ...arguments: any[]
-): number;
+interface Crypto {
+  randomUUID(): string;
+}
