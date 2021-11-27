@@ -285,11 +285,7 @@ export class CosmosClient {
     this.setHeaders(request.headers, headers);
     request.headers.set('content-type', 'application/query+json');
     const response = await this.fetchWithRetry(request);
-    if (
-      (await response.clone().text()).includes(
-        'The provided cross partition query can not be directly served by the gateway'
-      )
-    ) {
+    if (response.headers.get('x-ms-substatus') === '1004') {
       const pkr: PartitionKeyRanges = await this.getPartitionKeyRanges({
         collId,
         dbId
