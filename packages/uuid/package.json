@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/uuid",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Serialize/deserialize V4 UUIDs from a Uint8Array",
   "keywords": [
     "uuid",
@@ -36,7 +36,7 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.11.0",
+    "@cfworker/dev": "^1.12.0",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
     "chai": "^4.3.4",
