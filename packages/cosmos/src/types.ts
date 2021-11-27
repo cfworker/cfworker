@@ -17,6 +17,22 @@ export interface PersistedResource extends Resource {
   _ts: number;
 }
 
+export interface PartitionKeyRange extends PersistedResource {
+  id: string;
+  minInclusive: string;
+  maxExclusive: string;
+  ridPrefix: number;
+  throughputFraction: number;
+  status: string;
+  parents: unknown[];
+}
+
+export type PartitionKeyRanges = {
+  _rid: string;
+  PartitionKeyRanges: PartitionKeyRange[];
+  _count: number;
+};
+
 export interface Document extends PersistedResource {
   _attachments: 'attachments/';
 }

@@ -2,7 +2,7 @@ import { FeedResponse, ItemResponse } from './response.js';
 import { defaultRetryPolicy, RetryContext, RetryPolicy } from './retry.js';
 import { DefaultSessionContainer, SessionContainer } from './session.js';
 import { getSigner, Signer } from './signer.js';
-import {
+import type {
   Collection,
   ConsistencyLevel,
   Database,
@@ -11,6 +11,7 @@ import {
   IndexingPolicy,
   OfferType,
   PartitionKeyDefinition,
+  PartitionKeyRanges,
   Resource
 } from './types.js';
 import { assertArg, escapeNonASCII, uri } from './util.js';
@@ -451,24 +452,6 @@ function toBodyInit(obj: DocumentInit): BodyInit {
   }
   return JSON.stringify(obj);
 }
-
-type PartitionKeyRanges = {
-  _rid: string;
-  PartitionKeyRanges: {
-    _rid: string;
-    id: string;
-    _etag: string;
-    minInclusive: string;
-    maxExclusive: string;
-    ridPrefix: number;
-    _self: string;
-    throughputFraction: number;
-    status: string;
-    parents: unknown[];
-    _ts: number;
-  }[];
-  _count: number;
-};
 
 interface CommonArgs {
   activityId?: string;
