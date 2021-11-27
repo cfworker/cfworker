@@ -33,6 +33,31 @@ export type PartitionKeyRanges = {
   _count: number;
 };
 
+export type AdditionalErrorInfo = {
+  partitionedQueryExecutionInfoVersion: number;
+  queryInfo: {
+    distinctType: string;
+    top: number | null;
+    offset: number | null;
+    limit: number | null;
+    orderBy: 'Descending' | 'Ascending'[];
+    orderByExpressions: string[];
+    groupByExpressions: string[];
+    groupByAliases: string[];
+    aggregates: string[];
+    groupByAliasToAggregateType: unknown;
+    rewrittenQuery: string;
+    hasSelectValue: boolean;
+    dCountInfo: number | null;
+  };
+  queryRanges: {
+    min: string;
+    max: string;
+    isMinInclusive: boolean;
+    isMaxInclusive: boolean;
+  }[];
+};
+
 export interface Document extends PersistedResource {
   _attachments: 'attachments/';
 }

@@ -3,6 +3,7 @@ import { defaultRetryPolicy, RetryContext, RetryPolicy } from './retry.js';
 import { DefaultSessionContainer, SessionContainer } from './session.js';
 import { getSigner, Signer } from './signer.js';
 import type {
+  AdditionalErrorInfo,
   Collection,
   ConsistencyLevel,
   Database,
@@ -286,6 +287,19 @@ export class CosmosClient {
     request.headers.set('content-type', 'application/query+json');
     const response = await this.fetchWithRetry(request);
     if (response.headers.get('x-ms-substatus') === '1004') {
+      const newQueryArgs = { ...args };
+      const { additionalErrorInfo } = await response.clone().json();
+      if (additionalErrorInfo !== undefined) {
+        const { queryInfo } = <AdditionalErrorInfo>(
+          JSON.parse(additionalErrorInfo)
+        );
+        if (queryInfo?.rewrittenQuery !== undefined) {
+          newQueryArgs.parameters = [];
+          newQueryArgs.query = queryInfo.rewrittenQuery;
+          delete newQueryArgs.partitionKey;
+        }
+      }
+
       const pkr: PartitionKeyRanges = await this.getPartitionKeyRanges({
         collId,
         dbId
