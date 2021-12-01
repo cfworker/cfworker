@@ -55,6 +55,11 @@ export interface CosmosClientConfig {
   sessions?: SessionContainer;
 
   /**
+   * Enables cross partition queries. This can be overriden on individual queries. Defaults to true.
+   */
+  enableCrossPartitionQueries?: boolean;
+
+  /**
    * System fetch function
    */
   fetch?: typeof fetch;
@@ -67,6 +72,7 @@ export class CosmosClient {
   private readonly consistencyLevel: ConsistencyLevel;
   private readonly dbId: string | undefined;
   private readonly collId: string | undefined;
+  private readonly enableCrossPartitionQueries: boolean;
   private readonly systemFetch: typeof fetch;
   public readonly sessions: SessionContainer;
   public requestCharges = 0;
@@ -79,6 +85,8 @@ export class CosmosClient {
     this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;
     this.collId = config.collId;
+    this.enableCrossPartitionQueries =
+      config.enableCrossPartitionQueries ?? true;
     this.sessions = config.sessions ?? new DefaultSessionContainer();
     this.systemFetch = config.fetch ?? fetch.bind(self);
   }
