@@ -278,7 +278,7 @@ export class CosmosClient {
 
     const headers = Object.assign(
       {
-        enableCrossPartition: false,
+        enableCrossPartition: this.enableCrossPartitionQueries,
         enableScan: false,
         maxItems: -1,
         populateMetrics: false,
