@@ -409,6 +409,12 @@ export class CosmosClient {
         args.enableCrossPartition.toString()
       );
     }
+    if (args.partitionKeyRangeId) {
+      headers.set(
+        'x-ms-documentdb-partitionkeyrangeid',
+        args.partitionKeyRangeId.toString()
+      );
+    }
   }
 }
 
@@ -551,4 +557,5 @@ interface AllHeaders {
   offerThroughput?: number;
   partitionKey?: string;
   populateMetrics?: boolean;
+  partitionKeyRangeId?: string;
 }
