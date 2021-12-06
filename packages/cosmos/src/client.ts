@@ -300,6 +300,18 @@ export class CosmosClient {
     return new FeedResponse<T>(response, next, 'Documents');
   }
 
+  public async getPartitionKeyRanges(args: GetPartitionKeyRangesArgs) {
+    const { dbId = this.dbId, collId = this.collId } = args;
+    assertArg('dbId', dbId);
+    assertArg('collId', collId);
+
+    const url = this.endpoint + uri`/dbs/${dbId}/colls/${collId}/pkranges`;
+    const request = new Request(url);
+    this.setHeaders(request.headers, {});
+    request.headers.set('content-type', 'application/json');
+    return this.fetchWithRetry(request);
+  }
+
   private getNext<TArgs extends CommonGetListArgs, TResult>(
     response: Response,
     args: TArgs,
@@ -499,6 +511,11 @@ export interface QueryDocumentsArgs extends CommonGetListArgs {
   enableCrossPartition?: boolean;
   populateMetrics?: boolean;
   enableScan?: boolean;
+}
+
+export interface GetPartitionKeyRangesArgs extends CommonGetArgs {
+  dbId?: string;
+  collId?: string;
 }
 
 export interface QueryParameter {
