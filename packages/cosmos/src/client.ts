@@ -496,6 +496,7 @@ export interface QueryDocumentsArgs extends CommonGetListArgs {
   query: string;
   parameters?: QueryParameter[];
   partitionKey?: string;
+  partitionKeyRangeId?: string;
   enableCrossPartition?: boolean;
   populateMetrics?: boolean;
   enableScan?: boolean;
