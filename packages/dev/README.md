@@ -19,10 +19,10 @@ CLOUDFLARE_WORKERS_DEV_PROJECT=xxxxxx
 
 Please note that `cfworker` supports two authentication options:
 
-  1. using API tokens, where you can provide fine-graned permission scopes (e.g. to deploy this package you may want to create a token using the "Edit Cloudflare Workers" template in CloudFlare's console;
-  2. using your API key, where you basically grant `cfworker` to do API calls on your behalf (e.g. the code will have full and unrestricted access to everything in your CloudFlare account).
+1. using API tokens, where you can provide fine-graned permission scopes (e.g. to deploy this package you may want to create a token using the "Edit Cloudflare Workers" template in CloudFlare's console;
+2. using your API key, where you basically grant `cfworker` to do API calls on your behalf (e.g. the code will have full and unrestricted access to everything in your CloudFlare account).
 
-If you prefer option 1, then put your API token into CLOUDFLARE_API_KEY and ensure that CLOUDFLARE_EMAIL is not defined in your `.env` file.  Otherwise, to use option 2, put your API key into CLOUDFLARE_API_KEY and configure CLOUDFLARE_EMAIL to your e-mail used to access your account.
+If you prefer option 1, then put your API token into CLOUDFLARE_API_KEY and ensure that CLOUDFLARE_EMAIL is not defined in your `.env` file. Otherwise, to use option 2, put your API key into CLOUDFLARE_API_KEY and configure CLOUDFLARE_EMAIL to your e-mail used to access your account.
 
 Usage:
 
@@ -58,7 +58,7 @@ cfworker run [options] [input...]
 Options:
 
 ```
-  -p, --port <port>       set the port to serve on (default: 7000)
+  -p, --port <port>       set the port to serve on (default: 1234)
   -w, --watch             enable watch mode (default: false)
   -i, --inspect           open browser window with devtools enabled (default: false)
   -n, --nocheck           disable diagnostic checks on TypeScript code (default: false)
@@ -89,7 +89,7 @@ cfworker test [options] [globs...]
 Options:
 
 ```
-  -p, --port <port>       set the port to serve on (default: 7000)
+  -p, --port <port>       set the port to serve on (default: 1234)
   -w, --watch             enable watch mode (default: false)
   -i, --inspect           open browser window with devtools enabled (default: false)
   -n, --nocheck           disable diagnostic checks on TypeScript code (default: false)

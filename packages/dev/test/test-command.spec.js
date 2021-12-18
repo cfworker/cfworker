@@ -2,7 +2,7 @@ import assert from 'assert';
 import fs from 'fs-extra';
 import { TestCommand } from '../src/cli/test-command.js';
 
-const port = 7000;
+const port = 1234;
 const passingSpec = `
 import { expect } from 'chai';
 import { describe, it } from 'mocha';

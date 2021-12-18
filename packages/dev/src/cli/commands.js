@@ -10,6 +10,8 @@ import { DeployCommand, DeployDevCommand } from './deploy-command.js';
 import { RunCommand } from './run-command.js';
 import { TestCommand } from './test-command.js';
 
+const port = +(process.env.PORT ?? 1234);
+
 /** @type {{ execute(): void; dispose(): void; }} */
 let currentCommand;
 
@@ -50,7 +52,7 @@ function collect(value, previous) {
 program
   .command('test [input...]')
   .description('run tests')
-  .option('-p, --port <port>', 'set the port to serve on', p => +p, 7000)
+  .option('-p, --port <port>', 'set the port to serve on', p => +p, port)
   .option('-w, --watch', 'enable watch mode', false)
   .option('-i, --inspect', 'open browser window with devtools enabled', false)
   .option('-n --nocheck', 'disable diagnostic checks on TypeScript code')
@@ -73,7 +75,7 @@ program
 program
   .command('run [input...]')
   .description('run worker script')
-  .option('-p, --port <port>', 'set the port to serve on', p => +p, 7000)
+  .option('-p, --port <port>', 'set the port to serve on', p => +p, port)
   .option('-w, --watch', 'enable watch mode', false)
   .option('-i, --inspect', 'open browser window with devtools enabled', false)
   .option('-n --nocheck', 'disable diagnostic checks on TypeScript code')
