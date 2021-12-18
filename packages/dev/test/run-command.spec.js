@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import fetch from 'node-fetch';
 import { RunCommand } from '../src/cli/run-command.js';
 
-const port = 7000;
+const port = 1234;
 
 export async function assertBundlesJavaScriptWorker() {
   const entry = './test/fixtures/worker.js';
@@ -24,7 +24,7 @@ export async function assertBundlesJavaScriptWorker() {
     kv: []
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   assert.equal(response.status, 200);
   command.dispose();
 }
@@ -49,7 +49,7 @@ export async function assertBundlesTypeScriptWorker() {
     kv: []
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   assert.equal(response.status, 200);
   command.dispose();
 }
@@ -67,7 +67,7 @@ export async function assertRespondsWith503WhenFetchListenerIsNotAdded() {
     kv: []
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   assert.equal(response.status, 503);
   command.dispose();
 }
@@ -85,7 +85,7 @@ export async function assertWatchesForChanges() {
     kv: []
   });
   await command.execute();
-  let response = await fetch('http://localhost:7000');
+  let response = await fetch('http://localhost:1234');
   assert.equal(response.status, 503);
 
   const updated = new Promise(resolve =>
@@ -96,7 +96,7 @@ export async function assertWatchesForChanges() {
     addEventListener('fetch', e => e.respondWith(new Response('', { status: 200 })))`;
   await fs.outputFile(entry, code);
   await updated;
-  response = await fetch('http://localhost:7000');
+  response = await fetch('http://localhost:1234');
   assert.equal(response.status, 200);
 
   command.dispose();
@@ -122,7 +122,7 @@ export async function assertCanReadRequestCookieHeader() {
     kv: []
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000', {
+  const response = await fetch('http://localhost:1234', {
     headers: { cookie }
   });
   assert.equal(response.status, 200);
@@ -151,7 +151,7 @@ export async function assertCanRespondWithSetCookieHeader() {
   });
   await command.execute();
 
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('set-cookie'), 'test cookie');
   command.dispose();
@@ -175,7 +175,7 @@ export async function assertCanReadWriteCache() {
     kv: []
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   assert.equal(response.status, 201);
   assert.equal(response.statusText, 'no content');
   command.dispose();
@@ -209,7 +209,7 @@ export async function assertCanServeStaticSite() {
     kv: []
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   const html = await response.text();
   assert.equal(html, '<body>hello world</body>');
 
@@ -221,7 +221,7 @@ export async function assertCanServeStaticSite() {
     '<body>hello world 2</body>'
   );
   await updated;
-  const response2 = await fetch('http://localhost:7000');
+  const response2 = await fetch('http://localhost:1234');
   const html2 = await response2.text();
   assert.equal(html2, '<body>hello world 2</body>');
 
@@ -249,7 +249,7 @@ export async function assertCanCreateKVNamespace() {
     kv: ['./test/fixtures/greetings.json']
   });
   await command.execute();
-  const response = await fetch('http://localhost:7000');
+  const response = await fetch('http://localhost:1234');
   const html = await response.text();
   assert.equal(html, 'world');
 
@@ -261,7 +261,7 @@ export async function assertCanCreateKVNamespace() {
     '[{ "key": "hello", "value": "world 2", "base64": false }]'
   );
   await updated;
-  const response2 = await fetch('http://localhost:7000');
+  const response2 = await fetch('http://localhost:1234');
   const html2 = await response2.text();
   assert.equal(html2, 'world 2');
 

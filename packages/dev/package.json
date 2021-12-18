@@ -41,7 +41,7 @@
     "node-cleanup": "^2.1.2",
     "node-fetch": "^3.1.0",
     "ora": "^6.0.1",
-    "puppeteer": "^11.0.0",
+    "puppeteer": "^13.0.0",
     "rollup": "^2.60.1",
     "rollup-plugin-minify-html-literals": "^1.2.6",
     "rollup-plugin-typescript2": "^0.31.0",
