@@ -1,5 +1,11 @@
 # @cfworker/dev
 
+## 1.13.0
+
+### Minor Changes
+
+- fb5826f: Change default port from 7000 to 1234 and update puppeteer dependency
+
 ## 1.12.0
 
 ### Minor Changes
