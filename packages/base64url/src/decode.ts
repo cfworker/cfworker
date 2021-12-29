@@ -5,21 +5,10 @@ import { pad } from './pad.js';
  */
 export function decode(s: string): string {
   const base64 = pad(s).replace(/_/g, '/').replace(/-/g, '+');
-  return decodeUnicode(atob(base64));
+
+  return decodeURIComponent(Array.from(atob(base64), byteToPercent).join(''));
 }
 
-function decodeUnicode(s: string): string {
-  try {
-    return decodeURIComponent(
-      s.replace(/(.)/g, (_, p) => {
-        const code = p.charCodeAt(0).toString(16).toUpperCase();
-        if (code.length < 2) {
-          return '%0' + code;
-        }
-        return '%' + code;
-      })
-    );
-  } catch {
-    return s;
-  }
+function byteToPercent(b: string) {
+  return `%${`00${b.charCodeAt(0).toString(16)}`.slice(-2)}`;
 }
