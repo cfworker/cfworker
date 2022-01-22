@@ -1,5 +1,17 @@
 # @cfworker/examples
 
+## 1.12.1
+
+### Patch Changes
+
+- d2390db: Update dependencies
+- Updated dependencies [d2390db]
+  - @cfworker/cosmos@1.12.1
+  - @cfworker/jwt@1.12.1
+  - @cfworker/sentry@1.12.1
+  - @cfworker/web@1.12.1
+  - @cfworker/worker-types@1.12.1
+
 ## 1.12.0
 
 ### Minor Changes
