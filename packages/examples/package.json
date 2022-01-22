@@ -35,7 +35,7 @@
     "@cloudflare/workers-types": "^2.2.2"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.12.0",
-    "typescript": "^4.5.2"
+    "@cfworker/dev": "^1.13.0",
+    "typescript": "^4.5.5"
   }
 }

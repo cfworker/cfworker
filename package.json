@@ -27,7 +27,7 @@
     "release": "npm run clean && npm run build && changeset publish",
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js",
-    "update-deps": "npm exec --ws -- npx npm-check-updates -u"
+    "update-deps": "npm exec --workspaces --include-workspace-root --package npm-check-updates --call 'ncu -u -x husky,@cloudflare/workers-types' && git clean -fxd -e .env && rm package-lock.json && npm install"
   },
   "husky": {
     "hooks": {
@@ -35,9 +35,9 @@
     }
   },
   "devDependencies": {
-    "@changesets/cli": "^2.18.0",
+    "@changesets/cli": "^2.19.0",
     "husky": "^4.3.0",
-    "prettier": "2.4.1",
-    "pretty-quick": "^3.1.2"
+    "prettier": "2.5.1",
+    "pretty-quick": "^3.1.3"
   }
 }

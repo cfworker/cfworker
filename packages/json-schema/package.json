@@ -39,12 +39,12 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.12.0",
-    "@types/chai": "^4.2.22",
-    "@types/mocha": "^9.0.0",
+    "@cfworker/dev": "^1.13.0",
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.1.0",
     "chai": "^4.3.4",
     "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#76b529f",
-    "mocha": "^9.1.3",
-    "typescript": "^4.5.2"
+    "mocha": "^9.1.4",
+    "typescript": "^4.5.5"
   }
 }
