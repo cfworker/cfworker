@@ -1,6 +1,6 @@
 import { Schema } from '@cfworker/json-schema';
 import { expect } from 'chai';
-import { set } from 'json-pointer';
+import { set } from 'jsonpointer';
 import { describe, it } from 'mocha';
 import { Context } from '../src/context.js';
 import { HttpError } from '../src/http-error.js';
@@ -28,7 +28,9 @@ describe('validate', () => {
     const context = new Context({ request });
     context.req.params.id = '899934';
     let resolved = false;
-    await middleware(context, async () => (resolved = true));
+    await middleware(context, async () => {
+      resolved = true;
+    });
     expect(resolved).to.be.true;
   });
 
@@ -43,7 +45,9 @@ describe('validate', () => {
     const context = new Context({ request });
     let resolved = false;
     try {
-      await middleware(context, async () => (resolved = true));
+      await middleware(context, async () => {
+        resolved = true;
+      });
     } catch (err) {
       expect(err instanceof HttpError && err.status === 400).to.be.true;
     }
@@ -62,7 +66,9 @@ describe('validate', () => {
     context.req.params.id = '899934';
     let resolved = false;
     try {
-      await middleware(context, async () => (resolved = true));
+      await middleware(context, async () => {
+        resolved = true;
+      });
     } catch (err) {
       expect(err instanceof HttpError && err.status === 400).to.be.true;
     }
@@ -81,7 +87,9 @@ describe('validate', () => {
     context.req.params.id = '899934';
     let resolved = false;
     try {
-      await middleware(context, async () => (resolved = true));
+      await middleware(context, async () => {
+        resolved = true;
+      });
     } catch (err) {
       expect(err instanceof HttpError && err.status === 400).to.be.true;
     }
@@ -100,7 +108,9 @@ describe('validate', () => {
     let context = new Context({ request });
     let resolved = false;
     try {
-      await middleware(context, async () => (resolved = true));
+      await middleware(context, async () => {
+        resolved = true;
+      });
     } catch (err) {
       expect(err instanceof HttpError && err.status === 400).to.be.true;
     }
@@ -116,7 +126,9 @@ describe('validate', () => {
       }
     });
     context = new Context({ request });
-    await middleware(context, async () => (resolved = true));
+    await middleware(context, async () => {
+      resolved = true;
+    });
     // verify json read
     await context.req.body.json();
     expect(resolved).to.be.true;
@@ -131,7 +143,9 @@ describe('validate', () => {
     let context = new Context({ request });
     let resolved = false;
     try {
-      await middleware(context, async () => (resolved = true));
+      await middleware(context, async () => {
+        resolved = true;
+      });
     } catch (err) {
       expect(err instanceof HttpError && err.status === 400).to.be.true;
     }
@@ -144,7 +158,9 @@ describe('validate', () => {
       body: new URLSearchParams({ id: 'world' })
     });
     context = new Context({ request });
-    await middleware(context, async () => (resolved = true));
+    await middleware(context, async () => {
+      resolved = true;
+    });
     // verify formData read
     await context.req.body.formData();
     expect(resolved).to.be.true;
@@ -161,7 +177,9 @@ describe('validate', () => {
     let context = new Context({ request });
     let resolved = false;
     try {
-      await middleware(context, async () => (resolved = true));
+      await middleware(context, async () => {
+        resolved = true;
+      });
     } catch (err) {
       expect(err instanceof HttpError && err.status === 400).to.be.true;
     }
@@ -176,7 +194,9 @@ describe('validate', () => {
       body
     });
     context = new Context({ request });
-    await middleware(context, async () => (resolved = true));
+    await middleware(context, async () => {
+      resolved = true;
+    });
     // verify formData read
     await context.req.body.formData();
     expect(resolved).to.be.true;
@@ -210,7 +230,9 @@ describe('validate', () => {
       body: new URLSearchParams(stringified)
     });
     let resolved = false;
-    await middleware(new Context({ request }), async () => (resolved = true));
+    await middleware(new Context({ request }), async () => {
+      resolved = true;
+    });
     expect(resolved).to.be.true;
 
     const form = new FormData();
@@ -220,7 +242,9 @@ describe('validate', () => {
       method: 'POST',
       body: form
     });
-    await middleware(new Context({ request }), async () => (resolved = true));
+    await middleware(new Context({ request }), async () => {
+      resolved = true;
+    });
     expect(resolved).to.be.true;
   });
 });
