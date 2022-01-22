@@ -6,7 +6,6 @@ import {
 } from '@cfworker/json-schema';
 import { HttpError } from './http-error.js';
 import { Middleware } from './middleware.js';
-import { toObject } from './to-object.js';
 
 export interface RequestSchemas {
   body?: Schema;
@@ -30,7 +29,7 @@ const hasBody: Record<string, true> = {
 
 function middlewareFactory(
   schemas: RequestSchemas,
-  parser: RequestParser = toObject as RequestParser,
+  parser: RequestParser = Object.fromEntries,
   lookup = Object.create(null)
 ): Middleware {
   const {
@@ -58,7 +57,7 @@ function middlewareFactory(
       validateRequestPart('params', req.params, $params, lookup);
     }
     if ($headers) {
-      const headers = toObject(req.headers);
+      const headers = Object.fromEntries(req.headers);
       validateRequestPart('headers', headers, $headers, lookup);
     }
     if ($search) {
