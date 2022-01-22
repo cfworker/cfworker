@@ -1,5 +1,13 @@
 # @cfworker/sentry
 
+## 1.12.1
+
+### Patch Changes
+
+- d2390db: Update dependencies
+- Updated dependencies [d2390db]
+  - @cfworker/worker-types@1.12.1
+
 ## 1.12.0
 
 ### Minor Changes

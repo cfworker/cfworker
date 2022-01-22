@@ -1,5 +1,13 @@
 # @cfworker/dev
 
+## 1.13.1
+
+### Patch Changes
+
+- d2390db: Update dependencies
+- Updated dependencies [d2390db]
+  - @cfworker/worker-types@1.12.1
+
 ## 1.13.0
 
 ### Minor Changes
