@@ -5,7 +5,6 @@ import {
   HttpError,
   Middleware,
   Router,
-  toObject,
   validate
 } from '@cfworker/web';
 import { html } from './html-stream.js';
@@ -52,7 +51,7 @@ router
   })
   .get('/echo-headers', ({ req, res }) => {
     res.status = 200;
-    res.body = toObject(req.headers);
+    res.body = Object.fromEntries(req.headers);
   })
   .get('/hello-world', ({ res }) => {
     res.body = 'hello world';

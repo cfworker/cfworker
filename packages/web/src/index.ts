@@ -9,5 +9,4 @@ export * from './normalize-pathname.js';
 export * from './req.js';
 export * from './response-builder.js';
 export * from './router.js';
-export * from './to-object.js';
 export * from './validate.js';
