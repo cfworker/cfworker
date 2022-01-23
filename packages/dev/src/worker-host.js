@@ -15,6 +15,9 @@ export class WorkerHost extends EventEmitter {
   /** @type {string|null} */
   localIP = null;
 
+  /** @type {Promise<void>} */
+  workerCodeSet = new Promise(resolve => this.on('worker-updated', resolve));
+
   /**
    * @param {number} port
    * @param {boolean} inspect
@@ -39,6 +42,7 @@ export class WorkerHost extends EventEmitter {
   async start() {
     let startTime = Date.now();
     logger.progress('Starting server...');
+    this.server.on('request', this.handleRequestWithWorker);
     this.server.serve();
 
     const ipPromise = getLocalhostIP();
@@ -76,8 +80,6 @@ export class WorkerHost extends EventEmitter {
     await this.forkConsoleLog(page);
 
     this.localIP = await ipPromise;
-
-    this.server.on('request', this.handleRequestWithWorker);
 
     logger.success('Worker host ready', Date.now() - startTime);
     this.resolvePage(page);
@@ -170,6 +172,7 @@ export class WorkerHost extends EventEmitter {
     };
 
     const page = await this.pageReady;
+    await this.workerCodeSet;
     const { status, statusText, headers, body } = await page.evaluate(
       async (url, bodyUrl, init) => {
         const { dispatchFetchEvent } = await import('./runtime/index.js');
