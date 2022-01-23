@@ -1,5 +1,11 @@
 # @cfworker/dev
 
+## 1.13.2
+
+### Patch Changes
+
+- 9dd14c2: Ensure worker host awaits the worker code prior to responding to requests
+
 ## 1.13.1
 
 ### Patch Changes
