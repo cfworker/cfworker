@@ -1,5 +1,13 @@
 # @cfworker/site
 
+## 1.12.2
+
+### Patch Changes
+
+- 8a6a815: Upgrade to node 16.14.0
+- Updated dependencies [8a6a815]
+  - @cfworker/web@1.12.2
+
 ## 1.12.1
 
 ### Patch Changes
