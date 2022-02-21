@@ -1,5 +1,11 @@
 # @cfworker/dev
 
+## 1.14.0
+
+### Minor Changes
+
+- 8a6a815: Upgrade to node 16.14.0
+
 ## 1.13.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @cfworker/jwt
 
+## 1.12.2
+
+### Patch Changes
+
+- 8a6a815: Upgrade to node 16.14.0
+- Updated dependencies [8a6a815]
+  - @cfworker/base64url@1.12.2
+
 ## 1.12.1
 
 ### Patch Changes
