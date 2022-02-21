@@ -1,8 +1,8 @@
 import chalk from 'chalk';
-import commander from 'commander';
+import { Command } from 'commander';
 import envinfo from 'envinfo';
 import nodeCleanup from 'node-cleanup';
-import packageConfig from '../../package.json';
+import packageConfig from '../../package.json' assert { type: 'json' };
 import { loadEnv } from '../env.js';
 import { logger } from '../logger.js';
 import { BuildCommand } from './build-command.js';
@@ -34,7 +34,7 @@ const errorHandler = err => {
 process.on('unhandledRejection', errorHandler);
 process.on('uncaughtException', errorHandler);
 
-const program = new commander.Command();
+const program = new Command();
 program.version(packageConfig.version);
 
 /** @type {import('commander').Command[]} */
