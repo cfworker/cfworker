@@ -117,7 +117,7 @@ export class Router {
     return this;
   }
 
-  private resolve(ctx: Context) {
+  public resolve(ctx: Context) {
     return this.routes.find(
       ({ conditions }) =>
         conditions.length === 0 || conditions.every(c => c(ctx))
