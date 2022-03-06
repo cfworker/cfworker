@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 1.12.3
+
+### Patch Changes
+
+- 0db8cb1: Make router's resolve method public
+
 ## 1.12.2
 
 ### Patch Changes
