@@ -13,20 +13,32 @@ import {
   PartitionKeyDefinition,
   Resource
 } from './types.js';
-import { assertArg, escapeNonASCII, uri } from './util.js';
+import {
+  assertArg,
+  escapeNonASCII,
+  parseConnectionString,
+  uri
+} from './util.js';
 
 export interface CosmosClientConfig {
+  /**
+   * Cosmos DB connection string.
+   * @example
+   * "AccountEndpoint=https://xxxxxxxxxx.documents.azure.com:443/;AccountKey=xxxxxxxxxx;"
+   */
+  connectionString?: string;
+
   /**
    * Cosmos DB endpoint.
    * @example
    * "https://xxxxxxxxxx.documents.azure.com"
    */
-  endpoint: string;
+  endpoint?: string;
 
   /**
    * Cosmos DB master key.
    */
-  masterKey: string;
+  masterKey?: string;
 
   /**
    * The retry policy to use when requests are throttled.
@@ -79,8 +91,18 @@ export class CosmosClient {
   public retries = { count: 0, delayMs: 0 };
 
   constructor(config: CosmosClientConfig) {
-    this.endpoint = config.endpoint;
-    this.signer = getSigner(config.masterKey);
+    if (config.connectionString) {
+      const connString = parseConnectionString(config.connectionString);
+      this.endpoint = connString.AccountEndpoint;
+      this.signer = getSigner(connString.AccountKey);
+    } else if (config.endpoint && config.masterKey) {
+      this.endpoint = config.endpoint;
+      this.signer = getSigner(config.masterKey);
+    } else {
+      throw Error(
+        'Either connectionString or endpoint/masterKey must be set in the config object'
+      );
+    }
     this.retryPolicy = config.retryPolicy ?? defaultRetryPolicy;
     this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;
