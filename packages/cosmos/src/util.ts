@@ -44,7 +44,7 @@ export function parseConnectionString(
       return;
     }
     const key = kv.slice(0, pos);
-    const val = kv.slice(pos);
+    const val = kv.slice(pos + 1);
     if (key && val) {
       res[key] = val;
     }
