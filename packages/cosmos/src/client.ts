@@ -88,7 +88,7 @@ export class CosmosClient {
     this.enableCrossPartitionQueries =
       config.enableCrossPartitionQueries ?? true;
     this.sessions = config.sessions ?? new DefaultSessionContainer();
-    this.systemFetch = config.fetch ?? fetch.bind(self);
+    this.systemFetch = config.fetch ?? fetch.bind(globalThis);
   }
 
   public async getDatabases(
