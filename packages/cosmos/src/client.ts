@@ -81,6 +81,9 @@ export class CosmosClient {
   constructor(config: CosmosClientConfig) {
     this.endpoint = config.endpoint;
     this.signer = getSigner(config.masterKey);
+    if (this.endpoint.endsWith('/')) {
+      this.endpoint = this.endpoint.slice(0, -1);
+    }
     this.retryPolicy = config.retryPolicy ?? defaultRetryPolicy;
     this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;
