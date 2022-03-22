@@ -103,6 +103,9 @@ export class CosmosClient {
         'Either connectionString or endpoint/masterKey must be set in the config object'
       );
     }
+    if (this.endpoint.endsWith('/')) {
+      this.endpoint = this.endpoint.slice(0, -1);
+    }
     this.retryPolicy = config.retryPolicy ?? defaultRetryPolicy;
     this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;
@@ -110,7 +113,7 @@ export class CosmosClient {
     this.enableCrossPartitionQueries =
       config.enableCrossPartitionQueries ?? true;
     this.sessions = config.sessions ?? new DefaultSessionContainer();
-    this.systemFetch = config.fetch ?? fetch.bind(self);
+    this.systemFetch = config.fetch ?? fetch.bind(globalThis);
   }
 
   public async getDatabases(
