@@ -35,7 +35,7 @@ describe('util', () => {
         parseConnectionString(
           'AccountEndpoint=https://foo.documents.azure.com:443/;AccountKey=hello-world;'
         )
-      ).to.equal({
+      ).to.deep.equal({
         AccountEndpoint: 'https://foo.documents.azure.com:443/',
         AccountKey: 'hello-world'
       });
