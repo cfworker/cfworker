@@ -19,6 +19,21 @@ if (process.env.COSMOS_DB_ORIGIN) {
     kind: 'Hash'
   };
 
+  if (process.env.COSMOS_DB_CONNSTRING) {
+    const connectionString = process.env.COSMOS_DB_CONNSTRING;
+
+    describe('CosmosClient from connection string', () => {
+      const client = new CosmosClient({ connectionString, dbId, collId });
+
+      it(`"${dbId}" database  exists`, async () => {
+        const res = await client.getDatabase();
+        expect(res.status).to.equal(200);
+        const db = await res.json();
+        expect(db.id).to.equal(dbId);
+      });
+    });
+  }
+
   describe('CosmosClient', () => {
     const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
 
