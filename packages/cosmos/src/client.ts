@@ -99,7 +99,7 @@ export class CosmosClient {
       this.endpoint = config.endpoint;
       this.signer = getSigner(config.masterKey);
     } else {
-      throw Error(
+      throw new Error(
         'Either connectionString or endpoint/masterKey must be set in the config object'
       );
     }

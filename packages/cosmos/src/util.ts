@@ -50,7 +50,7 @@ export function parseConnectionString(
     }
   });
   if (!res.AccountEndpoint || !res.AccountKey) {
-    throw Error('Failed to parse the connection string');
+    throw new Error('Failed to parse the connection string');
   }
   return res;
 }
