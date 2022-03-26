@@ -44,10 +44,14 @@ import { CosmosClient } from '@cfworker/cosmos';
 
 // 🚨️ Do not commit your Cosmos DB master key to source control!
 // Use a bundler like Rollup, Parcel, or Webpack to interpolate your master key at build-time.
-const masterKey = '...top secret master key copied from the azure portal...';
+const accountKey = '...top secret master key copied from the azure portal...';
 const endpoint = 'https://xxxxxxxxxxxx.documents.azure.com';
 
-const client = new CosmosClient({ endpoint, masterKey });
+const client = new CosmosClient({ endpoint, accountKey });
+
+// or
+
+const client = new CosmosClient({ connectionString });
 ```
 
 ### Specify consistency level
@@ -58,7 +62,7 @@ You may override the default value when constructing the CosmosClient.
 ```ts
 const consistencyLevel = 'Eventual';
 
-const client = new CosmosClient({ endpoint, masterKey, consistencyLevel });
+const client = new CosmosClient({ endpoint, accountKey, consistencyLevel });
 ```
 
 Most methods on CosmosClient accept a `consistencyLevel` argument to enable overriding the client's consistency level on a case-by-case basis.
@@ -76,7 +80,7 @@ You may specify default values for these arguments when constructing the CosmosC
 const dbId = 'my-db';
 const collId = 'my-coll';
 
-const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
+const client = new CosmosClient({ endpoint, accountKey, dbId, collId });
 ```
 
 ### Authenticating with resource tokens
