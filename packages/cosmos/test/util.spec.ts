@@ -33,7 +33,7 @@ describe('util', () => {
     it('parses a connection string', () => {
       expect(
         parseConnectionString(
-          'AccountEndpoint=https://foo.documents.azure.com:443/;accountKey=hello-world;'
+          'AccountEndpoint=https://foo.documents.azure.com:443/;AccountKey=hello-world;'
         )
       ).to.deep.equal({
         endpoint: 'https://foo.documents.azure.com:443/',
