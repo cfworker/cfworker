@@ -1,10 +1,13 @@
 # @cfworker/cosmos
 
-## 1.12.3
+## 1.13.0
+
+### Minor Changes
+
+- 07f7266: Allow authenticating with Cosmos DB using a connection string
 
 ### Patch Changes
 
-- 07f7266: Allow authenticating with Cosmos DB using a connection string
 - cd89593: Fix auth issues when Cosmos DB endpoint had trailing slash
 - 9e543bf: Fix issues with running in a Node.js environment
 
