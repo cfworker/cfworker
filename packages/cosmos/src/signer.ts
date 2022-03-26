@@ -55,9 +55,9 @@ export class Signer {
 
 const signers: Record<string, Signer> = {};
 
-export function getSigner(masterkey: string) {
-  if (!signers[masterkey]) {
-    signers[masterkey] = new Signer(masterkey);
+export function getSigner(accountKey: string) {
+  if (!signers[accountKey]) {
+    signers[accountKey] = new Signer(accountKey);
   }
-  return signers[masterkey];
+  return signers[accountKey];
 }

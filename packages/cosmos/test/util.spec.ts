@@ -1,6 +1,10 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import { assertArg, escapeNonASCII } from '../src/index.js';
+import {
+  assertArg,
+  escapeNonASCII,
+  parseConnectionString
+} from '../src/index.js';
 
 describe('util', () => {
   describe('escapeNonASCII', () => {
@@ -22,6 +26,23 @@ describe('util', () => {
 
     it('does not throw when value is defined', () => {
       expect(() => assertArg('foo', 'bar')).not.to.throw();
+    });
+  });
+
+  describe('parseConnectionString', () => {
+    it('parses a connection string', () => {
+      expect(
+        parseConnectionString(
+          'AccountEndpoint=https://foo.documents.azure.com:443/;AccountKey=hello-world;'
+        )
+      ).to.deep.equal({
+        endpoint: 'https://foo.documents.azure.com:443/',
+        accountKey: 'hello-world'
+      });
+    });
+
+    it('throws when value is invalid', () => {
+      expect(() => parseConnectionString('foo')).to.throw();
     });
   });
 });
