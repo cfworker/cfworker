@@ -66,3 +66,17 @@ export interface Collection extends PersistedResource {
   _udfs: 'udfs/';
   _conflicts: 'conflicts/';
 }
+
+export interface ConnectionInfo {
+  /**
+   * Cosmos DB endpoint.
+   * @example
+   * "https://xxxxxxxxxx.documents.azure.com"
+   */
+  endpoint: string;
+
+  /**
+   * Cosmos DB key.
+   */
+  accountKey: string;
+}

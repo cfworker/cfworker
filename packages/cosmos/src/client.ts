@@ -4,6 +4,7 @@ import { DefaultSessionContainer, SessionContainer } from './session.js';
 import { getSigner, Signer } from './signer.js';
 import {
   Collection,
+  ConnectionInfo,
   ConsistencyLevel,
   Database,
   Document,
@@ -13,21 +14,25 @@ import {
   PartitionKeyDefinition,
   Resource
 } from './types.js';
-import { assertArg, escapeNonASCII, uri } from './util.js';
+import {
+  assertArg,
+  escapeNonASCII,
+  parseConnectionString,
+  uri
+} from './util.js';
 
-export interface CosmosClientConfig {
-  /**
-   * Cosmos DB endpoint.
-   * @example
-   * "https://xxxxxxxxxx.documents.azure.com"
-   */
-  endpoint: string;
+export type CosmosClientConfig =
+  | (ConnectionInfo & CosmosClientConfigBase)
+  | ({
+      /**
+       * Cosmos DB connection string.
+       * @example
+       * "AccountEndpoint=https://xxxxxxxxxx.documents.azure.com:443/;AccountKey=xxxxxxxxxx;"
+       */
+      connectionString: string;
+    } & CosmosClientConfigBase);
 
-  /**
-   * Cosmos DB master key.
-   */
-  masterKey: string;
-
+interface CosmosClientConfigBase {
   /**
    * The retry policy to use when requests are throttled.
    */
@@ -79,11 +84,15 @@ export class CosmosClient {
   public retries = { count: 0, delayMs: 0 };
 
   constructor(config: CosmosClientConfig) {
-    this.endpoint = config.endpoint;
-    this.signer = getSigner(config.masterKey);
-    if (this.endpoint.endsWith('/')) {
-      this.endpoint = this.endpoint.slice(0, -1);
+    let { endpoint, accountKey } =
+      'connectionString' in config
+        ? parseConnectionString(config.connectionString)
+        : config;
+    if (endpoint.endsWith('/')) {
+      endpoint = endpoint.slice(0, -1);
     }
+    this.endpoint = endpoint;
+    this.signer = getSigner(accountKey);
     this.retryPolicy = config.retryPolicy ?? defaultRetryPolicy;
     this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;

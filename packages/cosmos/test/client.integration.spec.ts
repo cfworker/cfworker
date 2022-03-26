@@ -11,7 +11,8 @@ declare const process: { env: Record<string, string> };
 
 if (process.env.COSMOS_DB_ORIGIN) {
   const endpoint = process.env.COSMOS_DB_ORIGIN;
-  const masterKey = process.env.COSMOS_DB_MASTER_KEY;
+  const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
+  const accountKey = process.env.COSMOS_DB_MASTER_KEY;
   const dbId = process.env.COSMOS_DB_DATABASE;
   const collId = 'integration-test-' + Date.now();
   const partitionKey: PartitionKeyDefinition = {
@@ -19,8 +20,19 @@ if (process.env.COSMOS_DB_ORIGIN) {
     kind: 'Hash'
   };
 
+  describe('CosmosClient from connection string', () => {
+    const client = new CosmosClient({ connectionString, dbId, collId });
+
+    it('getDatabases returns an array', async () => {
+      const res = await client.getDatabases();
+      expect(res.status).to.equal(200);
+      const dbs = await res.json();
+      expect(dbs).to.be.instanceof(Array);
+    });
+  });
+
   describe('CosmosClient', () => {
-    const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
+    const client = new CosmosClient({ endpoint, accountKey, dbId, collId });
 
     it('sets activity id', async () => {
       const activityId = '1abdf87a-c213-418b-b7fc-65d1bcf88aa2';
