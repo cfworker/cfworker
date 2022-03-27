@@ -27,7 +27,7 @@ export type CosmosClientConfig =
       /**
        * Cosmos DB connection string.
        * @example
-       * "AccountEndpoint=https://xxxxxxxxxx.documents.azure.com:443/;accountKey=xxxxxxxxxx;"
+       * "AccountEndpoint=https://xxxxxxxxxx.documents.azure.com:443/;masterKey=xxxxxxxxxx;"
        */
       connectionString: string;
     } & CosmosClientConfigBase);
@@ -84,7 +84,7 @@ export class CosmosClient {
   public retries = { count: 0, delayMs: 0 };
 
   constructor(config: CosmosClientConfig) {
-    let { endpoint, accountKey } =
+    let { endpoint, masterKey } =
       'connectionString' in config
         ? parseConnectionString(config.connectionString)
         : config;
@@ -92,7 +92,7 @@ export class CosmosClient {
       endpoint = endpoint.slice(0, -1);
     }
     this.endpoint = endpoint;
-    this.signer = getSigner(accountKey);
+    this.signer = getSigner(masterKey);
     this.retryPolicy = config.retryPolicy ?? defaultRetryPolicy;
     this.consistencyLevel = config.consistencyLevel ?? 'Session';
     this.dbId = config.dbId;
