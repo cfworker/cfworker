@@ -1,12 +1,12 @@
 import { CosmosClient } from '@cfworker/cosmos';
 
 const endpoint = process.env.COSMOS_DB_ORIGIN;
-const accountKey = process.env.COSMOS_DB_MASTER_KEY;
+const masterKey = process.env.COSMOS_DB_MASTER_KEY;
 const dbId = process.env.COSMOS_DB_DATABASE;
 const collId = 'integration-test';
 const partitionKey = 'test';
 
-const client = new CosmosClient({ endpoint, accountKey, dbId, collId });
+const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
 
 addEventListener('fetch', async event => {
   const url = new URL(event.request.url);
