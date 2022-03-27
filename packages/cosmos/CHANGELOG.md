@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 1.13.1
+
+### Patch Changes
+
+- 729a6fd: Rename accountKey back to masterKey
+
 ## 1.13.0
 
 ### Minor Changes
