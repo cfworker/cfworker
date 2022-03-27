@@ -78,5 +78,5 @@ export interface ConnectionInfo {
   /**
    * Cosmos DB key.
    */
-  accountKey: string;
+  masterKey: string;
 }

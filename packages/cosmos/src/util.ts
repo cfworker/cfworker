@@ -54,6 +54,6 @@ export function parseConnectionString(connString: string): ConnectionInfo {
   }
   return {
     endpoint: props.AccountEndpoint,
-    accountKey: props.AccountKey
+    masterKey: props.AccountKey
   };
 }

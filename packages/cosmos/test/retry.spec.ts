@@ -101,7 +101,7 @@ describe('retry', () => {
     const clientFactory = (...responses: Response[]) =>
       new CosmosClient({
         endpoint: 'https://foo.com',
-        accountKey:
+        masterKey:
           'Zg7ec6ojajv9FBjZmeGeqeDCJEhg8nSdWMIA3JCu9c2saIawh8ixHTPLPP52fO7h7C7xcS3iknEabtRhai+zHw==',
         dbId: 'foo',
         collId: 'bar',

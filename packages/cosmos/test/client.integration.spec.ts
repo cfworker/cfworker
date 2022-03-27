@@ -12,7 +12,7 @@ declare const process: { env: Record<string, string> };
 if (process.env.COSMOS_DB_ORIGIN) {
   const endpoint = process.env.COSMOS_DB_ORIGIN;
   const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
-  const accountKey = process.env.COSMOS_DB_MASTER_KEY;
+  const masterKey = process.env.COSMOS_DB_MASTER_KEY;
   const dbId = process.env.COSMOS_DB_DATABASE;
   const collId = 'integration-test-' + Date.now();
   const partitionKey: PartitionKeyDefinition = {
@@ -32,7 +32,7 @@ if (process.env.COSMOS_DB_ORIGIN) {
   });
 
   describe('CosmosClient', () => {
-    const client = new CosmosClient({ endpoint, accountKey, dbId, collId });
+    const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
 
     it('sets activity id', async () => {
       const activityId = '1abdf87a-c213-418b-b7fc-65d1bcf88aa2';

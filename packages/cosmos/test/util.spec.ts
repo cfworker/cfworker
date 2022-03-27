@@ -37,7 +37,7 @@ describe('util', () => {
         )
       ).to.deep.equal({
         endpoint: 'https://foo.documents.azure.com:443/',
-        accountKey: 'hello-world'
+        masterKey: 'hello-world'
       });
     });
 

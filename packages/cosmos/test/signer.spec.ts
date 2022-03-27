@@ -3,11 +3,11 @@ import { describe, it } from 'mocha';
 import { getSigner } from '../src/index.js';
 
 describe('Signer', () => {
-  const accountKey =
+  const masterKey =
     'Zg7ec6ojajv9FBjZmeGeqeDCJEhg8nSdWMIA3JCu9c2saIawh8ixHTPLPP52fO7h7C7xcS3iknEabtRhai+zHw==';
   const dateUtcString = 'Fri, 06 Dec 2019 07:29:46 GMT';
   const date = new Date(dateUtcString);
-  const signer = getSigner(accountKey);
+  const signer = getSigner(masterKey);
 
   describe('getPayload', () => {
     it('gets payload for /dbs request', () => {
