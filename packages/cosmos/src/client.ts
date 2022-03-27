@@ -27,7 +27,7 @@ export type CosmosClientConfig =
       /**
        * Cosmos DB connection string.
        * @example
-       * "AccountEndpoint=https://xxxxxxxxxx.documents.azure.com:443/;masterKey=xxxxxxxxxx;"
+       * "AccountEndpoint=https://xxxxxxxxxx.documents.azure.com:443/;AccountKey=xxxxxxxxxx;"
        */
       connectionString: string;
     } & CosmosClientConfigBase);
