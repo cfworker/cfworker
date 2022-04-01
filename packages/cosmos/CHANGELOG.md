@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 1.13.2
+
+### Patch Changes
+
+- cf26d3c: Fixed: "Your worker called response.clone(), but did not read the body of both clones."
+
 ## 1.13.1
 
 ### Patch Changes
