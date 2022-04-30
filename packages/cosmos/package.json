@@ -39,7 +39,7 @@
   "dependencies": {
     "@cfworker/worker-types": "^1.12.1",
     "@cloudflare/workers-types": "^2.2.2",
-    "base64-arraybuffer": "^1.0.2"
+    "rfc4648": "^1.5.1"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.14.0",

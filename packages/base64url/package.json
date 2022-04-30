@@ -26,6 +26,9 @@
     "clean": "tsc --build --clean",
     "test": "cfworker test test/**/*.spec.ts"
   },
+  "dependencies": {
+    "rfc4648": "^1.5.1"
+  },
   "devDependencies": {
     "@cfworker/dev": "^1.14.0",
     "@types/chai": "^4.3.0",

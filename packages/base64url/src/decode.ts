@@ -1,25 +1,9 @@
-import { pad } from './pad.js';
+import { base64url } from 'rfc4648';
 
 /**
  * Base64 URL decode a string.
+ * @deprecated Use rfc4648 package directly
  */
 export function decode(s: string): string {
-  const base64 = pad(s).replace(/_/g, '/').replace(/-/g, '+');
-  return decodeUnicode(atob(base64));
-}
-
-function decodeUnicode(s: string): string {
-  try {
-    return decodeURIComponent(
-      s.replace(/(.)/g, (_, p) => {
-        const code = p.charCodeAt(0).toString(16).toUpperCase();
-        if (code.length < 2) {
-          return '%0' + code;
-        }
-        return '%' + code;
-      })
-    );
-  } catch {
-    return s;
-  }
+  return new TextDecoder().decode(base64url.parse(s, { loose: true }));
 }

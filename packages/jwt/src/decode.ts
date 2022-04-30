@@ -1,4 +1,4 @@
-import { decode } from '@cfworker/base64url';
+import { base64url } from 'rfc4648';
 import { DecodedJwt } from './types.js';
 
 /**
@@ -6,10 +6,15 @@ import { DecodedJwt } from './types.js';
  */
 export function decodeJwt(token: string): DecodedJwt {
   const [header, payload, signature] = token.split('.');
+  const decoder = new TextDecoder();
   return {
-    header: JSON.parse(decode(header)),
-    payload: JSON.parse(decode(payload)),
-    signature: decode(signature),
+    header: JSON.parse(
+      decoder.decode(base64url.parse(header, { loose: true }))
+    ),
+    payload: JSON.parse(
+      decoder.decode(base64url.parse(payload, { loose: true }))
+    ),
+    signature: base64url.parse(signature, { loose: true }),
     raw: { header, payload, signature }
   };
 }

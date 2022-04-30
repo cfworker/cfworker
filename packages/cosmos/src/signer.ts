@@ -1,7 +1,4 @@
-import {
-  decode as base64ToArrayBuffer,
-  encode as arrayBufferToBase64
-} from 'base64-arraybuffer';
+import { base64 } from 'rfc4648';
 
 export class Signer {
   private readonly masterkey: Promise<CryptoKey>;
@@ -10,7 +7,7 @@ export class Signer {
   constructor(masterkey: string) {
     const promiseLike = crypto.subtle.importKey(
       'raw',
-      base64ToArrayBuffer(masterkey),
+      base64.parse(masterkey),
       { name: 'HMAC', hash: { name: 'SHA-256' } },
       false,
       ['sign']
@@ -22,7 +19,7 @@ export class Signer {
     const key = await this.masterkey;
     const payload = this.getPayload(request, date);
     const hashed = await crypto.subtle.sign('HMAC', key, payload);
-    const signature = arrayBufferToBase64(hashed);
+    const signature = base64.stringify(new Uint8Array(hashed));
     request.headers.set(
       'authorization',
       encodeURIComponent(`type=master&ver=1.0&sig=${signature}`)

@@ -28,7 +28,7 @@ export interface RawJwt {
 export interface DecodedJwt {
   header: JwtHeader;
   payload: JwtPayload;
-  signature: string;
+  signature: Uint8Array;
   raw: RawJwt;
 }
 

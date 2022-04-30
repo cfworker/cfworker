@@ -1,6 +1,6 @@
-import { decode } from '@cfworker/base64url';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
+import { base64url } from 'rfc4648';
 import { decodeJwt } from '../src/decode.js';
 
 describe('decodeJwt', () => {
@@ -27,7 +27,7 @@ describe('decodeJwt', () => {
         name: 'John Doe',
         iat: 1516239022
       },
-      signature: decode(rawSignature),
+      signature: base64url.parse(rawSignature, { loose: true }),
       raw: {
         header: rawHeader,
         payload: rawPayload,
@@ -46,7 +46,7 @@ describe('decodeJwt', () => {
         name: 'John Doe',
         iat: 1516239022
       },
-      signature: decode(rawSignatureUndefinedType),
+      signature: base64url.parse(rawSignatureUndefinedType, { loose: true }),
       raw: {
         header: rawHeaderUndefinedType,
         payload: rawPayloadUndefinedType,
