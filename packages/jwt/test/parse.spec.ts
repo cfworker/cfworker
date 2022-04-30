@@ -1,6 +1,6 @@
-import { encode } from '@cfworker/base64url';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
+import { base64url } from 'rfc4648';
 import { importKey } from '../src/jwks.js';
 import { parseJwt } from '../src/parse.js';
 import { JwtHeader, JwtPayload } from '../src/types.js';
@@ -94,17 +94,19 @@ async function createJwt(
   if (!privateKey) {
     privateKey = await generateKey();
   }
-
+  const encoder = new TextEncoder();
   const data =
-    encode(JSON.stringify(header)) + '.' + encode(JSON.stringify(payload));
+    base64url.stringify(encoder.encode(JSON.stringify(header))) +
+    '.' +
+    base64url.stringify(encoder.encode(JSON.stringify(payload)));
 
   const signature = await crypto.subtle.sign(
     'RSASSA-PKCS1-v1_5',
     privateKey,
-    new TextEncoder().encode(data)
+    encoder.encode(data)
   );
 
-  return data + '.' + btoa(String.fromCharCode(...new Uint8Array(signature)));
+  return data + '.' + base64url.stringify(new Uint8Array(signature));
 }
 
 async function generateKey() {
