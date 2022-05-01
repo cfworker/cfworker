@@ -4,13 +4,16 @@ import { getKey } from './jwks.js';
 import { DecodedJwt, JwtParseResult } from './types.js';
 import { verifyJwtSignature } from './verify.js';
 
+const skewMs = 30 * 1000;
+
 /**
  * Parse a JWT.
  */
 export async function parseJwt(
   encodedToken: string,
   issuer: string,
-  audience: string
+  audience: string,
+  resolveKey: (decoded: DecodedJwt) => Promise<CryptoKey | null> = getKey
 ): Promise<JwtParseResult> {
   let decoded: DecodedJwt;
   try {
@@ -18,62 +21,144 @@ export async function parseJwt(
   } catch {
     return { valid: false, reason: `Unable to decode JWT.` };
   }
-  if (
-    typeof decoded.header.typ !== 'undefined' &&
-    decoded.header.typ !== 'JWT'
-  ) {
+  const { typ, alg } = decoded.header;
+  if (typeof typ !== 'undefined' && typ !== 'JWT') {
     return {
       valid: false,
-      reason: `Invalid JWT type "${decoded.header.typ}". Expected "JWT".`
+      reason: `Invalid JWT type ${JSON.stringify(typ)}. Expected "JWT".`
     };
   }
-  if (!algToHash[decoded.header.alg]) {
+  if (!algToHash[alg]) {
     return {
       valid: false,
-      reason: `Invalid JWT algorithm "${decoded.header.alg}". Supported: ${algs}.`
-    };
-  }
-  if (
-    typeof decoded.payload.aud === 'string' &&
-    decoded.payload.aud !== audience
-  ) {
-    return {
-      valid: false,
-      reason: `Invalid JWT audience "${decoded.payload.aud}". Expected "${audience}".`
-    };
-  } else if (
-    Array.isArray(decoded.payload.aud) &&
-    !decoded.payload.aud.includes(audience)
-  ) {
-    return {
-      valid: false,
-      reason: `Invalid JWT audience in array "${decoded.payload.aud}". Does not include "${audience}".`
+      reason: `Invalid JWT algorithm ${JSON.stringify(
+        alg
+      )}. Supported: ${algs}.`
     };
   }
 
-  if (decoded.payload.iss !== issuer) {
+  const { sub, aud, iss, iat, exp, nbf } = decoded.payload;
+  if (typeof sub !== 'string') {
     return {
       valid: false,
-      reason: `Invalid JWT issuer "${decoded.payload.iss}". Expected "${issuer}".`
+      reason: `Subject claim (sub) is required and must be a string. Received ${JSON.stringify(
+        sub
+      )}.`
     };
   }
-  const expiryDate = new Date(0);
-  expiryDate.setUTCSeconds(decoded.payload.exp);
+
+  if (typeof aud === 'string') {
+    if (aud !== audience) {
+      return {
+        valid: false,
+        reason: `Invalid JWT audience claim (aud) ${JSON.stringify(
+          aud
+        )}. Expected "${audience}".`
+      };
+    }
+  } else if (
+    Array.isArray(aud) &&
+    aud.length > 0 &&
+    aud.every(a => typeof a === 'string')
+  ) {
+    if (!aud.includes(audience)) {
+      return {
+        valid: false,
+        reason: `Invalid JWT audience claim array (aud) ${JSON.stringify(
+          aud
+        )}. Does not include "${audience}".`
+      };
+    }
+  } else {
+    return {
+      valid: false,
+      reason: `Invalid JWT audience claim (aud) ${JSON.stringify(
+        aud
+      )}. Expected a string or a non-empty array of strings.`
+    };
+  }
+
+  if (iss !== issuer) {
+    return {
+      valid: false,
+      reason: `Invalid JWT issuer claim (iss) ${JSON.stringify(
+        decoded.payload.iss
+      )}. Expected "${issuer}".`
+    };
+  }
+
+  if (typeof exp !== 'number') {
+    return {
+      valid: false,
+      reason: `Invalid JWT expiry date claim (exp) ${JSON.stringify(
+        exp
+      )}. Expected number.`
+    };
+  }
   const currentDate = new Date(Date.now());
-  const expired = expiryDate <= currentDate;
+  const expiryDate = new Date(0);
+  expiryDate.setUTCSeconds(exp);
+  const expired = expiryDate.getTime() <= currentDate.getTime() - skewMs;
   if (expired) {
     return {
       valid: false,
       reason: `JWT is expired. Expiry date: ${expiryDate}; Current date: ${currentDate};`
     };
   }
-  let key: CryptoKey;
+
+  if (nbf !== undefined) {
+    if (typeof nbf !== 'number') {
+      return {
+        valid: false,
+        reason: `Invalid JWT not before date claim (nbf) ${JSON.stringify(
+          nbf
+        )}. Expected number.`
+      };
+    }
+    const notBeforeDate = new Date(0);
+    notBeforeDate.setUTCSeconds(nbf);
+    const early = notBeforeDate.getTime() > currentDate.getTime() + skewMs;
+    if (early) {
+      return {
+        valid: false,
+        reason: `JWT cannot be used prior to not before date claim (nbf). Not before date: ${notBeforeDate}; Current date: ${currentDate};`
+      };
+    }
+  }
+
+  if (iat !== undefined) {
+    if (typeof iat !== 'number') {
+      return {
+        valid: false,
+        reason: `Invalid JWT issued at date claim (iat) ${JSON.stringify(
+          iat
+        )}. Expected number.`
+      };
+    }
+    const issuedAtDate = new Date(0);
+    issuedAtDate.setUTCSeconds(iat);
+    const postIssued = issuedAtDate.getTime() > currentDate.getTime() + skewMs;
+    if (postIssued) {
+      return {
+        valid: false,
+        reason: `JWT issued at date claim (iat) is in the future. Issued at date: ${issuedAtDate}; Current date: ${currentDate};`
+      };
+    }
+  }
+
+  let key: CryptoKey | null;
   try {
-    key = await getKey(decoded);
+    key = await resolveKey(decoded);
   } catch {
     return {
       valid: false,
-      reason: `Error retrieving key to verify JWT signature.`
+      reason: `Error retrieving public key to verify JWT signature.`
+    };
+  }
+  if (!key) {
+    return {
+      valid: false,
+      reason: `Unable to resolve public key to verify JWT signature.`
     };
   }
   let signatureValid: boolean;

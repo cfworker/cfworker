@@ -4,6 +4,8 @@ export interface JwtPayload {
   aud: string | Array<string>;
   iat: number;
   exp: number;
+  nbf?: number;
+  jti?: string;
 }
 
 export interface JwtHeader {
