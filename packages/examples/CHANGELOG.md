@@ -1,5 +1,12 @@
 # @cfworker/examples
 
+## 1.12.4
+
+### Patch Changes
+
+- Updated dependencies [073acc7]
+  - @cfworker/jwt@3.0.0
+
 ## 1.12.3
 
 ### Patch Changes
