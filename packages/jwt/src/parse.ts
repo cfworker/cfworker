@@ -1,3 +1,4 @@
+import { algs, algToHash } from './algs.js';
 import { decodeJwt } from './decode.js';
 import { getKey } from './jwks.js';
 import { DecodedJwt, JwtParseResult } from './types.js';
@@ -26,10 +27,10 @@ export async function parseJwt(
       reason: `Invalid JWT type "${decoded.header.typ}". Expected "JWT".`
     };
   }
-  if (decoded.header.alg !== 'RS256') {
+  if (!algToHash[decoded.header.alg]) {
     return {
       valid: false,
-      reason: `Invalid JWT algorithm "${decoded.header.alg}". Expected "RS256".`
+      reason: `Invalid JWT algorithm "${decoded.header.alg}". Supported: ${algs}.`
     };
   }
   if (
