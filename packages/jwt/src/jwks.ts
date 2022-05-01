@@ -1,3 +1,4 @@
+import { algToHash } from './algs.js';
 import { DecodedJwt, JsonWebKeyset } from './types.js';
 
 /**
@@ -26,22 +27,22 @@ const importedKeys: Record<string, Record<string, CryptoKey>> = {};
  * @param jwks The JsonWebKeyset to import.
  */
 export async function importKey(iss: string, jwk: JsonWebKey) {
-  const input = {
-    kty: 'RSA',
-    e: 'AQAB',
-    n: jwk.n,
-    alg: 'RS256',
-    ext: true
-  };
+  if (jwk.kty !== 'RSA') {
+    throw new Error(`Unsupported jwk key type (kty) "${jwk.kty}".`);
+  }
+  const hash = jwk.alg ? algToHash[jwk.alg] : null;
+  if (!hash) {
+    throw new Error(`Unsupported jwk Algorithm (alg) "${jwk.alg}".`);
+  }
   const key = await crypto.subtle.importKey(
     'jwk',
-    input,
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    jwk,
+    { name: 'RSASSA-PKCS1-v1_5', hash },
     false,
     ['verify']
   );
   importedKeys[iss] = importedKeys[iss] || {};
-  importedKeys[iss][jwk.kid || 'default'] = key;
+  importedKeys[iss][jwk.kid ?? 'default'] = key;
 }
 
 /**

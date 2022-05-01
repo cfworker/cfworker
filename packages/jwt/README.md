@@ -8,7 +8,7 @@
 
 Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs.
 
-Currently supports `alg:'RS256'` only.
+Currently supports RS256, RS384, and RS512.
 
 ```js
 const jwt = request.headers.get('Authorization');
