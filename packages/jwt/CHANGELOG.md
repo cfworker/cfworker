@@ -1,5 +1,15 @@
 # @cfworker/jwt
 
+## 2.0.0
+
+### Major Changes
+
+- bc29475: Add support for RS384 and RS512
+
+### Patch Changes
+
+- 03090fb: Migrate from @cfworker/base64url and base64-arraybuffer to rfc4648
+
 ## 1.12.2
 
 ### Patch Changes

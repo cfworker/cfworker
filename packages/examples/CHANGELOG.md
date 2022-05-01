@@ -1,5 +1,14 @@
 # @cfworker/examples
 
+## 1.12.3
+
+### Patch Changes
+
+- Updated dependencies [bc29475]
+- Updated dependencies [03090fb]
+  - @cfworker/jwt@2.0.0
+  - @cfworker/cosmos@1.13.3
+
 ## 1.12.2
 
 ### Patch Changes

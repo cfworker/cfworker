@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 1.13.3
+
+### Patch Changes
+
+- 03090fb: Migrate from @cfworker/base64url and base64-arraybuffer to rfc4648
+
 ## 1.13.2
 
 ### Patch Changes

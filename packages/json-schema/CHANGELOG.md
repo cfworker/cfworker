@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 1.12.3
+
+### Patch Changes
+
+- 03090fb: Migrate from @cfworker/base64url and base64-arraybuffer to rfc4648
+
 ## 1.12.2
 
 ### Patch Changes
