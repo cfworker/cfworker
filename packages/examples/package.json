@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/examples",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "description": "cfworker examples",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@cfworker/cosmos": "^1.13.3",
-    "@cfworker/jwt": "^2.0.0",
+    "@cfworker/jwt": "^3.0.0",
     "@cfworker/sentry": "^1.12.1",
     "@cfworker/web": "^1.12.2",
     "@cfworker/worker-types": "^1.12.1",

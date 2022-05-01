@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 3.0.0
+
+### Major Changes
+
+- 073acc7: Validate iat and nbf. Permit 30 seconds of clock skew. Enable supplying custom public key resolver to parseJwt.
+
 ## 2.0.0
 
 ### Major Changes
