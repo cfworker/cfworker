@@ -19,7 +19,7 @@ addEventListener('fetch', event => {
   try {
     // handle event.request ...
   } catch (err) {
-    const { event_id, promise } = captureError(
+    const { event_id, posted } = captureError(
       sentryDsn,
       environment,
       release,
@@ -27,7 +27,7 @@ addEventListener('fetch', event => {
       event.request,
       user // optional, eg { name: 'octocat' }
     );
-    event.waitUntil(promise);
+    event.waitUntil(posted);
   }
 
   event.respondWith(
