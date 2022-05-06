@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 1.12.2
+
+### Patch Changes
+
+- b15e4ea: Correct example in readme
+
 ## 1.12.1
 
 ### Patch Changes
