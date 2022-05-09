@@ -44,8 +44,8 @@ export async function importKey(iss: string, jwk: JsonWebKey) {
     );
   }
   // alg is not mandatory in a JWK but is available in the JWT, for now we default to
-  // SHA-256 (RS256) because this is the most common but there must be a nicer way of doing this
-  // that isn't particularly expensive
+  // SHA-256 (RS256) because this is the most common but evaluating the key length
+  // of the JWKS is probably an ideal way of identifying what the alg is.
   const hash = jwk.alg ? algToHash[jwk.alg] : 'SHA-256';
   if (!hash) {
     throw new Error(
