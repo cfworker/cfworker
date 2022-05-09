@@ -149,10 +149,12 @@ export async function parseJwt(
   let key: CryptoKey | null;
   try {
     key = await resolveKey(decoded);
-  } catch {
+  } catch (e) {
     return {
       valid: false,
-      reason: `Error retrieving public key to verify JWT signature.`
+      reason: `Error retrieving public key to verify JWT signature: ${
+        e instanceof Error ? e.message : e
+      }`
     };
   }
   if (!key) {
