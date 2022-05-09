@@ -37,11 +37,22 @@ const importedKeys: Record<string, Record<string, CryptoKey>> = {};
  */
 export async function importKey(iss: string, jwk: JsonWebKey) {
   if (jwk.kty !== 'RSA') {
-    throw new Error(`Unsupported jwk key type (kty) "${jwk.kty}".`);
+    throw new Error(
+      `Unsupported jwk key type (kty) "${
+        jwk.kty
+      }": Full JWK was ${JSON.stringify(jwk)}`
+    );
   }
-  const hash = jwk.alg ? algToHash[jwk.alg] : null;
+  // alg is not mandatory in a JWK but is available in the JWT, for now we default to
+  // SHA-256 (RS256) because this is the most common but there must be a nicer way of doing this
+  // that isn't particularly expensive
+  const hash = jwk.alg ? algToHash[jwk.alg] : 'SHA-256';
   if (!hash) {
-    throw new Error(`Unsupported jwk Algorithm (alg) "${jwk.alg}".`);
+    throw new Error(
+      `Unsupported jwk Algorithm (alg) "${
+        jwk.alg
+      }": Full JWK was ${JSON.stringify(jwk)}`
+    );
   }
   const key = await crypto.subtle.importKey(
     'jwk',
