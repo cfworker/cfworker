@@ -1,15 +1,24 @@
 import { algToHash } from './algs.js';
 import { DecodedJwt, JsonWebKeyset } from './types.js';
+import { getIssuerMetadata } from './discovery';
 
 /**
  * Fetch a json web keyset.
  */
 export async function getJwks(issuer: string): Promise<JsonWebKeyset> {
-  const url = new URL(issuer);
-  if (!url.pathname.endsWith('/')) {
-    url.pathname += '/';
+  const issuerMetadata = await getIssuerMetadata(issuer);
+
+  let url;
+  if (issuerMetadata.jwks_uri) {
+    url = new URL(issuerMetadata.jwks_uri);
+  } else {
+    url = new URL(issuer);
+    if (!url.pathname.endsWith('/')) {
+      url.pathname += '/';
+    }
+    url.pathname += '.well-known/jwks.json';
   }
-  url.pathname += '.well-known/jwks.json';
+
   const response = await fetch(url.href);
   if (!response.ok) {
     throw new Error(
