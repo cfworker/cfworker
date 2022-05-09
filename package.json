@@ -1,5 +1,5 @@
 {
-  "name": "cfworker",
+  "name": "perlboy",
   "version": "1.0.0",
   "description": "Packages optimized for Cloudflare Workers",
   "type": "module",
