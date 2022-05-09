@@ -1,5 +1,5 @@
 {
-  "name": "@cfworker/jwt",
+  "name": "@perlboy/cfworker-jwt",
   "version": "3.0.1",
   "description": "Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs",
   "keywords": [
