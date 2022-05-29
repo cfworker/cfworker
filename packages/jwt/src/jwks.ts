@@ -1,6 +1,6 @@
 import { algToHash } from './algs.js';
-import { DecodedJwt, JsonWebKeyset } from './types.js';
 import { getIssuerMetadata } from './discovery.js';
+import { DecodedJwt, JsonWebKeyset } from './types.js';
 
 /**
  * Fetch a json web keyset.
