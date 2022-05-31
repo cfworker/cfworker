@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 4.0.0
+
+### Major Changes
+
+- 37df6b6: Use OIDC discovery document to locate public keyset
+
 ## 3.0.0
 
 ### Major Changes
