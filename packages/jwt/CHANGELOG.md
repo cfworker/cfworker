@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 4.0.1
+
+### Patch Changes
+
+- fabe900: Reuse jwks imports
+
 ## 4.0.0
 
 ### Major Changes
