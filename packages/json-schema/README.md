@@ -10,14 +10,14 @@ A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 
 
 This library is validated against the [json-schema-test-suite](https://github.com/json-schema-org/JSON-Schema-Test-Suite), a series of approximately 4,500 assertions maintained along with the json-schema specification. A small set of test cases are intentionally not supported due to performance constraints or lack of feature use. These list of unsupported features are maintained in [test/unsupported.ts](./test/unsupported.ts). While this library is not the fastest due to lack of code generation, it's consistently among the [most spec compliant](https://json-schema.org/implementations.html#benchmarks).
 
-## background
+## Background
 
 _Why another JSON schema validator?_
 
 Cloudflare workers do not have APIs required by [Ajv](https://ajv.js.org/) schema compilation (`eval` or `new Function(code)`).
 If possible use Ajv in a build step to precompile your schema. Otherwise this library could work for you.
 
-## basic usage
+## Basic usage
 
 ```js
 import { Validator } from '@cfworker/json-schema';
@@ -27,13 +27,13 @@ const validator = new Validator({ type: 'number' });
 const result = validator.validate(7);
 ```
 
-## specify meta schema draft
+## Specify meta schema draft
 
 ```js
 const validator = new Validator({ type: 'number' }, '4'); // draft-4
 ```
 
-## add schemas
+## Add schemas
 
 ```js
 const validator = new Validator({
@@ -44,7 +44,7 @@ const validator = new Validator({
 validator.addSchema({ $id: 'https://foo.bar/beep', type: 'boolean' });
 ```
 
-## include all errors
+## Include all errors
 
 By default the validator stops processing after the first error. Set the `shortCircuit` parameter to `false` to emit all errors.
 
