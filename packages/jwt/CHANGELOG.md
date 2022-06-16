@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 4.0.2
+
+### Patch Changes
+
+- 84f9f99: Remove jwks promise cache
+
 ## 4.0.1
 
 ### Patch Changes
