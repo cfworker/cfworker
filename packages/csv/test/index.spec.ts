@@ -52,9 +52,18 @@ describe('csv', () => {
         'hello\r\n"wo\nrl\rd\r\n"'
       );
     });
+
+    it('encodes custom column names', async () => {
+      expect(
+        await encodeToString([{ hello: 'world', foo: 'bar', baz: 'Beep' }], {
+          hello: 'Hello',
+          foo: 'Foo'
+        })
+      ).to.equal('Hello,Foo\r\nworld,bar');
+    });
   });
 });
 
-function encodeToString(rows: any[]) {
-  return new Response(encode(rows)).text();
+function encodeToString(rows: any[], columns?: Record<string, string>) {
+  return new Response(encode(rows, { columns })).text();
 }
