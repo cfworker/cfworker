@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 1.12.4
+
+### Patch Changes
+
+- 7417de3: Ability to format CSV column values
+
 ## 1.12.3
 
 ### Patch Changes
