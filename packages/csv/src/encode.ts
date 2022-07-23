@@ -4,11 +4,17 @@ const delimiter = ',';
 const rowDelimiter = '\r\n';
 const requiresQuoteRegex = /["\r\n,]/;
 
-export interface EncodeOptions {
+export interface EncodeOptions<T> {
   /**
-   * Properties to include. Values will be used as column name.
+   * Properties to include
    */
-  columns?: Record<string, string>;
+  columns?: Column<T, keyof T>[];
+}
+
+export interface Column<T, K extends keyof T> {
+  key: K;
+  label: string;
+  format: (value: T[K], row: T) => unknown;
 }
 
 /**
@@ -17,9 +23,9 @@ export interface EncodeOptions {
  * @param options
  * @returns
  */
-export function encode(
-  rows: any[],
-  { columns }: EncodeOptions = {}
+export function encode<T>(
+  rows: T[],
+  { columns }: EncodeOptions<T> = {}
 ): ReadableStream {
   // Cloudflare Workers cannot construct a ReadableStream
   const { readable, writable } = new TransformStream();
@@ -27,13 +33,11 @@ export function encode(
     const writer = writable.getWriter();
     if (rows.length > 0) {
       if (!columns) {
-        columns = Object.keys(rows[0]).reduce<Record<string, string>>(
-          (p, c) => {
-            p[c] = c;
-            return p;
-          },
-          {}
-        );
+        columns = Object.keys(rows[0]).map(key => ({
+          key: key as keyof T,
+          label: key,
+          format: (x: any) => x
+        }));
       }
       await writeRows(writer, rows, columns);
     }
@@ -43,17 +47,16 @@ export function encode(
   return readable;
 }
 
-async function writeRows(
+async function writeRows<T>(
   writer: WritableStreamDefaultWriter,
-  rows: any[],
-  columns: Record<string, string>
+  rows: T[],
+  columns: Column<T, keyof T>[]
 ) {
   const text = new TextEncoder();
   const utf8 = text.encode.bind(text);
   const write = writer.write.bind(writer);
-  const keys = Object.keys(columns);
   // write header row
-  await write(utf8(keys.map(k => encodeValue(columns[k])).join(delimiter)));
+  await write(utf8(columns.map(c => encodeValue(c.label)).join(delimiter)));
 
   for (const row of rows) {
     // write row delimiter
@@ -62,8 +65,8 @@ async function writeRows(
     // write data row
     let s = '';
     let first = true;
-    for (const key of keys) {
-      s += (first ? '' : ',') + encodeValue(row[key]);
+    for (const { key, format } of columns) {
+      s += (first ? '' : ',') + encodeValue(format(row[key], row));
       first = false;
     }
     await write(utf8(s));
