@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 1.12.3
+
+### Patch Changes
+
+- e43fc1d: Ability to customize CSV columns.
+
 ## 1.12.2
 
 ### Patch Changes
