@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
+import { EncodeOptions } from '../src/encode.js';
 import { encode } from '../src/index.js';
 
 describe('csv', () => {
@@ -53,17 +54,19 @@ describe('csv', () => {
       );
     });
 
-    it('encodes custom column names', async () => {
+    it('encodes custom column formats', async () => {
       expect(
         await encodeToString([{ hello: 'world', foo: 'bar', baz: 'Beep' }], {
-          hello: 'Hello',
-          foo: 'Foo'
+          columns: [
+            { key: 'hello', label: 'Hello', format: x => x },
+            { key: 'foo', label: 'Foo', format: (x, r) => x + r.hello }
+          ]
         })
-      ).to.equal('Hello,Foo\r\nworld,bar');
+      ).to.equal('Hello,Foo\r\nworld,barworld');
     });
   });
 });
 
-function encodeToString(rows: any[], columns?: Record<string, string>) {
-  return new Response(encode(rows, { columns })).text();
+function encodeToString<T>(rows: T[], options?: EncodeOptions<T>) {
+  return new Response(encode(rows, options)).text();
 }
