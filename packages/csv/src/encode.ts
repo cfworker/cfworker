@@ -4,32 +4,58 @@ const delimiter = ',';
 const rowDelimiter = '\r\n';
 const requiresQuoteRegex = /["\r\n,]/;
 
-export function encode(rows: any[]): ReadableStream {
+export interface EncodeOptions {
+  /**
+   * Properties to include. Values will be used as column name.
+   */
+  columns?: Record<string, string>;
+}
+
+/**
+ * Encode an array of objects as a CSV
+ * @param rows An array of objects. Each item in the array represents a row.
+ * @param options
+ * @returns
+ */
+export function encode(
+  rows: any[],
+  { columns }: EncodeOptions = {}
+): ReadableStream {
   // Cloudflare Workers cannot construct a ReadableStream
   const { readable, writable } = new TransformStream();
-
   (async () => {
     const writer = writable.getWriter();
-    await writeRows(writer, rows);
+    if (rows.length > 0) {
+      if (!columns) {
+        columns = Object.keys(rows[0]).reduce<Record<string, string>>(
+          (p, c) => {
+            p[c] = c;
+            return p;
+          },
+          {}
+        );
+      }
+      await writeRows(writer, rows, columns);
+    }
     await writer.close();
   })();
 
   return readable;
 }
 
-async function writeRows(writer: WritableStreamDefaultWriter, rows: any[]) {
+async function writeRows(
+  writer: WritableStreamDefaultWriter,
+  rows: any[],
+  columns: Record<string, string>
+) {
   const text = new TextEncoder();
   const utf8 = text.encode.bind(text);
   const write = writer.write.bind(writer);
-  let keys: string[] | undefined = undefined;
+  const keys = Object.keys(columns);
+  // write header row
+  await write(utf8(keys.map(k => encodeValue(columns[k])).join(delimiter)));
 
   for (const row of rows) {
-    // write header row
-    if (keys === undefined) {
-      keys = Object.keys(row);
-      await write(utf8(keys.map(encodeValue).join(delimiter)));
-    }
-
     // write row delimiter
     await write(utf8(rowDelimiter));
 
