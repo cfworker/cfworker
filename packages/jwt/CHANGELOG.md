@@ -1,5 +1,13 @@
 # @cfworker/jwt
 
+## 4.0.3
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+- Updated dependencies [1748ed6]
+  - @cfworker/worker-types@1.12.2
+
 ## 4.0.2
 
 ### Patch Changes

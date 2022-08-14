@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/web",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "description": "Web framework for Cloudflare Workers and service workers, inspired by Koa and fastify",
   "keywords": [
     "middleware",
@@ -34,8 +34,8 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/json-schema": "^1.12.3",
-    "@cfworker/worker-types": "^1.12.1",
+    "@cfworker/json-schema": "^1.12.4",
+    "@cfworker/worker-types": "^1.12.2",
     "@cloudflare/workers-types": "^2.2.2",
     "@types/cookie": "^0.5.1",
     "@types/html-escaper": "^3.0.0",
@@ -48,7 +48,7 @@
     "statuses": "^2.0.1"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.14.0",
+    "@cfworker/dev": "^1.14.1",
     "@types/chai": "^4.3.3",
     "@types/mocha": "^9.1.1",
     "chai": "^4.3.6",

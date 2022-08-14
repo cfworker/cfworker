@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 1.12.5
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+
 ## 1.12.4
 
 ### Patch Changes
