@@ -1,5 +1,13 @@
 # @cfworker/cosmos
 
+## 1.13.4
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+- Updated dependencies [1748ed6]
+  - @cfworker/worker-types@1.12.2
+
 ## 1.13.3
 
 ### Patch Changes

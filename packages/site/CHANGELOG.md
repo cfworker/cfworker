@@ -1,5 +1,14 @@
 # @cfworker/site
 
+## 1.12.3
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+- Updated dependencies [1748ed6]
+  - @cfworker/web@1.12.4
+  - @cfworker/worker-types@1.12.2
+
 ## 1.12.2
 
 ### Patch Changes

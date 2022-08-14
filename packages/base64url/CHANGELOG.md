@@ -1,5 +1,11 @@
 # @cfworker/base64url
 
+## 1.12.4
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+
 ## 1.12.3
 
 ### Patch Changes

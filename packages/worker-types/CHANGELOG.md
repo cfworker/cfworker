@@ -1,5 +1,11 @@
 # @cfworker/worker-types
 
+## 1.12.2
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+
 ## 1.12.1
 
 ### Patch Changes

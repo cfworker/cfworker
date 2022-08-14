@@ -1,5 +1,17 @@
 # @cfworker/examples
 
+## 1.12.6
+
+### Patch Changes
+
+- 1748ed6: Update dependencies
+- Updated dependencies [1748ed6]
+  - @cfworker/cosmos@1.13.4
+  - @cfworker/jwt@4.0.3
+  - @cfworker/sentry@1.12.3
+  - @cfworker/web@1.12.4
+  - @cfworker/worker-types@1.12.2
+
 ## 1.12.5
 
 ### Patch Changes
