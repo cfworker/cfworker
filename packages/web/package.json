@@ -34,26 +34,26 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/json-schema": "^1.12.2",
+    "@cfworker/json-schema": "^1.12.3",
     "@cfworker/worker-types": "^1.12.1",
     "@cloudflare/workers-types": "^2.2.2",
-    "@types/cookie": "^0.4.1",
+    "@types/cookie": "^0.5.1",
     "@types/html-escaper": "^3.0.0",
     "@types/statuses": "^2.0.0",
-    "cookie": "^0.4.2",
+    "cookie": "^0.5.0",
     "html-escaper": "^3.0.3",
     "negotiator": "^0.6.3",
-    "path-to-regexp": "^6.2.0",
-    "secure-json-parse": "^2.4.0",
+    "path-to-regexp": "^6.2.1",
+    "secure-json-parse": "^2.5.0",
     "statuses": "^2.0.1"
   },
   "devDependencies": {
     "@cfworker/dev": "^1.14.0",
-    "@types/chai": "^4.3.0",
-    "@types/mocha": "^9.1.0",
+    "@types/chai": "^4.3.3",
+    "@types/mocha": "^9.1.1",
     "chai": "^4.3.6",
-    "jsonpointer": "^5.0.0",
-    "mocha": "^9.2.1",
-    "typescript": "^4.5.5"
+    "jsonpointer": "^5.0.1",
+    "mocha": "^10.0.0",
+    "typescript": "^4.7.4"
   }
 }
