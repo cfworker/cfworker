@@ -1,4 +1,4 @@
-import { Reviver, safeParse } from 'secure-json-parse/index.js';
+import { Reviver, safeParse } from 'secure-json-parse';
 import { Accepts } from './accepts.js';
 
 export class Req {
