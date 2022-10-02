@@ -330,7 +330,7 @@ export class CosmosClient {
     request: Request,
     context?: RetryContext
   ): Promise<Response> {
-    const retryRequest = new Request(request.url, request);
+    const retryRequest = request.clone();
 
     const response = await this.fetch(request);
 
