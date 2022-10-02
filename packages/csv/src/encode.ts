@@ -23,7 +23,7 @@ export interface Column<T, K extends keyof T> {
  * @param options
  * @returns
  */
-export function encode<T>(
+export function encode<T extends {}>(
   rows: T[],
   { columns }: EncodeOptions<T> = {}
 ): ReadableStream {

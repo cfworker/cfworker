@@ -28,11 +28,11 @@
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-multi-entry": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-node-resolve": "^14.1.0",
     "@rollup/plugin-replace": "^4.0.0",
     "chokidar": "^3.5.3",
-    "commander": "^9.4.0",
-    "dotenv": "^16.0.1",
+    "commander": "^9.4.1",
+    "dotenv": "^16.0.3",
     "envinfo": "^7.8.1",
     "form-data": "^4.0.0",
     "fs-extra": "^10.1.0",
@@ -41,10 +41,10 @@
     "node-cleanup": "^2.1.2",
     "node-fetch": "^3.2.10",
     "ora": "^6.1.2",
-    "puppeteer": "^16.1.0",
-    "rollup": "^2.78.0",
+    "puppeteer": "^18.0.5",
+    "rollup": "^2.79.1",
     "rollup-plugin-minify-html-literals": "^1.2.6",
-    "rollup-plugin-typescript2": "^0.32.1",
-    "typescript": "^4.7.4"
+    "rollup-plugin-typescript2": "^0.34.0",
+    "typescript": "^4.8.4"
   }
 }
