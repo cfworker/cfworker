@@ -67,6 +67,6 @@ describe('csv', () => {
   });
 });
 
-function encodeToString<T>(rows: T[], options?: EncodeOptions<T>) {
+function encodeToString<T extends {}>(rows: T[], options?: EncodeOptions<T>) {
   return new Response(encode(rows, options)).text();
 }
