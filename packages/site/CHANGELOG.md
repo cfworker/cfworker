@@ -1,5 +1,14 @@
 # @cfworker/site
 
+## 1.12.4
+
+### Patch Changes
+
+- fc4c040: Update dependencies
+- Updated dependencies [fc4c040]
+  - @cfworker/web@1.12.5
+  - @cfworker/worker-types@1.12.3
+
 ## 1.12.3
 
 ### Patch Changes

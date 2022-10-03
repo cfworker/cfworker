@@ -1,5 +1,11 @@
 # @cfworker/base64url
 
+## 1.12.5
+
+### Patch Changes
+
+- fc4c040: Update dependencies
+
 ## 1.12.4
 
 ### Patch Changes
