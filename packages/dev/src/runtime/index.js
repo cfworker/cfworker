@@ -49,8 +49,11 @@ export async function dispatchFetchEvent(url, bodyUrl, init) {
     init.body = await response.arrayBuffer();
   }
   const request = new Request(url, init);
+  Object.defineProperty(request, 'body', {
+    value: init.body ?? null
+  });
   // @ts-ignore
-  request.body = init.body ?? null;
+  // request.body = init.body ?? null;
   bindCfProperty(request);
   const event = new FetchEvent(request);
   fetchHandler(event);
