@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 1.12.6
+
+### Patch Changes
+
+- fc4c040: Update dependencies
+
 ## 1.12.5
 
 ### Patch Changes

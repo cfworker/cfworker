@@ -1,5 +1,13 @@
 # @cfworker/jwt
 
+## 4.0.4
+
+### Patch Changes
+
+- fc4c040: Update dependencies
+- Updated dependencies [fc4c040]
+  - @cfworker/worker-types@1.12.3
+
 ## 4.0.3
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @cfworker/examples
 
+## 1.12.7
+
+### Patch Changes
+
+- fc4c040: Update dependencies
+- Updated dependencies [fc4c040]
+  - @cfworker/cosmos@1.13.5
+  - @cfworker/jwt@4.0.4
+  - @cfworker/sentry@1.12.4
+  - @cfworker/web@1.12.5
+  - @cfworker/worker-types@1.12.3
+
 ## 1.12.6
 
 ### Patch Changes
