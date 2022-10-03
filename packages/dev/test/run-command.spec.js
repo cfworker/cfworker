@@ -102,6 +102,35 @@ export async function assertWatchesForChanges() {
   command.dispose();
 }
 
+export async function assertCanReadRequestBody() {
+  const entry = './test/fixtures/worker.js';
+  const code = `
+    addEventListener('fetch', async event => {
+      const body = await event.request.json();
+      const response = new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });
+      event.respondWith(response);
+    });`;
+  await fs.outputFile(entry, code);
+  const { RunCommand } = await import('../src/cli/run-command.js');
+  const command = new RunCommand({
+    entry,
+    port,
+    inspect: false,
+    watch: false,
+    check: true,
+    kv: []
+  });
+  await command.execute();
+  const data = { hello: 'world' };
+  const response = await fetch('http://localhost:1234', {
+    method: 'POST',
+    body: JSON.stringify(data)
+  });
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), data);
+  command.dispose();
+}
+
 export async function assertCanReadRequestCookieHeader() {
   const cookie = 'test cookie';
   const entry = './test/fixtures/worker.js';

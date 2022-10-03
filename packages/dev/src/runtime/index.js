@@ -49,8 +49,6 @@ export async function dispatchFetchEvent(url, bodyUrl, init) {
     init.body = await response.arrayBuffer();
   }
   const request = new Request(url, init);
-  // @ts-ignore
-  request.body = init.body;
   bindCfProperty(request);
   const event = new FetchEvent(request);
   fetchHandler(event);
