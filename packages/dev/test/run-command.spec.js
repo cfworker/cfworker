@@ -98,7 +98,6 @@ export async function assertWatchesForChanges() {
   await updated;
   response = await fetch('http://localhost:1234');
   assert.equal(response.status, 200);
-
   command.dispose();
 }
 
@@ -106,8 +105,7 @@ export async function assertCanReadRequestBody() {
   const entry = './test/fixtures/worker.js';
   const code = `
     addEventListener('fetch', async event => {
-      const body = await event.request.json();
-      const response = new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });
+      const response = new Response(event.request.body, { status: 200, headers: { 'content-type': 'application/json' } });
       event.respondWith(response);
     });`;
   await fs.outputFile(entry, code);
