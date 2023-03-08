@@ -51,7 +51,7 @@ export interface Schema {
   dependentSchemas?: Record<string, Schema>;
   dependencies?: Record<string, Schema | string[]>;
 
-  prefixItems?: Array<Schema | boolean>[];
+  prefixItems?: Array<Schema | boolean>;
   items?: Schema | boolean | Array<Schema | boolean>;
   additionalItems?: Schema | boolean;
   unevaluatedItems?: Schema | boolean;
