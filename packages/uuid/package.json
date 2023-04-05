@@ -1,5 +1,6 @@
 {
   "name": "@cfworker/uuid",
+  "type": "module",
   "version": "1.12.4",
   "description": "Serialize/deserialize V4 UUIDs from a Uint8Array",
   "keywords": [
