@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.25.0",
-    "husky": "^4.3.0",
+    "husky": "^8.0.3",
     "prettier": "2.7.1",
     "pretty-quick": "^3.1.3"
   }
