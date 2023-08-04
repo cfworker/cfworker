@@ -72,7 +72,6 @@ export let initialBaseURI =
       new URL(self.location.origin + self.location.pathname + location.search)
     : new URL('https://github.com/cfworker');
 
-
 export function dereference(
   schema: Schema | boolean,
   lookup: Record<string, Schema | boolean> = Object.create(null),
