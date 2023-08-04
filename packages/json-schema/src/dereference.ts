@@ -72,7 +72,7 @@ export let initialBaseURI = (() => {
   } catch {
     return new URL('https://github.com/cfworker');
   }
-)();
+})();
 
 
 export function dereference(
