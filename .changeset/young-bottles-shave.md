@@ -1,6 +1,6 @@
 ---
 "@cfworker/examples": patch
-"@cfworker/web": patch
+"@cfworker/web": minor
 ---
 
 support for ESModule based workers
