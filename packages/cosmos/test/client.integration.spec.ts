@@ -7,15 +7,13 @@ import {
   QueryParameter
 } from '../src/index.js';
 
-const process: { env: Record<string, string> } = {
-  env: {}
-};
+const env: Record<string, string> = {};
 
-if (process.env.COSMOS_DB_ORIGIN) {
-  const endpoint = process.env.COSMOS_DB_ORIGIN;
-  const connectionString = process.env.COSMOS_DB_CONNECTION_STRING;
-  const masterKey = process.env.COSMOS_DB_MASTER_KEY;
-  const dbId = process.env.COSMOS_DB_DATABASE;
+if (env.COSMOS_DB_ORIGIN) {
+  const endpoint = env.COSMOS_DB_ORIGIN;
+  const connectionString = env.COSMOS_DB_CONNECTION_STRING;
+  const masterKey = env.COSMOS_DB_MASTER_KEY;
+  const dbId = env.COSMOS_DB_DATABASE;
   const collId = 'integration-test-' + Date.now();
   const partitionKey: PartitionKeyDefinition = {
     paths: ['/_partitionKey'],
