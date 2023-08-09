@@ -57,9 +57,6 @@ router
     res.body = 'hello world';
   })
   .get('/error-test', errorTest)
-  .get('/eject', context =>
-    context.respondWith(new Response('ejected', { status: 200 }))
-  )
   .get(
     '/api/greetings/:greeting',
     validate({
