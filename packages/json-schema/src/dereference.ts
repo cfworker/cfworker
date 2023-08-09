@@ -67,7 +67,9 @@ export const ignoredKeyword: Record<string, boolean> = {
  */
 export let initialBaseURI =
   // @ts-ignore
-  typeof self !== 'undefined' && self.location && self.location.origin !== 'null'
+  typeof self !== 'undefined' &&
+  self.location &&
+  self.location.origin !== 'null'
     ? //@ts-ignore
       new URL(self.location.origin + self.location.pathname + location.search)
     : new URL('https://github.com/cfworker');
