@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 1.12.6
+
+### Patch Changes
+
+- 576072a: Add support for `srcdoc` iframes to `json-schema`
+
 ## 1.12.5
 
 ### Patch Changes
