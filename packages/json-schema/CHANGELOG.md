@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 1.12.7
+
+### Patch Changes
+
+- 6cd554e: Fix prefixItems type definition
+
 ## 1.12.6
 
 ### Patch Changes
