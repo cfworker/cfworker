@@ -7,7 +7,9 @@ import {
   QueryParameter
 } from '../src/index.js';
 
-declare const process: { env: Record<string, string> };
+const process: { env: Record<string, string> } = {
+  env: {}
+};
 
 if (process.env.COSMOS_DB_ORIGIN) {
   const endpoint = process.env.COSMOS_DB_ORIGIN;
