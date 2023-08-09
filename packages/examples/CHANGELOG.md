@@ -1,5 +1,15 @@
 # @cfworker/examples
 
+## 1.12.8
+
+### Patch Changes
+
+- 45cf29f: support for ESModule based workers
+- Updated dependencies [a6fead5]
+- Updated dependencies [45cf29f]
+  - @cfworker/cosmos@1.13.6
+  - @cfworker/web@1.13.0
+
 ## 1.12.7
 
 ### Patch Changes

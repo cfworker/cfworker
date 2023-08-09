@@ -1,5 +1,16 @@
 # @cfworker/web
 
+## 1.13.0
+
+### Minor Changes
+
+- 45cf29f: support for ESModule based workers
+
+### Patch Changes
+
+- Updated dependencies [576072a]
+  - @cfworker/json-schema@1.12.6
+
 ## 1.12.5
 
 ### Patch Changes

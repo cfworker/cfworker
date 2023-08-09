@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 1.13.6
+
+### Patch Changes
+
+- a6fead5: disable cosmos integration tests
+
 ## 1.13.5
 
 ### Patch Changes
