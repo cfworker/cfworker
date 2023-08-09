@@ -1,4 +1,4 @@
-import { Schema } from '@cfworker/json-schema';
+import type { Schema } from '@cfworker/json-schema';
 import { expect } from 'chai';
 import { set } from 'jsonpointer';
 import { describe, it } from 'mocha';
@@ -25,7 +25,7 @@ describe('validate', () => {
         'content-type': 'application/json'
       }
     });
-    const context = new Context({ request });
+    const context = new Context(request, {}, { waitUntil() {} });
     context.req.params.id = '899934';
     let resolved = false;
     await middleware(context, async () => {
@@ -42,7 +42,7 @@ describe('validate', () => {
         'content-type': 'application/json'
       }
     });
-    const context = new Context({ request });
+    const context = new Context(request, {}, { waitUntil() {} });
     let resolved = false;
     try {
       await middleware(context, async () => {
@@ -62,7 +62,7 @@ describe('validate', () => {
         'content-type': 'text/plain'
       }
     });
-    const context = new Context({ request });
+    const context = new Context(request, {}, { waitUntil() {} });
     context.req.params.id = '899934';
     let resolved = false;
     try {
@@ -83,7 +83,7 @@ describe('validate', () => {
         'content-type': 'application/json'
       }
     });
-    const context = new Context({ request });
+    const context = new Context(request, {}, { waitUntil() {} });
     context.req.params.id = '899934';
     let resolved = false;
     try {
@@ -105,7 +105,7 @@ describe('validate', () => {
         'content-type': 'application/json'
       }
     });
-    let context = new Context({ request });
+    let context = new Context(request, {}, { waitUntil() {} });
     let resolved = false;
     try {
       await middleware(context, async () => {
@@ -125,7 +125,7 @@ describe('validate', () => {
         'content-type': 'application/json'
       }
     });
-    context = new Context({ request });
+    context = new Context(request, {}, { waitUntil() {} });
     await middleware(context, async () => {
       resolved = true;
     });
@@ -140,7 +140,7 @@ describe('validate', () => {
       method: 'POST',
       body: new URLSearchParams({ hello: 'world' })
     });
-    let context = new Context({ request });
+    let context = new Context(request, {}, { waitUntil() {} });
     let resolved = false;
     try {
       await middleware(context, async () => {
@@ -157,7 +157,7 @@ describe('validate', () => {
       method: 'POST',
       body: new URLSearchParams({ id: 'world' })
     });
-    context = new Context({ request });
+    context = new Context(request, {}, { waitUntil() {} });
     await middleware(context, async () => {
       resolved = true;
     });
@@ -174,7 +174,7 @@ describe('validate', () => {
       method: 'POST',
       body
     });
-    let context = new Context({ request });
+    let context = new Context(request, {}, { waitUntil() {} });
     let resolved = false;
     try {
       await middleware(context, async () => {
@@ -193,7 +193,7 @@ describe('validate', () => {
       method: 'POST',
       body
     });
-    context = new Context({ request });
+    context = new Context(request, {}, { waitUntil() {} });
     await middleware(context, async () => {
       resolved = true;
     });
@@ -230,7 +230,7 @@ describe('validate', () => {
       body: new URLSearchParams(stringified)
     });
     let resolved = false;
-    await middleware(new Context({ request }), async () => {
+    await middleware(new Context(request, {}, { waitUntil() {} }), async () => {
       resolved = true;
     });
     expect(resolved).to.be.true;
@@ -242,7 +242,7 @@ describe('validate', () => {
       method: 'POST',
       body: form
     });
-    await middleware(new Context({ request }), async () => {
+    await middleware(new Context(request, {}, { waitUntil() {} }), async () => {
       resolved = true;
     });
     expect(resolved).to.be.true;

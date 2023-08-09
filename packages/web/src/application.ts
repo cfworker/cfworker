@@ -7,24 +7,40 @@ const resolved = Promise.resolve();
 
 export class Application {
   private readonly middleware: Middleware[] = [];
+  private _composedMiddleware?: Middleware;
+
+  private get composedMiddleware() {
+    if (!this._composedMiddleware) {
+      this._composedMiddleware = composeMiddleware(this.middleware);
+    }
+    return this._composedMiddleware;
+  }
 
   public use(middleware: Middleware) {
     this.middleware.push(middleware);
+    this._composedMiddleware = undefined;
     return this;
   }
 
-  public listen() {
-    const middleware = composeMiddleware(this.middleware);
-    addEventListener('fetch', event => this.handleFetch(event, middleware));
+  public async handleRequest(
+    request: Request,
+    env: any,
+    context: {
+      waitUntil(promise: Promise<any>): void;
+    }
+  ): Promise<Response> {
+    return this.invokeMiddleware(
+      new Context(request, env, context),
+      this.composedMiddleware
+    );
   }
 
-  private handleFetch(event: FetchEvent, middleware: Middleware) {
-    const context = new Context(event);
-    event.respondWith(
-      Promise.race([
-        this.invokeMiddleware(context, middleware),
-        context.responded
-      ])
+  public listen() {
+    const middleware = this.composedMiddleware;
+    addEventListener('fetch', event =>
+      event.respondWith(
+        this.invokeMiddleware(Context.fromFetchEvent(event), middleware)
+      )
     );
   }
 

@@ -11,7 +11,7 @@ describe('Context', () => {
   });
   request.headers.set('accept', 'text/html');
   request.headers.set('cookie', 'ping=pong;beep=boop;');
-  const context = new Context(new FetchEvent(request));
+  const context = Context.fromFetchEvent(new FetchEvent(request));
 
   it('exposes cookies', () => {
     expect(context.cookies.get('ping')).to.equal('pong');
@@ -24,10 +24,5 @@ describe('Context', () => {
   it('exposes reponse builder', () => {
     context.res.status = 201;
     expect(context.res.statusText).to.equal('Created');
-  });
-
-  it('exposes respondWith', async () => {
-    context.respondWith(new Response('', { status: 200 }));
-    await context.responded;
   });
 });
