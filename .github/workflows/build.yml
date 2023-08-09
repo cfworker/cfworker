@@ -11,11 +11,11 @@ jobs:
     strategy:
       matrix:
         node-version: [16.14.x]
-    # env:
-    #   COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
-    #   COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
-    #   COSMOS_DB_DATABASE: ${{ secrets.COSMOS_DB_DATABASE }}
-    #   COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
+    env:
+      COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
+      COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
+      COSMOS_DB_DATABASE: ${{ secrets.COSMOS_DB_DATABASE }}
+      COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
