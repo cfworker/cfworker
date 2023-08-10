@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 1.14.0
+
+### Minor Changes
+
+- 021999e: Rename Context.env to Context.environmentBindings
+
 ## 1.13.0
 
 ### Minor Changes
