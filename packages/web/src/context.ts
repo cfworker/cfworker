@@ -16,7 +16,7 @@ export class Context {
 
   constructor(
     request: Request,
-    public readonly env: any,
+    public readonly environmentBindings: any,
     private readonly _context: {
       waitUntil(promise: Promise<any>): void;
     }
