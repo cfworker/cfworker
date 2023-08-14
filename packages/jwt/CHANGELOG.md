@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 4.0.5
+
+### Patch Changes
+
+- e1d4a23: Add jku to JwtHeader typedef
+
 ## 4.0.4
 
 ### Patch Changes
