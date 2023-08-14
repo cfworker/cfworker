@@ -12,6 +12,7 @@ export interface JwtHeader {
   typ?: string;
   alg: string;
   kid: string;
+  jku?: string;
 }
 
 export interface RawJwt {
