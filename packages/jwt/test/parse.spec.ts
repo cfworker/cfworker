@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 import { base64url } from 'rfc4648';
-import { algs, algToHash } from '../src/algs.js';
+import { algToHash, algs } from '../src/algs.js';
 import { importKey } from '../src/jwks.js';
 import { parseJwt } from '../src/parse.js';
 import { JwtHeader, JwtPayload } from '../src/types.js';
@@ -59,6 +59,24 @@ describe('parseJwt', () => {
     const payload = { iss: 'https://nefarious.com', aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt(jwt, iss, aud);
+    expect(result.valid).to.equal(false);
+  });
+
+  it('supports array target issuer', async () => {
+    const exp = Math.floor(new Date().getTime() / 1000) + 10;
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
+    const payload = { iss, aud, exp, sub, iat, nbf };
+    const jwt = await createJwt(kid, 'RS256', header, payload);
+    const result = await parseJwt(jwt, ['https://example.com', iss], aud);
+    expect(result.valid).to.equal(false);
+  });
+
+  it('rejects when array target issuer is not matched', async () => {
+    const exp = Math.floor(new Date().getTime() / 1000) + 10;
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
+    const payload = { iss: 'https://nefarious.com', aud, exp, sub, iat, nbf };
+    const jwt = await createJwt(kid, 'RS256', header, payload);
+    const result = await parseJwt(jwt, ['https://example.com', iss], aud);
     expect(result.valid).to.equal(false);
   });
 

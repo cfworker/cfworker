@@ -11,7 +11,7 @@ const skewMs = 30 * 1000;
  */
 export async function parseJwt(
   encodedToken: string,
-  issuer: string,
+  issuer: string | string[],
   audience: string,
   resolveKey: (decoded: DecodedJwt) => Promise<CryptoKey | null> = getKey
 ): Promise<JwtParseResult> {
@@ -78,12 +78,12 @@ export async function parseJwt(
     };
   }
 
-  if (iss !== issuer) {
+  if (!(iss === issuer || (Array.isArray(issuer) && issuer.includes(iss)))) {
     return {
       valid: false,
       reason: `Invalid JWT issuer claim (iss) ${JSON.stringify(
         decoded.payload.iss
-      )}. Expected "${issuer}".`
+      )}. Expected ${JSON.stringify(issuer)}.`
     };
   }
 
