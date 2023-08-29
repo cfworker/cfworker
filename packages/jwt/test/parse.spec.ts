@@ -68,7 +68,7 @@ describe('parseJwt', () => {
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt(jwt, ['https://example.com', iss], aud);
-    expect(result.valid).to.equal(false);
+    expect(result.valid).to.equal(true);
   });
 
   it('rejects when array target issuer is not matched', async () => {
