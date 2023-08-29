@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 4.0.6
+
+### Patch Changes
+
+- 3209b6a: Support an array of allowed issuers when calling parseJwt
+
 ## 4.0.5
 
 ### Patch Changes
