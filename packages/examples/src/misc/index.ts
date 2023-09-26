@@ -15,14 +15,14 @@ const sentryLogging: Middleware = async (context, next) => {
     await next();
   } catch (err) {
     if (!(err instanceof HttpError) || err.status === 500) {
-      const { posted } = captureError(
-        process.env.SENTRY_DSN,
-        process.env.NODE_ENV,
-        'demo',
+      const { posted } = captureError({
+        sentryDsn: process.env.SENTRY_DSN,
+        environment: process.env.NODE_ENV,
+        release: 'demo',
         err,
-        req.raw,
-        state.user
-      );
+        request: req.raw,
+        user: state.user
+      });
       context.waitUntil(posted);
     }
     throw err;
