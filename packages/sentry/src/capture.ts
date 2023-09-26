@@ -5,14 +5,23 @@ const sentryClient = 'cfworker-sentry';
 /**
  * Report an error to Sentry
  */
-export function captureError(
-  sentryDsn: string,
-  environment: string,
-  release: string,
-  err: any,
-  request: Request,
-  user: any
-) {
+export function captureError({
+  sentryDsn,
+  environment,
+  release,
+  err,
+  request,
+  user,
+  level = 'error'
+}: {
+  sentryDsn: string;
+  environment: string;
+  release: string;
+  err: any;
+  request: Request;
+  user: any;
+  level?: 'fatal' | 'error' | 'warning' | 'info' | 'debug';
+}) {
   const event_id = crypto.randomUUID();
   const timestamp = new Date().toISOString().substr(0, 19);
   if (!(err instanceof Error)) {
@@ -27,7 +36,7 @@ export function captureError(
       name: sentryClient,
       version: '1.0.0'
     },
-    level: 'error',
+    level,
     transaction: request.url,
     server_name: 'cloudflare',
     release,
