@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 2.0.0
+
+### Major Changes
+
+- 0e3a2f8: Refactor captureError to accept object parameter instead of individual parameters. Enable overriding error level
+
 ## 1.12.4
 
 ### Patch Changes

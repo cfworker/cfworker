@@ -1,5 +1,12 @@
 # @cfworker/examples
 
+## 1.12.9
+
+### Patch Changes
+
+- Updated dependencies [0e3a2f8]
+  - @cfworker/sentry@2.0.0
+
 ## 1.12.8
 
 ### Patch Changes
