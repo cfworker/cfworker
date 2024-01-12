@@ -673,7 +673,7 @@ export function validate(
     if (!stop && $patternProperties !== undefined) {
       const keywordLocation = `${schemaLocation}/patternProperties`;
       for (const pattern in $patternProperties) {
-        const regex = new RegExp(pattern);
+        const regex = new RegExp(pattern, 'u');
         const subSchema = $patternProperties[pattern];
         for (const key in instance) {
           if (!regex.test(key)) {
@@ -1142,7 +1142,7 @@ export function validate(
         error: `String is too long (${length} > ${$maxLength}).`
       });
     }
-    if ($pattern !== undefined && !new RegExp($pattern).test(instance)) {
+    if ($pattern !== undefined && !new RegExp($pattern, 'u').test(instance)) {
       errors.push({
         instanceLocation,
         keyword: 'pattern',
