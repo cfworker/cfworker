@@ -153,19 +153,6 @@ export const unsupportedTests: Record<
       "doesn't match two": true
     }
   },
-  'draft2019-09/optional/unicode': {
-    'unicode semantics should be used for all pattern matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
-    },
-    'unicode digits are more than 0 through 9': {
-      'non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO)': true
-    },
-    'unicode semantics should be used for all patternProperties matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
-    }
-  },
   'draft2020-12/defs': {
     'validate definition against metaschema': {
       'invalid definition schema': true
@@ -368,19 +355,6 @@ export const unsupportedTests: Record<
       "doesn't match two": true
     }
   },
-  'draft2020-12/optional/unicode': {
-    'unicode semantics should be used for all pattern matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
-    },
-    'unicode digits are more than 0 through 9': {
-      'non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO)': true
-    },
-    'unicode semantics should be used for all patternProperties matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
-    }
-  },
   'draft2020-12/ref': {
     'relative pointer ref to array': {
       'mismatch array': true
@@ -398,19 +372,6 @@ export const unsupportedTests: Record<
     },
     'Proper UTF-16 surrogate pair handling: patternProperties': {
       "doesn't match two": true
-    }
-  },
-  'draft4/optional/unicode': {
-    'unicode semantics should be used for all pattern matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
-    },
-    'unicode digits are more than 0 through 9': {
-      'non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO)': true
-    },
-    'unicode semantics should be used for all patternProperties matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
     }
   },
   'draft4/optional/zeroTerminatedFloats': {
@@ -532,19 +493,6 @@ export const unsupportedTests: Record<
     },
     'Proper UTF-16 surrogate pair handling: patternProperties': {
       "doesn't match two": true
-    }
-  },
-  'draft7/optional/unicode': {
-    'unicode semantics should be used for all pattern matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
-    },
-    'unicode digits are more than 0 through 9': {
-      'non-ascii digits (BENGALI DIGIT FOUR, BENGALI DIGIT TWO)': true
-    },
-    'unicode semantics should be used for all patternProperties matching': {
-      'literal unicode character in json string': true,
-      'unicode character in hex format in string': true
     }
   }
 };
