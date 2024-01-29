@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 1.12.8
+
+### Patch Changes
+
+- f6c2f65: Use the `u` (Unicode) flag for regular expression patterns
+
 ## 1.12.7
 
 ### Patch Changes
