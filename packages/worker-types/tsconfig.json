@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig-base",
-  "compilerOptions": {
-    "target": "ES2021",
-    "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
-    "types": ["@cloudflare/workers-types"],
-    "composite": false
-  }
-}
