@@ -23,21 +23,21 @@
     "deploy-dev": "npm run deploy-dev --workspace=@cfworker/site",
     "clean": "npm run clean --workspaces",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
+    "lint-staged": "lint-staged",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
     "release": "npm run clean && npm run build && changeset publish",
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js",
-    "update-deps": "npm exec --workspaces --include-workspace-root --package npm-check-updates --call 'ncu -u -x husky,@cloudflare/workers-types' && git clean -fxd -e .env && rm package-lock.json && npm install"
+    "update-deps": "npx npm-check-updates --upgrade --deep && git clean -fxd -e .env && rm package-lock.json && npm install",
+    "prepare": "husky"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+  "lint-staged": {
+    "*.{ts,js,json,yml,html,xml}": "prettier --write"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.25.0",
-    "husky": "^4.3.0",
-    "prettier": "2.7.1",
-    "pretty-quick": "^3.1.3"
+    "@changesets/cli": "^2.27.1",
+    "husky": "^9.0.11",
+    "lint-staged": "15.2.2",
+    "prettier": "3.2.5"
   }
 }
