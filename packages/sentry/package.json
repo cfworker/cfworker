@@ -34,9 +34,6 @@
     "clean": "tsc --build --clean",
     "test": "cfworker test test/**/*.spec.ts"
   },
-  "dependencies": {
-    "@cloudflare/workers-types": "^4.20240314.0"
-  },
   "devDependencies": {
     "typescript": "^5.4.2"
   }
