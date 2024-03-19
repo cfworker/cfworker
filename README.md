@@ -140,20 +140,3 @@ npm run test --watch --inspect --workspace=@cfworker/base64url
 
 Refer to each package's README for more specific instructions and examples.
 Some packages require a .env file (gitignored) containing cloudflare or cosmos db keys for integration testing.
-
-```ts
-interface ErrorConstructor {
-  captureStackTrace(thisArg: any, func: any): void;
-}
-
-interface JsonWebKey {
-  x5c?: string[];
-  kid?: string;
-  x5t?: string;
-  n?: string;
-}
-
-interface Crypto {
-  randomUUID(): string;
-}
-```
