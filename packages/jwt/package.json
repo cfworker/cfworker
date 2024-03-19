@@ -34,12 +34,10 @@
     "test": "cfworker test test/**/*.spec.ts --nocheck"
   },
   "dependencies": {
-    "@cfworker/worker-types": "^1.12.3",
     "@cloudflare/workers-types": "^2.2.2",
     "rfc4648": "^1.5.2"
   },
   "devDependencies": {
-    "@cfworker/dev": "^1.14.2",
     "@types/chai": "^4.3.3",
     "@types/mocha": "^10.0.0",
     "chai": "^4.3.6",

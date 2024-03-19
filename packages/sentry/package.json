@@ -35,7 +35,6 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "dependencies": {
-    "@cfworker/worker-types": "^1.12.3",
     "@cloudflare/workers-types": "^2.2.2"
   },
   "devDependencies": {
