@@ -1,13 +1,6 @@
-import {
-  Key,
-  ParseOptions,
-  pathToRegexp,
-  TokensToRegexpOptions
-} from 'path-to-regexp';
+import { Key, pathToRegexp, PathToRegexpOptions } from 'path-to-regexp';
 import { Context } from './context.js';
 import { composeMiddleware, Middleware } from './middleware.js';
-
-export type PathToRegExpOptions = TokensToRegexpOptions & ParseOptions;
 
 export const Method = (method: string) => {
   method = method.toUpperCase();
@@ -28,16 +21,15 @@ export const Header = (header: string, value: string) => {
 export const Host = (host: string) => Header('host', host);
 export const Referer = (host: string) => Header('referer', host);
 
-export const Path = (pattern: string, options?: PathToRegExpOptions) => {
-  const keys: Key[] = [];
-  const regExp = pathToRegexp(pattern, keys, options);
+export const Path = (pattern: string, options?: PathToRegexpOptions) => {
+  const regExp = pathToRegexp(pattern, options);
 
   return ({ req: { url, params } }: Context) => {
     const match = url.pathname.match(regExp);
     if (!match) {
       return false;
     }
-    collectParameters(keys, match, params);
+    collectParameters(regExp.keys, match, params);
     return true;
   };
 };
@@ -50,7 +42,7 @@ export interface Route {
 }
 
 export interface RouterOptions {
-  pathToRegExpOptions?: PathToRegExpOptions;
+  pathToRegExpOptions?: PathToRegexpOptions;
 }
 
 export const defaultRouterOptions: RouterOptions = {
