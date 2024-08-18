@@ -35,9 +35,9 @@
     "*.{ts,js,json,yml,html,xml}": "prettier --write"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
-    "husky": "^9.0.11",
-    "lint-staged": "15.2.2",
-    "prettier": "3.2.5"
+    "@changesets/cli": "^2.27.7",
+    "husky": "^9.1.4",
+    "lint-staged": "15.2.9",
+    "prettier": "3.3.3"
   }
 }

@@ -36,10 +36,10 @@
     "test": "cfworker test test/**/*.spec.ts"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.13",
-    "@types/mocha": "^10.0.6",
-    "chai": "^5.1.0",
-    "mocha": "^10.3.0",
-    "typescript": "^5.4.2"
+    "@types/chai": "^4.3.17",
+    "@types/mocha": "^10.0.7",
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "typescript": "^5.5.4"
   }
 }
