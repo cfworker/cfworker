@@ -1,5 +1,16 @@
 # @cfworker/web
 
+## 2.0.0
+
+### Major Changes
+
+- 805c92f: Update all dependencies, use latest workers-types, deprecate cfworker dev in favor of wrangler
+
+### Patch Changes
+
+- Updated dependencies [805c92f]
+  - @cfworker/json-schema@2.0.0
+
 ## 1.14.0
 
 ### Minor Changes

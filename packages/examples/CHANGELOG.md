@@ -1,5 +1,20 @@
 # @cfworker/examples
 
+## 2.0.0
+
+### Major Changes
+
+- 805c92f: Update all dependencies, use latest workers-types, deprecate cfworker dev in favor of wrangler
+
+### Patch Changes
+
+- Updated dependencies [206bec0]
+- Updated dependencies [805c92f]
+  - @cfworker/jwt@5.0.0
+  - @cfworker/cosmos@2.0.0
+  - @cfworker/sentry@3.0.0
+  - @cfworker/web@2.0.0
+
 ## 1.12.9
 
 ### Patch Changes
