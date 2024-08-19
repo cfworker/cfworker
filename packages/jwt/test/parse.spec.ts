@@ -210,7 +210,7 @@ describe('parseJwt', () => {
 
   it('rejects future iat', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 120;
-    const iat = Math.floor(new Date().getTime() / 1000) + 60;
+    const iat = Math.floor(new Date().getTime() / 1000) + 90;
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
@@ -220,7 +220,7 @@ describe('parseJwt', () => {
 
   it('uses configurable skew', async () => {
     const exp = Math.floor(new Date().getTime() / 1000) + 120;
-    const iat = Math.floor(new Date().getTime() / 1000) + 60;
+    const iat = Math.floor(new Date().getTime() / 1000) + 90;
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);

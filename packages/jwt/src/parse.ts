@@ -4,7 +4,7 @@ import { getKey } from './jwks.js';
 import { DecodedJwt, JwtParseResult } from './types.js';
 import { verifyJwtSignature } from './verify.js';
 
-const defaultSkewMs = 30 * 1000;
+const defaultSkewMs = 60 * 1000;
 
 export interface JwtParseOptions {
   /**
