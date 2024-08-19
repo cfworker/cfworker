@@ -31,8 +31,8 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "pretest": "esbuild test/index.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist --ignore-annotations",
-    "test": "node test.mjs"
+    "pretest": "esbuild test/index.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
+    "test": "node ../../test.mjs"
   },
   "dependencies": {
     "@cfworker/json-schema": "^1.12.8",
