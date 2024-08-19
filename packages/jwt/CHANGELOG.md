@@ -5,9 +5,6 @@
 ### Major Changes
 
 - 805c92f: Update all dependencies, use latest workers-types, deprecate cfworker dev in favor of wrangler
-
-### Patch Changes
-
 - 206bec0: Refactor parseJwt to use a single options parameter. Add an option to customize the clock skew allowance when validating iat, nbf, and exp claims. Change the default clock skew from 30 to 60 seconds. Include jwt header in parse result.
 
 ## 4.0.6
