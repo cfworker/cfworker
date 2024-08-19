@@ -31,7 +31,8 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "cfworker test test/**/*.spec.ts --nocheck"
+    "pretest": "esbuild test/index.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist --ignore-annotations",
+    "test": "node test.mjs"
   },
   "dependencies": {
     "@cfworker/json-schema": "^1.12.8",
@@ -49,8 +50,10 @@
     "@types/chai": "^4.3.17",
     "@types/mocha": "^10.0.7",
     "chai": "^5.1.1",
+    "esbuild": "^0.23.1",
     "jsonpointer": "^5.0.1",
     "mocha": "^10.7.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "wrangler": "^3.72.0"
   }
 }

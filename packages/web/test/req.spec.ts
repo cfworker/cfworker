@@ -1,26 +1,30 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { Req, ReqBody } from '../src/req.js';
 
 describe('Req', () => {
-  const request = new Request('https://foo.com/hello-world', {
-    method: 'POST',
-    body: JSON.stringify({ foo: 'bar' })
-  });
-  request.headers.set('accept', 'text/html');
-  request.headers.set('cookie', 'ping=pong;beep=boop;');
-  const req = new Req(request);
+  const factory = () => {
+    const request = new Request('https://foo.com/hello-world', {
+      method: 'POST',
+      body: JSON.stringify({ foo: 'bar' })
+    });
+    request.headers.set('accept', 'text/html');
+    request.headers.set('cookie', 'ping=pong;beep=boop;');
+    return new Req(request);
+  };
 
   it('parses request url', () => {
+    const req = factory();
     expect(req.url.origin).to.equal('https://foo.com');
   });
 
   it('exposes accepts', () => {
+    const req = factory();
     expect(req.accepts.type('text/html')).to.equal('text/html');
     expect(req.accepts.type('application/json')).to.equal(false);
   });
 
   it('exposes body', async () => {
+    const req = factory();
     const data = await req.body.json();
     expect(data).to.eql({ foo: 'bar' });
   });
@@ -39,7 +43,8 @@ describe('ReqBody', () => {
   });
 
   it('reads FormData', async () => {
-    const body = new URLSearchParams({ foo: 'bar' });
+    const body = new FormData();
+    body.append('foo', 'bar');
     const request = new Request('https://a.b', { method: 'POST', body });
     const rb = new ReqBody(request);
     const data = await rb.formData();

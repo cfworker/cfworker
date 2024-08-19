@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { Context } from '../src/context.js';
 import { HttpError } from '../src/http-error.js';
 import {

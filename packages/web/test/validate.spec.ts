@@ -1,7 +1,6 @@
 import type { Schema } from '@cfworker/json-schema';
 import { expect } from 'chai';
 import { set } from 'jsonpointer';
-import { describe, it } from 'mocha';
 import { Context } from '../src/context.js';
 import { HttpError } from '../src/http-error.js';
 import { validate } from '../src/validate.js';
@@ -138,7 +137,10 @@ describe('validate', () => {
     const middleware = validate({ body: { required: ['id'] } });
     let request = new Request('https://a.b/', {
       method: 'POST',
-      body: new URLSearchParams({ hello: 'world' })
+      body: new URLSearchParams({ hello: 'world' }),
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded'
+      }
     });
     let context = new Context(request, {}, { waitUntil() {} });
     let resolved = false;
@@ -155,7 +157,10 @@ describe('validate', () => {
 
     request = new Request('https://a.b/', {
       method: 'POST',
-      body: new URLSearchParams({ id: 'world' })
+      body: new URLSearchParams({ id: 'world' }),
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded' // miniflare bug
+      }
     });
     context = new Context(request, {}, { waitUntil() {} });
     await middleware(context, async () => {
@@ -227,7 +232,10 @@ describe('validate', () => {
 
     let request = new Request('https://a.b/?' + stringified, {
       method: 'POST',
-      body: new URLSearchParams(stringified)
+      body: new URLSearchParams(stringified),
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded' // miniflare bug
+      }
     });
     let resolved = false;
     await middleware(new Context(request, {}, { waitUntil() {} }), async () => {

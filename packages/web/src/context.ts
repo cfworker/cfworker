@@ -8,12 +8,6 @@ export class Context {
   public readonly cookies: Cookies;
   public readonly state: any;
 
-  static fromFetchEvent(event: FetchEvent) {
-    return new Context(event.request, globalThis as any, {
-      waitUntil: event.waitUntil.bind(event)
-    });
-  }
-
   constructor(
     request: Request,
     public readonly environmentBindings: any,
