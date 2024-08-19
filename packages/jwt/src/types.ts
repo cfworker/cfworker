@@ -41,6 +41,7 @@ export interface JsonWebKeyset {
 
 export interface ValidJwtParseResult {
   valid: true;
+  header: JwtHeader;
   payload: JwtPayload;
 }
 

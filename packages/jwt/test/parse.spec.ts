@@ -20,7 +20,7 @@ describe('parseJwt', () => {
       const header: JwtHeader = { alg, typ: 'JWT', kid };
       const payload = { iss, aud, exp, sub, iat, nbf };
       const jwt = await createJwt(kid, alg, header, payload);
-      const result = await parseJwt(jwt, iss, aud);
+      const result = await parseJwt({ jwt, issuer: iss, audience: aud });
       expect(result.valid).to.equal(true);
     });
   }
@@ -30,7 +30,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'HS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -39,7 +39,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWS', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -48,7 +48,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(true);
   });
 
@@ -57,7 +57,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss: 'https://nefarious.com', aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -66,7 +66,11 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, ['https://example.com', iss], aud);
+    const result = await parseJwt({
+      jwt,
+      issuer: ['https://example.com', iss],
+      audience: aud
+    });
     expect(result.valid).to.equal(true);
   });
 
@@ -75,7 +79,11 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss: 'https://nefarious.com', aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, ['https://example.com', iss], aud);
+    const result = await parseJwt({
+      jwt,
+      issuer: ['https://example.com', iss],
+      audience: aud
+    });
     expect(result.valid).to.equal(false);
   });
 
@@ -84,7 +92,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss: 123 as any, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, 123 as any, aud);
+    const result = await parseJwt({ jwt, issuer: 123 as any, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -93,7 +101,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', kid };
     const payload = { iss, aud: [aud, 'another-aud'], exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(true);
   });
 
@@ -102,7 +110,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud: 'nefarious', exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -111,7 +119,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud: 123 as any, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, 123 as any);
+    const result = await parseJwt({ jwt, issuer: iss, audience: 123 as any });
     expect(result.valid).to.equal(false);
   });
 
@@ -120,7 +128,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud: [], exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -129,7 +137,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud: ['hello', 234422 as any], exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -138,7 +146,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -147,7 +155,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -156,7 +164,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(true);
   });
 
@@ -166,7 +174,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(true);
   });
 
@@ -176,7 +184,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(true);
   });
 
@@ -186,7 +194,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
   });
 
@@ -196,7 +204,7 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(true);
   });
 
@@ -206,8 +214,19 @@ describe('parseJwt', () => {
     const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
     const payload = { iss, aud, exp, sub, iat, nbf };
     const jwt = await createJwt(kid, 'RS256', header, payload);
-    const result = await parseJwt(jwt, iss, aud);
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+  });
+
+  it('uses configurable skew', async () => {
+    const exp = Math.floor(new Date().getTime() / 1000) + 120;
+    const iat = Math.floor(new Date().getTime() / 1000) + 60;
+    const header: JwtHeader = { alg: 'RS256', typ: 'JWT', kid };
+    const payload = { iss, aud, exp, sub, iat, nbf };
+    const jwt = await createJwt(kid, 'RS256', header, payload);
+    const skewMs = 120 * 1000; // 2 minutes
+    const result = await parseJwt({ jwt, issuer: iss, audience: aud, skewMs });
+    expect(result.valid).to.equal(true);
   });
 });
 

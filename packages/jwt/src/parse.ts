@@ -4,20 +4,55 @@ import { getKey } from './jwks.js';
 import { DecodedJwt, JwtParseResult } from './types.js';
 import { verifyJwtSignature } from './verify.js';
 
-const skewMs = 30 * 1000;
+const defaultSkewMs = 30 * 1000;
+
+export interface JwtParseOptions {
+  /**
+   * The JWT to parse.
+   */
+  jwt: string;
+
+  /**
+   * Permitted issuer(s) of the JWT. Used to validate the iss claim.
+   * Note: if you're using the default resolveKey function, OIDC discovery will be used
+   * to fetch the public key(s) for the issuer.
+   */
+  issuer: string | string[];
+
+  /**
+   * Expected audience of the JWT.
+   */
+  audience: string;
+
+  /**
+   * Given a decoded (but not fully verified) JWT, resolve the public key that
+   * should be used to verify the signature. Typical implementations will use
+   * the "kid" claim to look up the key in a JWKS endpoint or other key store.
+   * If the key cannot be resolved, the function should return null.
+   * @param decoded The decoded (but not fully verified / unsafe) JWT.
+   */
+  resolveKey?: (decoded: DecodedJwt) => Promise<CryptoKey | null>;
+
+  /**
+   * The maximum skew in milliseconds to allow when validating iat, nbf, and exp claims.
+   * Defaults to 60 seconds.
+   */
+  skewMs?: number;
+}
 
 /**
  * Parse a JWT.
  */
-export async function parseJwt(
-  encodedToken: string,
-  issuer: string | string[],
-  audience: string,
-  resolveKey: (decoded: DecodedJwt) => Promise<CryptoKey | null> = getKey
-): Promise<JwtParseResult> {
+export async function parseJwt({
+  jwt,
+  issuer,
+  audience,
+  resolveKey = getKey,
+  skewMs = defaultSkewMs
+}: JwtParseOptions): Promise<JwtParseResult> {
   let decoded: DecodedJwt;
   try {
-    decoded = decodeJwt(encodedToken);
+    decoded = decodeJwt(jwt);
   } catch {
     return { valid: false, reason: `Unable to decode JWT.` };
   }
@@ -173,5 +208,5 @@ export async function parseJwt(
     return { valid: false, reason: `JWT signature is invalid.` };
   }
   const payload = decoded.payload;
-  return { valid: true, payload };
+  return { valid: true, payload, header: decoded.header };
 }
