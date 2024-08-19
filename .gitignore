@@ -1,8 +1,9 @@
 .cache
 .cfworker
+.DS_Store
+.wrangler
 *.env*
 *.log
-node_modules
-dist
 *.tsbuildinfo
-.DS_Store
+dist
+node_modules

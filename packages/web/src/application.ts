@@ -35,15 +35,6 @@ export class Application {
     );
   }
 
-  public listen() {
-    const middleware = this.composedMiddleware;
-    addEventListener('fetch', event =>
-      event.respondWith(
-        this.invokeMiddleware(Context.fromFetchEvent(event), middleware)
-      )
-    );
-  }
-
   private async invokeMiddleware(context: Context, middleware: Middleware) {
     try {
       await middleware(context, () => resolved);

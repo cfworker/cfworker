@@ -1,17 +1,19 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { Application } from '../src/index.js';
 
 describe('Application', () => {
-  it('listens', () => {
+  const url = new URL('https://example.com/');
+  const env = {};
+  const context = { waitUntil: () => {} };
+
+  it('handles request', async () => {
     let received: Request | undefined = undefined;
-    const dispatched = new Request('/');
+    const dispatched = new Request(url);
     const app = new Application();
     app.use(ctx => {
       received = ctx.req.raw;
     });
-    app.listen();
-    self.dispatchEvent(new MockFetchEvent(dispatched));
+    await app.handleRequest(dispatched, env, context);
     expect(received).to.equal(dispatched);
   });
 
@@ -21,10 +23,7 @@ describe('Application', () => {
       ctx.res.status = 201;
       ctx.res.body = 'hello world';
     });
-    app.listen();
-    const event = new MockFetchEvent(new Request('/'));
-    self.dispatchEvent(event);
-    const response: Response = await event.__responded__;
+    const response = await app.handleRequest(new Request(url), env, context);
     expect(response.status).to.equal(201);
     expect(await response.text()).to.equal('hello world');
   });
@@ -38,10 +37,7 @@ describe('Application', () => {
     app.use(ctx => {
       ctx.res.body = 'hello world';
     });
-    app.listen();
-    const event = new MockFetchEvent(new Request('/'));
-    self.dispatchEvent(event);
-    const response: Response = await event.__responded__;
+    const response = await app.handleRequest(new Request(url), env, context);
     expect(response.status).to.equal(201);
     expect(await response.text()).to.equal('hello world');
   });
@@ -51,10 +47,7 @@ describe('Application', () => {
     app.use(() => {
       throw new Error('kaboom');
     });
-    app.listen();
-    const event = new MockFetchEvent(new Request('/'));
-    self.dispatchEvent(event);
-    const response: Response = await event.__responded__;
+    const response = await app.handleRequest(new Request(url), env, context);
     expect(response.status).to.equal(500);
   });
 
@@ -63,24 +56,7 @@ describe('Application', () => {
     app.use(() => {
       throw undefined;
     });
-    app.listen();
-    const event = new MockFetchEvent(new Request('/'));
-    self.dispatchEvent(event);
-    const response: Response = await event.__responded__;
+    const response = await app.handleRequest(new Request(url), env, context);
     expect(response.status).to.equal(500);
   });
 });
-
-export class MockFetchEvent extends Event {
-  public readonly __responded__: Promise<Response>;
-  public respondWith!: (response: Response) => void;
-
-  constructor(public readonly request: Request) {
-    super('fetch');
-    this.__responded__ = new Promise(resolve => (this.respondWith = resolve));
-  }
-
-  passThroughOnException() {}
-
-  waitUntil() {}
-}
