@@ -207,6 +207,6 @@ export async function parseJwt({
   if (!signatureValid) {
     return { valid: false, reason: `JWT signature is invalid.` };
   }
-  const payload = decoded.payload;
-  return { valid: true, payload, header: decoded.header };
+  const { header, payload } = decoded;
+  return { valid: true, header, payload };
 }
