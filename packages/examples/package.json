@@ -13,18 +13,14 @@
     "access": "public"
   },
   "scripts": {
-    "build-auth": "cfworker build src/auth/index.ts --out-file dist/auth/index.js",
-    "build-cosmos": "cfworker build src/cosmos/index.ts --out-file dist/cosmos/index.js",
-    "build-misc": "cfworker build src/misc/index.ts --out-file dist/misc/index.js",
-    "build-web": "cfworker build src/web/index.ts --out-file dist/web/index.js",
-    "build": "npm run build-auth && npm run build-cosmos && npm run build-misc && npm run build-web",
-    "start-auth": "cfworker run src/auth/index.ts --watch --inspect --port 7001",
-    "start-cosmos": "cfworker run src/cosmos/index.ts --watch --inspect --port 7002",
-    "start-misc": "cfworker run src/misc/index.ts --watch --inspect --port 7003",
-    "start-web": "cfworker run src/web/index.ts --watch --inspect --port 7004",
+    "build": "echo \"no build\"",
+    "clean": "echo \"no clean\"",
+    "start-auth": "wrangler dev src/auth/index.ts",
+    "start-cosmos": "wrangler dev src/cosmos/index.ts",
+    "start-misc": "wrangler dev src/misc/index.ts",
+    "start-web": "wrangler dev src/web/index.ts",
     "start": "npm run start-web",
-    "clean": "rm -rf dist",
-    "test": "cfworker test test/**/*.spec.ts"
+    "test": "echo \"no tests 🥺\""
   },
   "dependencies": {
     "@cfworker/cosmos": "^1.13.6",
@@ -33,6 +29,7 @@
     "@cfworker/web": "^1.14.0"
   },
   "devDependencies": {
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "wrangler": "^3.72.0"
   }
 }

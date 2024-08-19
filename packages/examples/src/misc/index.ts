@@ -76,7 +76,7 @@ router
     }
   )
   .get('/stream', ({ res }) => {
-    res.body = html` <!DOCTYPE html>
+    res.body = html` <!doctype html>
       <html lang="en">
         <head>
           <meta charset="utf-8" />
@@ -100,11 +100,20 @@ router
         </svg>`;
   });
 
-new Application()
+const app = new Application()
   .use(sentryLogging)
   .use(notFoundPage)
-  .use(router.middleware)
-  .listen();
+  .use(router.middleware);
+
+export default {
+  fetch(
+    request: Request,
+    env: any,
+    context: { waitUntil(promise: Promise<any>): void }
+  ) {
+    return app.handleRequest(request, env, context);
+  }
+};
 
 function errorTest() {
   function bar() {

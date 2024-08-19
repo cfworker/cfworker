@@ -13,11 +13,11 @@
     "access": "public"
   },
   "scripts": {
-    "build": "cfworker build src/index.ts --out-file dist/index.js",
-    "start": "cfworker run src/index.ts --watch --inspect",
+    "build": "echo \"todo: build\"",
+    "start": "echo \"todo: start\"",
     "clean": "rm -rf dist",
-    "test": "cfworker test test/**/*.spec.ts",
-    "deploy": "cfworker deploy src/index.ts --name cfworker --route cfworker.dev/*"
+    "test": "echo \"no tests 🥺\"",
+    "deploy": "echo \"todo: deploy\""
   },
   "dependencies": {
     "@cfworker/web": "^1.14.0",

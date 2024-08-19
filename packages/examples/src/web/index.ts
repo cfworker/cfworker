@@ -63,8 +63,17 @@ const cors: Middleware = async ({ res }, next) => {
 };
 
 // Compose the application
-new Application()
+const app = new Application()
   .use(normalizePathnameMiddleware)
   .use(cors)
-  .use(router.middleware)
-  .listen();
+  .use(router.middleware);
+
+export default {
+  fetch(
+    request: Request,
+    env: any,
+    context: { waitUntil(promise: Promise<any>): void }
+  ) {
+    return app.handleRequest(request, env, context);
+  }
+};

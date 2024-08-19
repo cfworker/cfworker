@@ -1,20 +1,8 @@
 # cfworker
 
-[![Release](https://github.com/cfworker/cfworker/actions/workflows/release.yml/badge.svg)](https://github.com/cfworker/cfworker/actions/workflows/release.yml)
+![](https://github.com/cfworker/cfworker/workflows/build/badge.svg)
 
 A collection of packages optimized for Cloudflare Workers and service workers.
-
-## @cfworker/base64url
-
-![](https://badgen.net/bundlephobia/minzip/@cfworker/base64url)
-![](https://badgen.net/bundlephobia/min/@cfworker/base64url)
-![](https://badgen.net/bundlephobia/dependency-count/@cfworker/base64url)
-![](https://badgen.net/bundlephobia/tree-shaking/@cfworker/base64url)
-![](https://badgen.net/npm/types/@cfworker/base64url?icon=typescript)
-
-base64 URL encoding for Cloudflare Workers and service workers
-
-[readme](https://github.com/cfworker/cfworker/tree/master/packages/base64url/README.md) | [npm](https://www.npmjs.com/package/@cfworker/base64url)
 
 ## @cfworker/cosmos
 
@@ -39,12 +27,6 @@ Azure Cosmos DB client for Cloudflare Workers and service workers
 Streaming CSV encoding for Cloudflare Workers and service workers
 
 [readme](https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md) | [npm](https://www.npmjs.com/package/@cfworker/csv)
-
-## @cfworker/dev
-
-Run, test and deploy Cloudflare workers
-
-[readme](https://github.com/cfworker/cfworker/tree/master/packages/dev/README.md) | [npm](https://www.npmjs.com/package/@cfworker/dev)
 
 ## @cfworker/json-schema
 
@@ -124,18 +106,6 @@ Run a specific package's tests
 
 ```
 npm run test --workspace=@cfworker/base64url
-```
-
-Watch files for changes and re-run tests
-
-```
-npm run test --watch --workspace=@cfworker/base64url
-```
-
-Use chrome devtools to debug tests
-
-```
-npm run test --watch --inspect --workspace=@cfworker/base64url
 ```
 
 Refer to each package's README for more specific instructions and examples.

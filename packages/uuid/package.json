@@ -33,13 +33,16 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "test": "cfworker test test/**/*.spec.ts"
+    "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
+    "test": "node ../../test.mjs"
   },
   "devDependencies": {
     "@types/chai": "^4.3.17",
     "@types/mocha": "^10.0.7",
     "chai": "^5.1.1",
+    "esbuild": "^0.23.1",
     "mocha": "^10.7.3",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "wrangler": "^3.72.0"
   }
 }

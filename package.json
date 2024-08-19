@@ -20,7 +20,6 @@
     "start": "npm run start --workspace=@cfworker/examples",
     "test": "npm run test --workspaces",
     "deploy": "npm run deploy --workspace=@cfworker/site",
-    "deploy-dev": "npm run deploy-dev --workspace=@cfworker/site",
     "clean": "npm run clean --workspaces",
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "lint-staged": "lint-staged",
