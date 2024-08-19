@@ -6,4 +6,5 @@
 *.log
 *.tsbuildinfo
 dist
+dist-test
 node_modules

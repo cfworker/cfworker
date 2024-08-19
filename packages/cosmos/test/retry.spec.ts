@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { CosmosClient } from '../src/index.js';
 import { DefaultRetryPolicy, RetryContext } from '../src/retry.js';
 

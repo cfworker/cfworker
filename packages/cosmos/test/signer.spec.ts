@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { getSigner } from '../src/index.js';
 
 describe('Signer', () => {
@@ -11,7 +10,7 @@ describe('Signer', () => {
 
   describe('getPayload', () => {
     it('gets payload for /dbs request', () => {
-      const request = new Request('/dbs');
+      const request = new Request('https://example.com/dbs');
       const expected = new Uint8Array([
         103, 101, 116, 10, 100, 98, 115, 10, 10, 102, 114, 105, 44, 32, 48, 54,
         32, 100, 101, 99, 32, 50, 48, 49, 57, 32, 48, 55, 58, 50, 57, 58, 52,
@@ -22,7 +21,7 @@ describe('Signer', () => {
 
     it('gets payload for document request', () => {
       const request = new Request(
-        '/dbs/mydatabase/colls/mycollection/docs/xyz'
+        'https://example.com/dbs/mydatabase/colls/mycollection/docs/xyz'
       );
       const expected = new Uint8Array([
         103, 101, 116, 10, 100, 111, 99, 115, 10, 100, 98, 115, 47, 109, 121,
@@ -88,7 +87,7 @@ describe('Signer', () => {
 
   describe('sign', () => {
     it('signs /dbs request', async () => {
-      const request = new Request('/dbs');
+      const request = new Request('https://example.com/dbs');
       await signer.sign(request, date);
       expect(request.headers.get('x-ms-date')).to.equal(dateUtcString);
       expect(request.headers.get('authorization')).to.equal(
@@ -97,7 +96,9 @@ describe('Signer', () => {
     });
 
     it('signs /dbs/{db-id}/colls/{coll-id} request', async () => {
-      const request = new Request('/dbs/mydatabase/colls/mycollection');
+      const request = new Request(
+        'https://example.com/dbs/mydatabase/colls/mycollection'
+      );
       await signer.sign(request, date);
       expect(request.headers.get('x-ms-date')).to.equal(dateUtcString);
       expect(request.headers.get('authorization')).to.equal(
@@ -107,7 +108,7 @@ describe('Signer', () => {
 
     it('signs /dbs/{db-id}/colls/{coll-id}/docs/{doc-id} request', async () => {
       const request = new Request(
-        '/dbs/mydatabase/colls/mycollection/docs/xyz'
+        'https://example.com/dbs/mydatabase/colls/mycollection/docs/xyz'
       );
       await signer.sign(request, date);
       expect(request.headers.get('x-ms-date')).to.equal(dateUtcString);
