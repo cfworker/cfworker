@@ -1,6 +1,6 @@
 # cfworker
 
-![](https://github.com/cfworker/cfworker/workflows/build/badge.svg)
+[![Release](https://github.com/cfworker/cfworker/actions/workflows/release.yml/badge.svg)](https://github.com/cfworker/cfworker/actions/workflows/release.yml)
 
 A collection of packages optimized for Cloudflare Workers and service workers.
 
