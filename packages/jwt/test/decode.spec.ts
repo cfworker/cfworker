@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { base64url } from 'rfc4648';
 import { decodeJwt } from '../src/decode.js';
 

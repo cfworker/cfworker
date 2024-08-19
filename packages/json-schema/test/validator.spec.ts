@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { Validator } from '../src/validator.js';
 
 describe('Validator', () => {

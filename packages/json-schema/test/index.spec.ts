@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { dereference, validate, ValidationResult } from '../src/index.js';
 import { remotes, suites } from './json-schema-test-suite.js';
 import { loadMeta } from './meta-schema.js';

@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { describe, it } from 'mocha';
 import { EncodeOptions } from '../src/encode.js';
 import { encode } from '../src/index.js';
 

@@ -1,7 +1,7 @@
 import { unstable_dev } from 'wrangler';
 
 try {
-  const worker = await unstable_dev(process.cwd() + '/dist-test/index.js', {
+  const worker = await unstable_dev(process.cwd() + '/dist-test/test.js', {
     local: true,
     logLevel: 'info',
     experimental: { disableExperimentalWarning: true }
