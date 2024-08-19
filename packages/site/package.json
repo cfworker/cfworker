@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/site",
-  "version": "1.12.4",
+  "version": "2.0.0",
   "description": "The cfworker.dev website",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
@@ -20,7 +20,7 @@
     "deploy": "echo \"todo: deploy\""
   },
   "dependencies": {
-    "@cfworker/web": "^1.14.0",
+    "@cfworker/web": "^2.0.0",
     "@cloudflare/workers-types": "^4.20240815.0"
   },
   "devDependencies": {
