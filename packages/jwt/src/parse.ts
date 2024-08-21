@@ -1,7 +1,7 @@
 import { algs, algToHash } from './algs.js';
 import { decodeJwt } from './decode.js';
 import { getKey } from './jwks.js';
-import { DecodedJwt, JwtParseResult } from './types.js';
+import { DecodedJwt, InvalidJwtReasonCode, JwtParseResult } from './types.js';
 import { verifyJwtSignature } from './verify.js';
 
 const defaultSkewMs = 60 * 1000;
@@ -54,13 +54,19 @@ export async function parseJwt({
   try {
     decoded = decodeJwt(jwt);
   } catch {
-    return { valid: false, reason: `Unable to decode JWT.` };
+    return {
+      valid: false,
+      reason: `Unable to decode JWT.`,
+      reasonCode: InvalidJwtReasonCode.Other
+    };
   }
   const { typ, alg } = decoded.header;
   if (typeof typ !== 'undefined' && typ !== 'JWT') {
     return {
       valid: false,
-      reason: `Invalid JWT type ${JSON.stringify(typ)}. Expected "JWT".`
+      reason: `Invalid JWT type ${JSON.stringify(typ)}. Expected "JWT".`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
   if (!algToHash[alg]) {
@@ -68,7 +74,9 @@ export async function parseJwt({
       valid: false,
       reason: `Invalid JWT algorithm ${JSON.stringify(
         alg
-      )}. Supported: ${algs}.`
+      )}. Supported: ${algs}.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
 
@@ -78,7 +86,9 @@ export async function parseJwt({
       valid: false,
       reason: `Subject claim (sub) is required and must be a string. Received ${JSON.stringify(
         sub
-      )}.`
+      )}.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
 
@@ -88,7 +98,9 @@ export async function parseJwt({
         valid: false,
         reason: `Invalid JWT audience claim (aud) ${JSON.stringify(
           aud
-        )}. Expected "${audience}".`
+        )}. Expected "${audience}".`,
+        reasonCode: InvalidJwtReasonCode.Other,
+        decoded
       };
     }
   } else if (
@@ -101,7 +113,9 @@ export async function parseJwt({
         valid: false,
         reason: `Invalid JWT audience claim array (aud) ${JSON.stringify(
           aud
-        )}. Does not include "${audience}".`
+        )}. Does not include "${audience}".`,
+        reasonCode: InvalidJwtReasonCode.Other,
+        decoded
       };
     }
   } else {
@@ -109,7 +123,9 @@ export async function parseJwt({
       valid: false,
       reason: `Invalid JWT audience claim (aud) ${JSON.stringify(
         aud
-      )}. Expected a string or a non-empty array of strings.`
+      )}. Expected a string or a non-empty array of strings.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
 
@@ -118,7 +134,9 @@ export async function parseJwt({
       valid: false,
       reason: `Invalid JWT issuer claim (iss) ${JSON.stringify(
         decoded.payload.iss
-      )}. Expected ${JSON.stringify(issuer)}.`
+      )}. Expected ${JSON.stringify(issuer)}.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
 
@@ -127,7 +145,9 @@ export async function parseJwt({
       valid: false,
       reason: `Invalid JWT expiry date claim (exp) ${JSON.stringify(
         exp
-      )}. Expected number.`
+      )}. Expected number.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
   const currentDate = new Date(Date.now());
@@ -137,7 +157,9 @@ export async function parseJwt({
   if (expired) {
     return {
       valid: false,
-      reason: `JWT is expired. Expiry date: ${expiryDate}; Current date: ${currentDate};`
+      reason: `JWT is expired. Expiry date: ${expiryDate}; Current date: ${currentDate};`,
+      reasonCode: InvalidJwtReasonCode.Expired,
+      decoded
     };
   }
 
@@ -147,7 +169,9 @@ export async function parseJwt({
         valid: false,
         reason: `Invalid JWT not before date claim (nbf) ${JSON.stringify(
           nbf
-        )}. Expected number.`
+        )}. Expected number.`,
+        reasonCode: InvalidJwtReasonCode.Other,
+        decoded
       };
     }
     const notBeforeDate = new Date(0);
@@ -156,7 +180,9 @@ export async function parseJwt({
     if (early) {
       return {
         valid: false,
-        reason: `JWT cannot be used prior to not before date claim (nbf). Not before date: ${notBeforeDate}; Current date: ${currentDate};`
+        reason: `JWT cannot be used prior to not before date claim (nbf). Not before date: ${notBeforeDate}; Current date: ${currentDate};`,
+        reasonCode: InvalidJwtReasonCode.Other,
+        decoded
       };
     }
   }
@@ -167,7 +193,9 @@ export async function parseJwt({
         valid: false,
         reason: `Invalid JWT issued at date claim (iat) ${JSON.stringify(
           iat
-        )}. Expected number.`
+        )}. Expected number.`,
+        reasonCode: InvalidJwtReasonCode.Other,
+        decoded
       };
     }
     const issuedAtDate = new Date(0);
@@ -176,7 +204,9 @@ export async function parseJwt({
     if (postIssued) {
       return {
         valid: false,
-        reason: `JWT issued at date claim (iat) is in the future. Issued at date: ${issuedAtDate}; Current date: ${currentDate};`
+        reason: `JWT issued at date claim (iat) is in the future. Issued at date: ${issuedAtDate}; Current date: ${currentDate};`,
+        reasonCode: InvalidJwtReasonCode.Other,
+        decoded
       };
     }
   }
@@ -189,23 +219,37 @@ export async function parseJwt({
       valid: false,
       reason: `Error retrieving public key to verify JWT signature: ${
         e instanceof Error ? e.message : e
-      }`
+      }`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
   if (!key) {
     return {
       valid: false,
-      reason: `Unable to resolve public key to verify JWT signature.`
+      reason: `Unable to resolve public key to verify JWT signature.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
     };
   }
   let signatureValid: boolean;
   try {
     signatureValid = await verifyJwtSignature(decoded, key);
   } catch {
-    return { valid: false, reason: `Error verifying JWT signature.` };
+    return {
+      valid: false,
+      reason: `Error verifying JWT signature.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
+    };
   }
   if (!signatureValid) {
-    return { valid: false, reason: `JWT signature is invalid.` };
+    return {
+      valid: false,
+      reason: `JWT signature is invalid.`,
+      reasonCode: InvalidJwtReasonCode.Other,
+      decoded
+    };
   }
   const { header, payload } = decoded;
   return { valid: true, header, payload };
