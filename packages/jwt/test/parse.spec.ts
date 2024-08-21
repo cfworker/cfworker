@@ -3,7 +3,12 @@ import { base64url } from 'rfc4648';
 import { algToHash, algs } from '../src/algs.js';
 import { importKey } from '../src/jwks.js';
 import { parseJwt } from '../src/parse.js';
-import { JwtHeader, JwtPayload } from '../src/types.js';
+import {
+  InvalidJwtParseResult,
+  InvalidJwtReasonCode,
+  JwtHeader,
+  JwtPayload
+} from '../src/types.js';
 
 const iss = 'https://test.com';
 const aud = 'test-aud';
@@ -32,6 +37,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('rejects unexpected type', async () => {
@@ -41,6 +49,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('accepts undefined type', async () => {
@@ -59,6 +70,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('supports array target issuer', async () => {
@@ -85,6 +99,9 @@ describe('parseJwt', () => {
       audience: aud
     });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('rejects non-string issuer', async () => {
@@ -94,6 +111,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: 123 as any, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('accepts array audience', async () => {
@@ -112,6 +132,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('rejects non-string audience', async () => {
@@ -121,6 +144,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: 123 as any });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('rejects empty array audience', async () => {
@@ -130,6 +156,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('rejects mixed array audience', async () => {
@@ -139,6 +168,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('rejects expired JWT', async () => {
@@ -148,6 +180,12 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Expired
+    );
+    expect((result as InvalidJwtParseResult).decoded?.payload.exp).to.equal(
+      exp
+    );
   });
 
   it('rejects non-number exp', async () => {
@@ -157,6 +195,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('allows for clock skew in exp', async () => {
@@ -196,6 +237,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('allows for clock skew in iat', async () => {
@@ -216,6 +260,9 @@ describe('parseJwt', () => {
     const jwt = await createJwt(kid, 'RS256', header, payload);
     const result = await parseJwt({ jwt, issuer: iss, audience: aud });
     expect(result.valid).to.equal(false);
+    expect((result as InvalidJwtParseResult).reasonCode).to.equal(
+      InvalidJwtReasonCode.Other
+    );
   });
 
   it('uses configurable skew', async () => {
