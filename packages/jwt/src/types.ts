@@ -48,6 +48,13 @@ export interface ValidJwtParseResult {
 export interface InvalidJwtParseResult {
   valid: false;
   reason: string;
+  reasonCode: InvalidJwtReasonCode;
+  decoded?: DecodedJwt;
+}
+
+export const enum InvalidJwtReasonCode {
+  Other = 0,
+  Expired = 1
 }
 
 export interface IssuerMetadata {
