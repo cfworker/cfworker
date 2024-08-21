@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 5.1.0
+
+### Minor Changes
+
+- f140592: Add reason code and decoded JWT header and payload to invalid JWT parse result.
+
 ## 5.0.0
 
 ### Major Changes
