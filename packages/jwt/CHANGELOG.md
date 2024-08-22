@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 5.1.1
+
+### Patch Changes
+
+- 4d04224: Fix export of InvalidJwtReasonCode
+
 ## 5.1.0
 
 ### Minor Changes
