@@ -1,5 +1,20 @@
 # @cfworker/examples
 
+## 2.1.0
+
+### Minor Changes
+
+- 8b0e94b: Set package type to module
+
+### Patch Changes
+
+- Updated dependencies [8b0e94b]
+- Updated dependencies [93a12c7]
+  - @cfworker/cosmos@2.1.0
+  - @cfworker/sentry@3.1.0
+  - @cfworker/jwt@5.2.0
+  - @cfworker/web@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

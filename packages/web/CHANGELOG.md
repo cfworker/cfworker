@@ -1,5 +1,17 @@
 # @cfworker/web
 
+## 2.1.0
+
+### Minor Changes
+
+- 8b0e94b: Set package type to module
+
+### Patch Changes
+
+- 93a12c7: Don't include tsconfig.json in package #237 #261
+- Updated dependencies [93a12c7]
+  - @cfworker/json-schema@2.0.1
+
 ## 2.0.0
 
 ### Major Changes
