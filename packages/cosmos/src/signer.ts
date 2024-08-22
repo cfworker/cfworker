@@ -15,7 +15,7 @@ export class Signer {
     this.masterkey = Promise.resolve(promiseLike);
   }
 
-  public async sign(request: Request, date = new Date()): Promise<void> {
+  public async sign(request: Request, date: Date = new Date()): Promise<void> {
     const key = await this.masterkey;
     const payload = this.getPayload(request, date);
     const hashed = await crypto.subtle.sign('HMAC', key, payload);
