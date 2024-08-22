@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 2.0.1
+
+### Patch Changes
+
+- 93a12c7: Don't include tsconfig.json in package #237 #261
+
 ## 2.0.0
 
 ### Major Changes
