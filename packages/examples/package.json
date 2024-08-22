@@ -1,5 +1,6 @@
 {
   "name": "@cfworker/examples",
+  "type": "module",
   "version": "2.0.0",
   "description": "cfworker examples",
   "main": "dist/index.js",

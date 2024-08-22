@@ -1,5 +1,6 @@
 {
   "name": "@cfworker/csv",
+  "type": "module",
   "version": "2.0.0",
   "description": "Streaming CSV encoding for Cloudflare Workers and service workers",
   "sideEffects": false,
