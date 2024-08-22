@@ -4,4 +4,4 @@ export const algToHash: Record<string, string> = {
   RS512: 'SHA-512'
 };
 
-export const algs = Object.keys(algToHash);
+export const algs: string[] = Object.keys(algToHash);

@@ -1,7 +1,7 @@
 import { HttpError } from './http-error';
 import { Middleware } from './middleware';
 
-export function normalizePathname(pathname: string) {
+export function normalizePathname(pathname: string): string {
   return decodeURIComponent(pathname).replace(/\/\/+/g, '/').normalize();
 }
 

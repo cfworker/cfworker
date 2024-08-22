@@ -21,7 +21,7 @@ export function captureError({
   request: Request;
   user: any;
   level?: 'fatal' | 'error' | 'warning' | 'info' | 'debug';
-}) {
+}): { event_id: string; posted: Promise<Response> } {
   const event_id = crypto.randomUUID();
   const timestamp = new Date().toISOString().substr(0, 19);
   if (!(err instanceof Error)) {

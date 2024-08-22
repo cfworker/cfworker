@@ -49,7 +49,7 @@ export function uuid(arr?: Uint8Array): string {
   return s;
 }
 
-export function parseUuid(s: string) {
+export function parseUuid(s: string): Uint8Array {
   if (!reg.test(s)) {
     throw new TypeError('Invalid uuid');
   }

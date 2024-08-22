@@ -21,7 +21,11 @@ export class Cookies {
     return this.requestCookies[name] || null;
   }
 
-  public set(name: string, val: string, options?: CookieSerializeOptions) {
+  public set(
+    name: string,
+    val: string,
+    options?: CookieSerializeOptions
+  ): void {
     this.responseHeaders.append(
       'Set-Cookie',
       serializeCookie(name, val, options)

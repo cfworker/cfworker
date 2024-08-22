@@ -15,7 +15,7 @@ export class Signer {
     this.masterkey = Promise.resolve(promiseLike);
   }
 
-  public async sign(request: Request, date = new Date()) {
+  public async sign(request: Request, date = new Date()): Promise<void> {
     const key = await this.masterkey;
     const payload = this.getPayload(request, date);
     const hashed = await crypto.subtle.sign('HMAC', key, payload);
@@ -27,7 +27,7 @@ export class Signer {
     request.headers.set('x-ms-date', date.toUTCString());
   }
 
-  public getPayload(request: Request, date: Date) {
+  public getPayload(request: Request, date: Date): Uint8Array {
     const url = new URL(request.url);
     const { resourceType, resourceId } = this.pathnameToResource(url.pathname);
     const method = request.method.toLowerCase();
@@ -37,7 +37,10 @@ export class Signer {
     return this.encoder.encode(text);
   }
 
-  public pathnameToResource(pathname: string) {
+  public pathnameToResource(pathname: string): {
+    resourceType: string;
+    resourceId: string;
+  } {
     const segments = pathname.split('/');
     if (segments.length % 2 === 0) {
       const resourceType = segments[segments.length - 1];
@@ -52,7 +55,7 @@ export class Signer {
 
 const signers: Record<string, Signer> = {};
 
-export function getSigner(masterKey: string) {
+export function getSigner(masterKey: string): Signer {
   if (!signers[masterKey]) {
     signers[masterKey] = new Signer(masterKey);
   }

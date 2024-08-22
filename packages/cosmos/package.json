@@ -47,6 +47,6 @@
     "esbuild": "^0.23.1",
     "mocha": "^10.7.3",
     "typescript": "^5.5.4",
-    "wrangler": "^3.72.0"
+    "wrangler": "^3.72.1"
   }
 }

@@ -16,7 +16,7 @@ export class Application {
     return this._composedMiddleware;
   }
 
-  public use(middleware: Middleware) {
+  public use(middleware: Middleware): Application {
     this.middleware.push(middleware);
     this._composedMiddleware = undefined;
     return this;

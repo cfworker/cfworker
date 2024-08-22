@@ -30,7 +30,7 @@ const hasBody: Record<string, true> = {
 function middlewareFactory(
   schemas: RequestSchemas,
   parser: RequestParser = Object.fromEntries,
-  lookup = Object.create(null)
+  lookup: Record<string, Schema | boolean> = Object.create(null)
 ): Middleware {
   const {
     headers: $headers,
@@ -118,4 +118,4 @@ function validateRequestPart(
   throw new HttpError(400, errorBody);
 }
 
-export const validate = middlewareFactory;
+export const validate: typeof middlewareFactory = middlewareFactory;

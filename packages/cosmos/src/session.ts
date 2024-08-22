@@ -1,4 +1,4 @@
-const readSessionNotAvailableSubstatus = '1002';
+const readSessionNotAvailableSubstatus: string = '1002';
 
 export function readSessionNotAvailable(response: Response): boolean {
   return (
@@ -40,7 +40,7 @@ export interface SessionContainer {
 export class DefaultSessionContainer implements SessionContainer {
   constructor(public readonly tokens: SessionTokens = {}) {}
 
-  setRequestSession(request: Request) {
+  setRequestSession(request: Request): void {
     if (request.headers.get('x-ms-consistency-level') !== 'Session') {
       return;
     }
@@ -54,7 +54,7 @@ export class DefaultSessionContainer implements SessionContainer {
     }
   }
 
-  readResponseSession(response: Response) {
+  readResponseSession(response: Response): void {
     const ids = getCollectionId(response);
     if (!ids) {
       return;

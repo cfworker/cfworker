@@ -21,7 +21,7 @@ export class Context {
     this.state = {};
   }
 
-  public waitUntil(promise: Promise<any>) {
+  public waitUntil(promise: Promise<any>): void {
     this._context.waitUntil(promise);
   }
 }
