@@ -3,7 +3,7 @@ import { ConnectionInfo } from './types';
 /**
  * Escape non-ASCII characters as \uXXXX
  */
-export function escapeNonASCII(s: string) {
+export function escapeNonASCII(s: string): string {
   return s.replace(
     /[\u0080-\uFFFF]/g,
     m => '\\u' + m.charCodeAt(0).toString(16).padStart(4, '0')
@@ -24,7 +24,7 @@ export function assertArg(name: string, value: any): asserts value {
 /**
  * Template literal tag which URI encodes values.
  */
-export function uri(strings: TemplateStringsArray, ...values: any[]) {
+export function uri(strings: TemplateStringsArray, ...values: any[]): string {
   let s = strings[0];
   for (let i = 0; i < values.length; i++) {
     s += encodeURIComponent(values[i]) + strings[i + 1];

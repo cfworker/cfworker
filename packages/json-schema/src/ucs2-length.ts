@@ -3,7 +3,7 @@
  * https://mathiasbynens.be/notes/javascript-encoding
  * https://github.com/bestiejs/punycode.js - punycode.ucs2.decode
  */
-export function ucs2length(s: string) {
+export function ucs2length(s: string): number {
   let result = 0;
   let length = s.length;
   let index = 0;

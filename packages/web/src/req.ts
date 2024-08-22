@@ -29,28 +29,28 @@ export class ReqBody {
 
   constructor(private readonly request: Request) {}
 
-  public arrayBuffer() {
+  public arrayBuffer(): Promise<ArrayBuffer> {
     if (!this._arrayBuffer) {
       this._arrayBuffer = this.request.arrayBuffer();
     }
     return this._arrayBuffer;
   }
 
-  public formData() {
+  public formData(): Promise<FormData> {
     if (!this._formData) {
       this._formData = this.request.formData();
     }
     return this._formData;
   }
 
-  public json(reviver?: Reviver) {
+  public json(reviver?: Reviver): Promise<any> {
     if (!this._json) {
       this._json = this.text().then(text => safeParse(text, reviver));
     }
     return this._json;
   }
 
-  public text() {
+  public text(): Promise<string> {
     if (!this._text) {
       this._text = this.request.text();
     }

@@ -3,25 +3,25 @@ import { PersistedResource } from './types.js';
 export abstract class CosmosResponse {
   constructor(protected readonly response: Response) {}
 
-  get status() {
+  get status(): number {
     return this.response.status;
   }
-  get headers() {
+  get headers(): Headers {
     return this.response.headers;
   }
-  get body() {
+  get body(): ReadableStream<Uint8Array> | null {
     return this.response.body;
   }
-  get activityId() {
+  get activityId(): string | null {
     return this.response.headers.get('x-ms-activity-id');
   }
-  get etag() {
+  get etag(): string {
     return this.response.headers.get('etag')!;
   }
-  get requestCharge() {
+  get requestCharge(): number {
     return parseInt(this.response.headers.get('x-ms-request-charge')!);
   }
-  get raw() {
+  get raw(): Response {
     return this.response;
   }
 }
@@ -45,10 +45,10 @@ export class FeedResponse<T> extends CosmosResponse {
     super(response);
   }
 
-  get count() {
+  get count(): number {
     return parseInt(this.response.headers.get('x-ms-item-count')!);
   }
-  get hasNext() {
+  get hasNext(): boolean {
     return this.response.headers.has('x-ms-continuation');
   }
 

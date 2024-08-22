@@ -1,5 +1,5 @@
 import { dereference } from './dereference.js';
-import { Schema, SchemaDraft } from './types.js';
+import { Schema, SchemaDraft, ValidationResult } from './types.js';
 import { validate } from './validate.js';
 
 export class Validator {
@@ -13,7 +13,7 @@ export class Validator {
     this.lookup = dereference(schema);
   }
 
-  public validate(instance: any) {
+  public validate(instance: any): ValidationResult {
     return validate(
       instance,
       this.schema,
@@ -23,7 +23,7 @@ export class Validator {
     );
   }
 
-  public addSchema(schema: Schema, id?: string) {
+  public addSchema(schema: Schema, id?: string): void {
     if (id) {
       schema = { ...schema, $id: id };
     }

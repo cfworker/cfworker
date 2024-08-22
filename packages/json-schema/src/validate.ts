@@ -17,7 +17,7 @@ export function validate(
   instance: any,
   schema: Schema | boolean,
   draft: SchemaDraft = '2019-09',
-  lookup = dereference(schema),
+  lookup: Record<string, Schema | boolean> = dereference(schema),
   shortCircuit = true,
   recursiveAnchor: Schema | null = null,
   instanceLocation = '#',

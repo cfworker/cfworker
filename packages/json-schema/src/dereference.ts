@@ -65,7 +65,7 @@ export const ignoredKeyword: Record<string, boolean> = {
  * https://json-schema.org/draft/2019-09/json-schema-core.html#initial-base
  * https://tools.ietf.org/html/rfc3986#section-5.1
  */
-export let initialBaseURI =
+export let initialBaseURI: URL =
   // @ts-ignore
   typeof self !== 'undefined' &&
   self.location &&
@@ -77,9 +77,9 @@ export let initialBaseURI =
 export function dereference(
   schema: Schema | boolean,
   lookup: Record<string, Schema | boolean> = Object.create(null),
-  baseURI = initialBaseURI,
+  baseURI: URL = initialBaseURI,
   basePointer = ''
-) {
+): Record<string, Schema | boolean> {
   if (schema && typeof schema === 'object' && !Array.isArray(schema)) {
     const id: string = schema.$id || schema.id;
     if (id) {

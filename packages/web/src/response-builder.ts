@@ -9,14 +9,14 @@ export type ExtendedBodyInit =
   | null;
 
 export class ResponseBuilder {
-  public readonly headers = new Headers();
+  public readonly headers: Headers = new Headers();
   private _status = 404;
   private _explicitStatus = false;
   private _implicitType = false;
   private _body: ExtendedBodyInit = null;
   private _stringifyBody = false;
 
-  get status() {
+  get status(): number {
     return this._status;
   }
   set status(value) {
@@ -27,7 +27,7 @@ export class ResponseBuilder {
     }
   }
 
-  get statusText() {
+  get statusText(): string {
     return statuses.message[this._status]!;
   }
 
@@ -88,7 +88,7 @@ export class ResponseBuilder {
     }
   }
 
-  redirect(url: string | URL) {
+  redirect(url: string | URL): void {
     if (url instanceof URL) {
       url = url.href;
     }
@@ -103,7 +103,7 @@ export class ResponseBuilder {
     this.body = `Redirecting to ${url}.`;
   }
 
-  get type() {
+  get type(): string {
     const type = this.headers.get('content-type');
     if (!type) {
       return '';
@@ -134,7 +134,7 @@ export class ResponseBuilder {
     this.headers.set('last-modified', value.toUTCString());
   }
 
-  get etag() {
+  get etag(): string | null {
     return this.headers.get('etag');
   }
   set etag(value) {
@@ -148,7 +148,7 @@ export class ResponseBuilder {
     }
   }
 
-  create() {
+  create(): Response {
     const { body: rawBody, status, statusText, headers } = this;
     const body = this._stringifyBody
       ? JSON.stringify(rawBody)

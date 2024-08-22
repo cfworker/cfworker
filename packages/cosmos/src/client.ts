@@ -114,7 +114,9 @@ export class CosmosClient {
     return new FeedResponse<Database>(response, next, 'Databases');
   }
 
-  public async getDatabase(args: GetDatabaseArgs = {}) {
+  public async getDatabase(
+    args: GetDatabaseArgs = {}
+  ): Promise<ItemResponse<Database>> {
     const { dbId = this.dbId, ...headers } = args;
     assertArg('dbId', dbId);
     const url = this.endpoint + uri`/dbs/${dbId}`;
@@ -137,7 +139,9 @@ export class CosmosClient {
     return new FeedResponse<Collection>(response, next, 'DocumentCollections');
   }
 
-  public async getCollection(args: GetCollectionArgs = {}) {
+  public async getCollection(
+    args: GetCollectionArgs = {}
+  ): Promise<ItemResponse<Collection>> {
     const { dbId = this.dbId, collId = this.collId, ...headers } = args;
     assertArg('dbId', dbId);
     assertArg('collId', collId);
@@ -148,7 +152,9 @@ export class CosmosClient {
     return new ItemResponse<Collection>(response);
   }
 
-  public async createCollection(args: CreateCollectionArgs) {
+  public async createCollection(
+    args: CreateCollectionArgs
+  ): Promise<ItemResponse<Collection>> {
     const {
       dbId = this.dbId,
       collId = this.collId,
@@ -167,7 +173,9 @@ export class CosmosClient {
     return new ItemResponse<Collection>(response);
   }
 
-  public async replaceCollection(args: ReplaceCollectionArgs) {
+  public async replaceCollection(
+    args: ReplaceCollectionArgs
+  ): Promise<ItemResponse<Collection>> {
     const {
       dbId = this.dbId,
       collId = this.collId,
@@ -186,7 +194,9 @@ export class CosmosClient {
     return new ItemResponse<Collection>(response);
   }
 
-  public async deleteCollection(args: DeleteCollectionArgs = {}) {
+  public async deleteCollection(
+    args: DeleteCollectionArgs = {}
+  ): Promise<Response> {
     const { dbId = this.dbId, collId = this.collId, ...headers } = args;
     assertArg('dbId', dbId);
     assertArg('collId', collId);
@@ -215,7 +225,9 @@ export class CosmosClient {
     return new FeedResponse<T & Document>(response, next, 'Documents');
   }
 
-  public async getDocument<T extends Resource>(args: GetDocumentArgs) {
+  public async getDocument<T extends Resource>(
+    args: GetDocumentArgs
+  ): Promise<ItemResponse<T & Document>> {
     const { dbId = this.dbId, collId = this.collId, docId, ...headers } = args;
     assertArg('dbId', dbId);
     assertArg('collId', collId);
@@ -226,7 +238,9 @@ export class CosmosClient {
     return new ItemResponse<T & Document>(response);
   }
 
-  public async createDocument<T extends Resource>(args: CreateDocumentArgs) {
+  public async createDocument<T extends Resource>(
+    args: CreateDocumentArgs
+  ): Promise<ItemResponse<T & Document>> {
     const {
       dbId = this.dbId,
       collId = this.collId,
@@ -244,7 +258,9 @@ export class CosmosClient {
     return new ItemResponse<T & Document>(response);
   }
 
-  public async replaceDocument<T extends Resource>(args: ReplaceDocumentArgs) {
+  public async replaceDocument<T extends Resource>(
+    args: ReplaceDocumentArgs
+  ): Promise<ItemResponse<T & Document>> {
     const {
       dbId = this.dbId,
       collId = this.collId,
@@ -263,7 +279,7 @@ export class CosmosClient {
     return new ItemResponse<T & Document>(response);
   }
 
-  public async deleteDocument(args: DeleteDocumentArgs) {
+  public async deleteDocument(args: DeleteDocumentArgs): Promise<Response> {
     const { dbId = this.dbId, collId = this.collId, docId, ...headers } = args;
     assertArg('dbId', dbId);
     assertArg('collId', collId);
@@ -316,7 +332,7 @@ export class CosmosClient {
     response: Response,
     args: TArgs,
     fn: (args: TArgs) => Promise<FeedResponse<TResult>>
-  ) {
+  ): () => Promise<FeedResponse<TResult>> {
     return () => {
       const continuation = response.headers.get('x-ms-continuation');
       if (!continuation) {

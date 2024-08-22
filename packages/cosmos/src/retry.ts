@@ -42,4 +42,4 @@ export class DefaultRetryPolicy implements RetryPolicy {
   }
 }
 
-export const defaultRetryPolicy = new DefaultRetryPolicy();
+export const defaultRetryPolicy: RetryPolicy = new DefaultRetryPolicy();
