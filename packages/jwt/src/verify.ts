@@ -4,7 +4,10 @@ import { DecodedJwt } from './types.js';
  * Verify the JWT's signature.
  * @param {DecodedJwt} decoded
  */
-export async function verifyJwtSignature(decoded: DecodedJwt, key: CryptoKey) {
+export async function verifyJwtSignature(
+  decoded: DecodedJwt,
+  key: CryptoKey
+): Promise<boolean> {
   const encoder = new TextEncoder();
   const data = encoder.encode(`${decoded.raw.header}.${decoded.raw.payload}`);
 

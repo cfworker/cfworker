@@ -52,7 +52,7 @@ export interface InvalidJwtParseResult {
   decoded?: DecodedJwt;
 }
 
-export const enum InvalidJwtReasonCode {
+export enum InvalidJwtReasonCode {
   Other = 0,
   Expired = 1
 }

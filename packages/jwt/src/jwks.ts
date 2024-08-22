@@ -35,7 +35,7 @@ const importedKeys: Record<string, Record<string, CryptoKey>> = {};
  * @param iss The issuer. Serves as the first-level cache key.
  * @param jwks The JsonWebKeyset to import.
  */
-export async function importKey(iss: string, jwk: JsonWebKey) {
+export async function importKey(iss: string, jwk: JsonWebKey): Promise<void> {
   if (jwk.kty !== 'RSA') {
     throw new Error(
       `Unsupported jwk key type (kty) "${
