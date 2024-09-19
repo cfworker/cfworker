@@ -53,6 +53,13 @@ describe('csv', () => {
       );
     });
 
+    it('quotes string fields that are entirely numeric', async () => {
+      expect(await encodeToString([{ hello: '01' }])).to.equal('hello\r\n"01"');
+      expect(await encodeToString([{ hello: '11' }])).to.equal('hello\r\n"11"');
+      expect(await encodeToString([{ hello: '1a' }])).to.equal('hello\r\n1a');
+      expect(await encodeToString([{ hello: 'a1' }])).to.equal('hello\r\na1');
+    });
+
     it('encodes custom column formats', async () => {
       expect(
         await encodeToString([{ hello: 'world', foo: 'bar', baz: 'Beep' }], {
