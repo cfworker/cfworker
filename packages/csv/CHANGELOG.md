@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 2.2.0
+
+### Minor Changes
+
+- 65a2749: Quote numeric strings
+
 ## 2.1.0
 
 ### Minor Changes
