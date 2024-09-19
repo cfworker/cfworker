@@ -2,7 +2,7 @@ const quote = '"';
 const quoteRegex = /"/g;
 const delimiter = ',';
 const rowDelimiter = '\r\n';
-const requiresQuoteRegex = /["\r\n,]/;
+const requiresQuoteRegex = /["\r\n,]|(?:^\d+$)/;
 
 export interface EncodeOptions<T> {
   /**
