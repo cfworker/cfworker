@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig-base",
   "compilerOptions": {
+    "module": "CommonJS",
     "target": "ESNext",
     "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
-    "outDir": "dist/esm",
+    "outDir": "dist/cjs",
     "rootDir": "./src"
   },
 
