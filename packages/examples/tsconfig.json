@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
-    "composite": false
+    "composite": false,
+    "outDir": "dist/esm"
   }
 }

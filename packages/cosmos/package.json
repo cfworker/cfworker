@@ -14,16 +14,20 @@
     "service-worker"
   ],
   "sideEffects": false,
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "source": "src/index.ts",
-  "types": "dist/index.d.ts",
+  "types": "dist/esm/index.d.ts",
   "files": [
     "dist/**/*",
     "src/**/*",
     "README.md",
     "package.json"
   ],
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/cosmos/README.md",
@@ -32,7 +36,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --build",
+    "build": "tsc --build & tsc --build tsconfig-cjs.json",
     "clean": "tsc --build --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
