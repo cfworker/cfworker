@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/jwt",
   "type": "module",
-  "version": "5.2.1",
+  "version": "6.0.0",
   "description": "Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs",
   "keywords": [
     "jwt",

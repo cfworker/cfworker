@@ -1,5 +1,16 @@
 # @cfworker/web
 
+## 3.0.0
+
+### Major Changes
+
+- f7c148d: Add support for CommonJS by adding exports field to all packages. Thanks @dannyball710 !!
+
+### Patch Changes
+
+- Updated dependencies [f7c148d]
+  - @cfworker/json-schema@3.0.0
+
 ## 2.1.0
 
 ### Minor Changes
