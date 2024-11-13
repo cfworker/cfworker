@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/cosmos",
   "type": "module",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Azure Cosmos DB client for Cloudflare Workers and service workers",
   "keywords": [
     "azure",

@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 3.0.0
+
+### Major Changes
+
+- f7c148d: Add support for CommonJS by adding exports field to all packages. Thanks @dannyball710 !!
+
 ## 2.1.0
 
 ### Minor Changes

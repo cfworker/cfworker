@@ -1,7 +1,7 @@
 {
   "name": "@cfworker/examples",
   "type": "module",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "cfworker examples",
   "main": "dist/cjs/index.js",
   "exports": {
@@ -28,10 +28,10 @@
     "test": "echo \"no tests 🥺\""
   },
   "dependencies": {
-    "@cfworker/cosmos": "^2.1.0",
-    "@cfworker/jwt": "^5.2.0",
-    "@cfworker/sentry": "^3.1.0",
-    "@cfworker/web": "^2.1.0"
+    "@cfworker/cosmos": "^3.0.0",
+    "@cfworker/jwt": "^6.0.0",
+    "@cfworker/sentry": "^4.0.0",
+    "@cfworker/web": "^3.0.0"
   },
   "devDependencies": {
     "typescript": "^5.5.4",

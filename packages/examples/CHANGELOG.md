@@ -1,5 +1,19 @@
 # @cfworker/examples
 
+## 3.0.0
+
+### Major Changes
+
+- f7c148d: Add support for CommonJS by adding exports field to all packages. Thanks @dannyball710 !!
+
+### Patch Changes
+
+- Updated dependencies [f7c148d]
+  - @cfworker/cosmos@3.0.0
+  - @cfworker/jwt@6.0.0
+  - @cfworker/sentry@4.0.0
+  - @cfworker/web@3.0.0
+
 ## 2.1.0
 
 ### Minor Changes
