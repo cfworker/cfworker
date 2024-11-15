@@ -1,5 +1,16 @@
 # @cfworker/web
 
+## 4.0.0
+
+### Major Changes
+
+- e4f2167: Update dependencies
+
+### Patch Changes
+
+- Updated dependencies [e4f2167]
+  - @cfworker/json-schema@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
