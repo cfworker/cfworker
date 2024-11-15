@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 4.0.1
+
+### Patch Changes
+
+- c845342: Downgrade path-to-regexp
+
 ## 4.0.0
 
 ### Major Changes
