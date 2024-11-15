@@ -1,7 +1,7 @@
 import {
-  CookieSerializeOptions,
   parse as parseCookie,
-  serialize as serializeCookie
+  serialize as serializeCookie,
+  SerializeOptions
 } from 'cookie';
 
 const noCookies = Object.create(null);
@@ -21,11 +21,7 @@ export class Cookies {
     return this.requestCookies[name] || null;
   }
 
-  public set(
-    name: string,
-    val: string,
-    options?: CookieSerializeOptions
-  ): void {
+  public set(name: string, val: string, options?: SerializeOptions): void {
     this.responseHeaders.append(
       'Set-Cookie',
       serializeCookie(name, val, options)
