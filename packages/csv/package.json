@@ -32,12 +32,12 @@
     "test": "node ../../test.mjs"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.17",
-    "@types/mocha": "^10.0.7",
-    "chai": "^5.1.1",
-    "esbuild": "^0.23.1",
-    "mocha": "^10.7.3",
-    "typescript": "^5.5.4",
-    "wrangler": "^3.72.1"
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.9",
+    "chai": "^5.1.2",
+    "esbuild": "^0.24.0",
+    "mocha": "^10.8.2",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.87.0"
   }
 }

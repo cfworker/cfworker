@@ -40,24 +40,24 @@
   },
   "dependencies": {
     "@cfworker/json-schema": "^3.0.0",
-    "@types/cookie": "^0.6.0",
+    "@types/cookie": "^1.0.0",
     "@types/html-escaper": "^3.0.2",
     "@types/statuses": "^2.0.5",
-    "cookie": "^0.6.0",
+    "cookie": "^1.0.1",
     "html-escaper": "^3.0.3",
-    "negotiator": "^0.6.3",
-    "path-to-regexp": "^7.1.0",
+    "negotiator": "^1.0.0",
+    "path-to-regexp": "^8.2.0",
     "secure-json-parse": "^2.7.0",
     "statuses": "^2.0.1"
   },
   "devDependencies": {
-    "@types/chai": "^4.3.17",
-    "@types/mocha": "^10.0.7",
-    "chai": "^5.1.1",
-    "esbuild": "^0.23.1",
+    "@types/chai": "^5.0.1",
+    "@types/mocha": "^10.0.9",
+    "chai": "^5.1.2",
+    "esbuild": "^0.24.0",
     "jsonpointer": "^5.0.1",
-    "mocha": "^10.7.3",
-    "typescript": "^5.5.4",
-    "wrangler": "^3.72.1"
+    "mocha": "^10.8.2",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.87.0"
   }
 }
