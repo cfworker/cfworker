@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 4.0.2
+
+### Patch Changes
+
+- 9e9ca41: Improve error serialization
+
 ## 4.0.1
 
 ### Patch Changes
