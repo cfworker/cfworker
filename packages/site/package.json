@@ -22,9 +22,9 @@
   },
   "dependencies": {
     "@cfworker/web": "^3.0.0",
-    "@cloudflare/workers-types": "^4.20240821.1"
+    "@cloudflare/workers-types": "^4.20241112.0"
   },
   "devDependencies": {
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.3"
   }
 }
