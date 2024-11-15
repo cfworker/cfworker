@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 4.0.1
+
+### Patch Changes
+
+- e4f2167: Update dependencies
+
 ## 4.0.0
 
 ### Major Changes

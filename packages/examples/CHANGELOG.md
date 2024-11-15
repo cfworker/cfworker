@@ -1,5 +1,16 @@
 # @cfworker/examples
 
+## 3.0.1
+
+### Patch Changes
+
+- e4f2167: Update dependencies
+- Updated dependencies [e4f2167]
+  - @cfworker/web@4.0.0
+  - @cfworker/cosmos@3.0.1
+  - @cfworker/sentry@4.0.1
+  - @cfworker/jwt@6.0.1
+
 ## 3.0.0
 
 ### Major Changes

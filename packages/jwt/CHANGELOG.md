@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 6.0.1
+
+### Patch Changes
+
+- e4f2167: Update dependencies
+
 ## 6.0.0
 
 ### Major Changes

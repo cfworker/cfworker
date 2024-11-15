@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 3.0.1
+
+### Patch Changes
+
+- e4f2167: Update dependencies
+
 ## 3.0.0
 
 ### Major Changes

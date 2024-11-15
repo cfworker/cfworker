@@ -1,5 +1,13 @@
 # @cfworker/site
 
+## 2.1.2
+
+### Patch Changes
+
+- e4f2167: Update dependencies
+- Updated dependencies [e4f2167]
+  - @cfworker/web@4.0.0
+
 ## 2.1.1
 
 ### Patch Changes
