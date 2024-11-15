@@ -46,7 +46,7 @@
     "cookie": "^1.0.1",
     "html-escaper": "^3.0.3",
     "negotiator": "^1.0.0",
-    "path-to-regexp": "^8.2.0",
+    "path-to-regexp": "7.1.0",
     "secure-json-parse": "^2.7.0",
     "statuses": "^2.0.1"
   },
