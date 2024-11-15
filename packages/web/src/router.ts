@@ -30,14 +30,14 @@ export const Path: (
   pattern: string,
   options?: PathToRegexpOptions
 ) => Predicate = (pattern: string, options?: PathToRegexpOptions) => {
-  const { regexp, keys } = pathToRegexp(pattern, options);
+  const regexp = pathToRegexp(pattern, options);
 
   return ({ req: { url, params } }: Context) => {
     const match = url.pathname.match(regexp);
     if (!match) {
       return false;
     }
-    collectParameters(keys, match, params);
+    collectParameters(regexp.keys, match, params);
     return true;
   };
 };
