@@ -54,7 +54,9 @@ export interface RouterOptions {
 }
 
 export const defaultRouterOptions: RouterOptions = {
-  pathToRegExpOptions: {}
+  pathToRegExpOptions: {
+    strict: true
+  }
 };
 
 export class Router {
