@@ -30,14 +30,14 @@ export const Path: (
   pattern: string,
   options?: PathToRegexpOptions
 ) => Predicate = (pattern: string, options?: PathToRegexpOptions) => {
-  const regExp = pathToRegexp(pattern, options);
+  const { regexp, keys } = pathToRegexp(pattern, options);
 
   return ({ req: { url, params } }: Context) => {
-    const match = url.pathname.match(regExp);
+    const match = url.pathname.match(regexp);
     if (!match) {
       return false;
     }
-    collectParameters(regExp.keys, match, params);
+    collectParameters(keys, match, params);
     return true;
   };
 };
@@ -54,7 +54,7 @@ export interface RouterOptions {
 }
 
 export const defaultRouterOptions: RouterOptions = {
-  pathToRegExpOptions: { strict: true }
+  pathToRegExpOptions: {}
 };
 
 export class Router {
