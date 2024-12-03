@@ -1,5 +1,10 @@
 import { expect } from 'chai';
-import { dereference, validate, ValidationResult } from '../src/index.js';
+import {
+  dereference,
+  Schema,
+  validate,
+  ValidationResult
+} from '../src/index.js';
 import { remotes, suites } from './json-schema-test-suite.js';
 import { loadMeta } from './meta-schema.js';
 import { unsupportedTests } from './unsupported.js';
@@ -50,6 +55,32 @@ describe('json-schema', () => {
         });
       });
     });
+  });
+
+  it('normalizes $ref values', () => {
+    // https://github.com/cfworker/cfworker/issues/285
+
+    const schema = {
+      type: 'object',
+      definitions: {
+        'child[one]': { type: 'string' }
+      },
+      properties: {
+        name: { type: 'string' },
+        children: {
+          type: 'array',
+          items: { $ref: '#/definitions/child[one]' }
+        }
+      }
+    } satisfies Schema;
+
+    const input = {
+      name: 'John',
+      children: ['foo', 'bar']
+    };
+
+    const result = validate(input, schema);
+    expect(result.valid).to.be.true;
   });
 
   // after(() => console.log(JSON.stringify(failures, null, 2)));
