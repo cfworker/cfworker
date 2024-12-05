@@ -27,16 +27,16 @@
     "release": "npm run clean && npm run build && changeset publish",
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js",
-    "update-deps": "npx npm-check-updates --upgrade --deep && git clean -fxd -e .env && rm package-lock.json && npm install",
+    "update-deps": "npx npm-check-updates --upgrade --deep --reject path-to-regexp && git clean -fxd -e .env && rm package-lock.json && npm install",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,js,json,yml,html,xml}": "prettier --write"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.9",
-    "husky": "^9.1.6",
+    "@changesets/cli": "^2.27.10",
+    "husky": "^9.1.7",
     "lint-staged": "15.2.10",
-    "prettier": "3.3.3"
+    "prettier": "3.4.2"
   }
 }

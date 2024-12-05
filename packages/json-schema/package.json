@@ -51,13 +51,13 @@
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",
-    "@types/mocha": "^10.0.9",
+    "@types/mocha": "^10.0.10",
     "chai": "^5.1.2",
     "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#76b529f",
     "esbuild": "^0.24.0",
-    "mocha": "^10.8.2",
-    "typescript": "^5.6.3",
-    "wrangler": "^3.87.0"
+    "mocha": "^11.0.1",
+    "typescript": "^5.7.2",
+    "wrangler": "^3.92.0"
   },
   "tshy": {
     "exports": {
