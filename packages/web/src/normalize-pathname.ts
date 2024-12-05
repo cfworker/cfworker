@@ -1,13 +1,14 @@
-import { HttpError } from './http-error';
-import { Middleware } from './middleware';
+import { Context } from './context.js';
+import { HttpError } from './http-error.js';
+import { Middleware } from './middleware.js';
 
 export function normalizePathname(pathname: string): string {
   return decodeURIComponent(pathname).replace(/\/\/+/g, '/').normalize();
 }
 
 export const normalizePathnameMiddleware: Middleware = async (
-  { req },
-  next
+  { req }: Context,
+  next: () => Promise<void>
 ) => {
   const pathname = req.url.pathname;
   try {
