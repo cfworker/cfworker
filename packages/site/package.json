@@ -2,6 +2,7 @@
   "name": "@cfworker/site",
   "version": "3.0.0",
   "description": "The cfworker.dev website",
+  "type": "module",
   "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
