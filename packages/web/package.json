@@ -46,7 +46,6 @@
   },
   "dependencies": {
     "@cfworker/json-schema": "^4.0.1",
-    "@types/cookie": "^1.0.0",
     "@types/html-escaper": "^3.0.2",
     "@types/statuses": "^2.0.5",
     "cookie": "^1.0.2",
