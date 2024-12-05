@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 5.0.0
+
+### Major Changes
+
+- c6e2d7b: Remove package.type for better compatibility with esm and cjs
+
 ## 4.0.2
 
 ### Patch Changes

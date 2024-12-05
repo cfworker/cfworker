@@ -1,5 +1,19 @@
 # @cfworker/examples
 
+## 4.0.0
+
+### Major Changes
+
+- c6e2d7b: Remove package.type for better compatibility with esm and cjs
+
+### Patch Changes
+
+- Updated dependencies [c6e2d7b]
+  - @cfworker/cosmos@4.0.0
+  - @cfworker/sentry@5.0.0
+  - @cfworker/jwt@7.0.0
+  - @cfworker/web@5.0.0
+
 ## 3.0.1
 
 ### Patch Changes
