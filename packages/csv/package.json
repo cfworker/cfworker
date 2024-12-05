@@ -32,8 +32,8 @@
   ],
   "scripts": {
     "prepare": "tshy",
-    "build": "tsc --build & tsc --build tsconfig.cjs.json",
-    "clean": "tsc --build --clean && tsc --build tsconfig.cjs.json --clean",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },
