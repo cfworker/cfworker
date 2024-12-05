@@ -1,5 +1,16 @@
 # @cfworker/site
 
+## 3.0.0
+
+### Major Changes
+
+- c6e2d7b: Remove package.type for better compatibility with esm and cjs
+
+### Patch Changes
+
+- Updated dependencies [c6e2d7b]
+  - @cfworker/web@5.0.0
+
 ## 2.1.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/json-schema",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, 2019-09, and 2020-12.",
   "keywords": [
     "json-schema",

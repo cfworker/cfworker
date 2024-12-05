@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 7.0.0
+
+### Major Changes
+
+- c6e2d7b: Remove package.type for better compatibility with esm and cjs
+
 ## 6.0.1
 
 ### Patch Changes
