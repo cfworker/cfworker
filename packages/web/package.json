@@ -38,7 +38,7 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "tshy",
+    "prepare": "npm run prepare --workspace @cfworker/json-schema && tshy",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
