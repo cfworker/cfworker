@@ -1,6 +1,5 @@
 {
   "name": "@cfworker/jwt",
-  "type": "module",
   "version": "6.0.1",
   "description": "Tiny lib for decoding JWTs and verifying signatures, using native crypto APIs",
   "keywords": [
@@ -12,19 +11,22 @@
     "service-worker"
   ],
   "main": "dist/cjs/index.js",
-  "module": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "source": "src/index.ts",
-  "types": "dist/cjs/index.d.ts",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "files": [
     "dist/**/*",
     "src/**/*",
     "README.md",
     "package.json"
   ],
-  "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
-  },
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/jwt/README.md",
@@ -33,8 +35,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --build & tsc --build tsconfig-cjs.json",
-    "clean": "tsc --build --clean",
+    "build": "tsc --build & tsc --build tsconfig.cjs.json",
+    "clean": "tsc --build --clean && tsc --build tsconfig.cjs.json --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },

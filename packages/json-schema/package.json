@@ -1,6 +1,5 @@
 {
   "name": "@cfworker/json-schema",
-  "type": "module",
   "version": "3.0.1",
   "description": "A JSON schema validator that will run on Cloudflare workers. Supports drafts 4, 7, 2019-09, and 2020-12.",
   "keywords": [
@@ -16,17 +15,21 @@
   "sideEffects": false,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "source": "src/index.ts",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "files": [
     "dist/**/*",
     "src/**/*",
     "README.md",
     "package.json"
   ],
-  "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
-  },
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/json-schema/README.md",
@@ -35,8 +38,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --build & tsc --build tsconfig-cjs.json",
-    "clean": "tsc --build --clean",
+    "build": "tsc --build & tsc --build tsconfig.cjs.json",
+    "clean": "tsc --build --clean && tsc --build tsconfig.cjs.json --clean",
     "pretest": "node --experimental-import-meta-resolve suite-gen.js && esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },

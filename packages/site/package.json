@@ -1,6 +1,5 @@
 {
   "name": "@cfworker/site",
-  "type": "module",
   "version": "2.1.2",
   "description": "The cfworker.dev website",
   "main": "dist/index.js",

@@ -1,6 +1,5 @@
 {
   "name": "@cfworker/sentry",
-  "type": "module",
   "version": "4.0.2",
   "description": "Minimalist Sentry client for Cloudflare workers and service workers",
   "keywords": [
@@ -15,17 +14,20 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "source": "src/index.ts",
-  "types": "dist/esm/index.d.ts",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "files": [
     "dist/**/*",
     "src/**/*",
     "README.md",
     "package.json"
   ],
-  "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
-  },
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/sentry/README.md",
@@ -34,8 +36,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --build & tsc --build tsconfig-cjs.json",
-    "clean": "tsc --build --clean",
+    "build": "tsc --build & tsc --build tsconfig.cjs.json",
+    "clean": "tsc --build --clean && tsc --build tsconfig.cjs.json --clean",
     "test": "echo \"no tests 🥺\""
   },
   "devDependencies": {
