@@ -19,9 +19,14 @@
   "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
+      "import": {
+        "default": "./dist/esm/index.js",
+        "types": "./dist/types/index.d.ts"
+      },
+      "require": {
+        "default": "./dist/cjs/index.js",
+        "types": "./dist/types/index.d.ts"
+      }
     }
   },
   "files": [
@@ -40,7 +45,7 @@
   "scripts": {
     "build": "tsc --build & tsc --build tsconfig.cjs.json",
     "clean": "tsc --build --clean && tsc --build tsconfig.cjs.json --clean",
-    "pretest": "node --experimental-import-meta-resolve suite-gen.js && esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
+    "pretest": "node --experimental-import-meta-resolve suite-gen.mjs && esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },
   "devDependencies": {
