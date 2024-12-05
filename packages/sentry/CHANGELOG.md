@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 5.0.1
+
+### Patch Changes
+
+- a72875c: Restore type:module
+
 ## 5.0.0
 
 ### Major Changes
