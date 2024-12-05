@@ -1,5 +1,16 @@
 # @cfworker/examples
 
+## 4.0.1
+
+### Patch Changes
+
+- a72875c: Restore type:module
+- Updated dependencies [a72875c]
+  - @cfworker/cosmos@4.0.1
+  - @cfworker/sentry@5.0.1
+  - @cfworker/jwt@7.0.1
+  - @cfworker/web@5.0.1
+
 ## 4.0.0
 
 ### Major Changes

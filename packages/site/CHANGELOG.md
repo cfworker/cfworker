@@ -1,5 +1,13 @@
 # @cfworker/site
 
+## 3.0.1
+
+### Patch Changes
+
+- a72875c: Restore type:module
+- Updated dependencies [a72875c]
+  - @cfworker/web@5.0.1
+
 ## 3.0.0
 
 ### Major Changes

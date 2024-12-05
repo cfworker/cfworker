@@ -1,5 +1,13 @@
 # @cfworker/web
 
+## 5.0.1
+
+### Patch Changes
+
+- a72875c: Restore type:module
+- Updated dependencies [a72875c]
+  - @cfworker/json-schema@4.0.1
+
 ## 5.0.0
 
 ### Major Changes

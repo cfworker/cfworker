@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 4.0.1
+
+### Patch Changes
+
+- a72875c: Restore type:module
+
 ## 4.0.0
 
 ### Major Changes

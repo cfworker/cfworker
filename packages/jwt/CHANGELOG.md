@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 7.0.1
+
+### Patch Changes
+
+- a72875c: Restore type:module
+
 ## 7.0.0
 
 ### Major Changes
