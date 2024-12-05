@@ -4,6 +4,6 @@
     "target": "ESNext",
     "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
     "composite": false,
-    "outDir": "dist/esm"
+    "outDir": "dist"
   }
 }

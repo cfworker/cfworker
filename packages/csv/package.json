@@ -1,23 +1,25 @@
 {
   "name": "@cfworker/csv",
-  "type": "module",
   "version": "3.0.1",
   "description": "Streaming CSV encoding for Cloudflare Workers and service workers",
   "sideEffects": false,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "source": "src/index.ts",
-  "types": "dist/esm/index.d.ts",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
   "files": [
     "dist/**/*",
     "src/**/*",
     "README.md",
     "package.json"
   ],
-  "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
-  },
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/csv/README.md",
@@ -26,8 +28,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc --build & tsc --build tsconfig-cjs.json",
-    "clean": "tsc --build --clean",
+    "build": "tsc --build & tsc --build tsconfig.cjs.json",
+    "clean": "tsc --build --clean && tsc --build tsconfig.cjs.json --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },

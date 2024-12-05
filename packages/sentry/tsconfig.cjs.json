@@ -4,7 +4,10 @@
     "module": "CommonJS",
     "target": "ESNext",
     "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
-    "composite": false,
-    "outDir": "dist/cjs"
-  }
+    "outDir": "dist/cjs",
+    "declarationDir": "dist/types",
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "references": [{ "path": "../uuid" }]
 }

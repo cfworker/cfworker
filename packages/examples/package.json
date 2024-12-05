@@ -1,13 +1,7 @@
 {
   "name": "@cfworker/examples",
-  "type": "module",
   "version": "3.0.1",
   "description": "cfworker examples",
-  "main": "dist/cjs/index.js",
-  "exports": {
-    "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
-  },
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/examples/README.md",
