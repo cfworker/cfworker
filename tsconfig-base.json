@@ -13,7 +13,7 @@
     "types": [],
     "baseUrl": "./packages",
     "paths": {
-      "@cfworker/*": ["./*/src"]
+      "@cfworker/*": ["./*"]
     },
     "composite": true,
     "isolatedModules": true,

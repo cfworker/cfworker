@@ -4,10 +4,8 @@
     "target": "ESNext",
     "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
     "outDir": "dist/esm",
-    "declarationDir": "dist/types",
     "rootDir": "./src"
   },
-
   "include": ["src"],
   "references": [{ "path": "../json-schema" }]
 }

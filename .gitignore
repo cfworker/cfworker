@@ -1,6 +1,8 @@
 .cache
 .cfworker
 .DS_Store
+.tshy
+.tshy-build
 .wrangler
 *.env*
 *.log

@@ -2,7 +2,6 @@
   "name": "@cfworker/examples",
   "version": "4.0.1",
   "description": "cfworker examples",
-  "type": "module",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/examples/README.md",
@@ -12,6 +11,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "scripts": {
     "build": "echo \"no build\"",
     "clean": "echo \"no clean\"",

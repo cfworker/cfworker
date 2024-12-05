@@ -2,8 +2,6 @@
   "name": "@cfworker/site",
   "version": "3.0.1",
   "description": "The cfworker.dev website",
-  "type": "module",
-  "main": "dist/index.js",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
   "homepage": "https://github.com/cfworker/cfworker/tree/master/packages/site/README.md",
@@ -13,6 +11,8 @@
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "build": "echo \"todo: build\"",
     "start": "echo \"todo: start\"",

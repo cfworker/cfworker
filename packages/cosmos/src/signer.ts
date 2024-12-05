@@ -1,4 +1,5 @@
-import { base64 } from 'rfc4648';
+// @ts-ignore
+import { base64 } from 'rfc4648/lib/rfc4648.js'; // tshy doesn't like its typedefs
 
 export class Signer {
   private readonly masterkey: Promise<CryptoKey>;

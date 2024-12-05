@@ -1,4 +1,4 @@
-import { IssuerMetadata } from './types';
+import type { IssuerMetadata } from './types.js';
 
 /**
  * Fetch an oidc discovery document

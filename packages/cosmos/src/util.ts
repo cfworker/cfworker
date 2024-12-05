@@ -1,4 +1,4 @@
-import { ConnectionInfo } from './types';
+import { ConnectionInfo } from './types.js';
 
 /**
  * Escape non-ASCII characters as \uXXXX

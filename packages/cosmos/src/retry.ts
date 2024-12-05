@@ -1,4 +1,4 @@
-import { readSessionNotAvailable } from './session';
+import { readSessionNotAvailable } from './session.js';
 
 export interface RetryContext {
   request: Request;
