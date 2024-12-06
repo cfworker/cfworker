@@ -28,8 +28,7 @@
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js",
     "update-deps": "npx npm-check-updates --upgrade --deep --reject path-to-regexp && git clean -fxd -e .env && rm package-lock.json && npm install",
-    "prepare": "husky",
-    "postinstall": "patch-package"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,js,json,yml,html,xml}": "prettier --write"
@@ -38,7 +37,6 @@
     "@changesets/cli": "^2.27.10",
     "husky": "^9.1.7",
     "lint-staged": "15.2.10",
-    "patch-package": "^8.0.0",
     "prettier": "3.4.2"
   }
 }
