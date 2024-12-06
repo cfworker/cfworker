@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 5.0.2
+
+### Patch Changes
+
+- b7b602d: Use tshy: Hybrid (CommonJS/ESM) TypeScript node package builder, to produce builds
+
 ## 5.0.1
 
 ### Patch Changes

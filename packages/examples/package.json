@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/examples",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "cfworker examples",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
@@ -23,10 +23,10 @@
     "test": "echo \"no tests 🥺\""
   },
   "dependencies": {
-    "@cfworker/cosmos": "^4.0.1",
-    "@cfworker/jwt": "^7.0.1",
-    "@cfworker/sentry": "^5.0.1",
-    "@cfworker/web": "^5.0.1"
+    "@cfworker/cosmos": "^4.0.2",
+    "@cfworker/jwt": "^7.0.2",
+    "@cfworker/sentry": "^5.0.2",
+    "@cfworker/web": "^5.0.2"
   },
   "devDependencies": {
     "typescript": "^5.7.2",
