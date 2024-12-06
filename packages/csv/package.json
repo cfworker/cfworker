@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/csv",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Streaming CSV encoding for Cloudflare Workers and service workers",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",

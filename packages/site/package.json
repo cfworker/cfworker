@@ -1,6 +1,6 @@
 {
   "name": "@cfworker/site",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "The cfworker.dev website",
   "repository": "https://github.com/cfworker/cfworker",
   "author": "Jeremy Danyow <jdanyow@gmail.com>",
@@ -21,7 +21,7 @@
     "deploy": "echo \"todo: deploy\""
   },
   "dependencies": {
-    "@cfworker/web": "^5.0.1",
+    "@cfworker/web": "^5.0.2",
     "@cloudflare/workers-types": "^4.20241205.0"
   },
   "devDependencies": {

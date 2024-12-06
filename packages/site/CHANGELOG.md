@@ -1,5 +1,13 @@
 # @cfworker/site
 
+## 3.0.2
+
+### Patch Changes
+
+- b7b602d: Use tshy: Hybrid (CommonJS/ESM) TypeScript node package builder, to produce builds
+- Updated dependencies [b7b602d]
+  - @cfworker/web@5.0.2
+
 ## 3.0.1
 
 ### Patch Changes
