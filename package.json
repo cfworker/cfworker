@@ -24,7 +24,7 @@
     "lint": "prettier --check \"**/*.{ts,js,json,yml}\"",
     "lint-staged": "lint-staged",
     "prettier": "prettier --write \"**/*.{ts,js,json,yml}\"",
-    "release": "npm run clean && npm run build && changeset publish",
+    "release": "changeset publish",
     "reinstall": "git clean -fxd -e .env && rm -f package-lock.json && npm install",
     "readme-gen": "node readme-gen.js",
     "update-deps": "npx npm-check-updates --upgrade --deep --reject path-to-regexp && git clean -fxd -e .env && rm package-lock.json && npm install",

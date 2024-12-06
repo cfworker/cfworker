@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
     env:
       COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
       COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
@@ -24,19 +24,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
-      - name: Environment log
-        run: |
-          node --version
-          npm --version
-      - name: Install
-        run: |
-          npm install
-      - name: Lint
-        run: |
-          npm run lint
-      - name: Build
-        run: |
-          npm run build
-      - name: Test
-        run: |
-          npm run test
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
