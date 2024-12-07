@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 4.0.3
+
+### Patch Changes
+
+- 631daf3: Cancel retryRequest body after successful fetch. This removes the `A ReadableStream branch was created but never consumed...` error shown during debugging.
+
 ## 4.0.2
 
 ### Patch Changes
