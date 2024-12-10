@@ -357,6 +357,7 @@ export class CosmosClient {
 
     const { retry, delayMs } = await this.retryPolicy.shouldRetry(context);
     if (!retry) {
+      retryRequest.body?.cancel();
       return response;
     }
     if (delayMs !== 0) {
