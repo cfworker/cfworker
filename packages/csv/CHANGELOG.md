@@ -1,5 +1,11 @@
 # @cfworker/csv
 
+## 4.0.3
+
+### Patch Changes
+
+- 04a079e: Update dependencies
+
 ## 4.0.2
 
 ### Patch Changes

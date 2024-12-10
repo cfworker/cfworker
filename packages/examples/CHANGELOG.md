@@ -1,5 +1,15 @@
 # @cfworker/examples
 
+## 4.0.3
+
+### Patch Changes
+
+- 04a079e: Update dependencies
+- Updated dependencies [04a079e]
+  - @cfworker/cosmos@4.0.4
+  - @cfworker/jwt@7.0.3
+  - @cfworker/web@5.0.3
+
 ## 4.0.2
 
 ### Patch Changes
