@@ -44,7 +44,7 @@
     "esbuild": "^0.24.0",
     "mocha": "^11.0.1",
     "typescript": "^5.7.2",
-    "wrangler": "^3.92.0"
+    "wrangler": "^3.95.0"
   },
   "tshy": {
     "exports": {

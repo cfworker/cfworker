@@ -23,13 +23,13 @@
     "test": "echo \"no tests 🥺\""
   },
   "dependencies": {
-    "@cfworker/cosmos": "^4.0.2",
+    "@cfworker/cosmos": "^4.0.3",
     "@cfworker/jwt": "^7.0.2",
     "@cfworker/sentry": "^5.0.2",
     "@cfworker/web": "^5.0.2"
   },
   "devDependencies": {
     "typescript": "^5.7.2",
-    "wrangler": "^3.92.0"
+    "wrangler": "^3.95.0"
   }
 }

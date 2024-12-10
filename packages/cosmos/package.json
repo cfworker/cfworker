@@ -41,14 +41,14 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "node ../../patch.mjs && tshy",
+    "prepare": "tshy",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },
   "dependencies": {
-    "rfc4648": "^1.5.3"
+    "rfc4648": "^1.5.4"
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",
@@ -58,7 +58,7 @@
     "mocha": "^11.0.1",
     "tshy": "^3.0.2",
     "typescript": "^5.7.2",
-    "wrangler": "^3.92.0"
+    "wrangler": "^3.95.0"
   },
   "tshy": {
     "exports": {
