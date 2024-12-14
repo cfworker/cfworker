@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 5.0.4
+
+### Patch Changes
+
+- 359f03d: Support status codes with empty body in HttpError
+
 ## 5.0.3
 
 ### Patch Changes
