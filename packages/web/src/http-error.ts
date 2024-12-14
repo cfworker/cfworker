@@ -3,9 +3,9 @@ import statuses from 'statuses';
 export class HttpError extends Error {
   public readonly status: number;
   public readonly statusText: string;
-  public readonly body: string | object;
+  public readonly body: string | object | null;
 
-  constructor(status: number, body: string | object) {
+  constructor(status: number, body: string | object | null = null) {
     const statusText = statuses.message[status]!;
 
     super(statusText);
@@ -17,20 +17,20 @@ export class HttpError extends Error {
 
     this.status = status;
     this.statusText = statusText;
-    this.body = body;
+    this.body = statuses.empty[this.status] ? null : (body ?? statusText);
   }
 
   public toResponse(): Response {
-    let body = this.body || this.statusText;
-    let contentType: string;
-    if (typeof body === 'string') {
-      contentType = 'text/plain';
+    let body = this.body;
+    const headers: HeadersInit = {};
+    if (body === null) {
+    } else if (typeof body === 'string') {
+      headers['content-type'] = 'text/plain';
     } else {
-      contentType = 'application/json';
+      headers['content-type'] = 'application/json';
       body = JSON.stringify(body);
     }
     const { status, statusText } = this;
-    const headers = { 'content-type': contentType };
     return new Response(body, { status, statusText, headers });
   }
 }
