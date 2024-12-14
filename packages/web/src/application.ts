@@ -40,11 +40,11 @@ export class Application {
       await middleware(context, () => resolved);
       return context.res.create();
     } catch (err) {
-      console.error((err as any)?.stack ?? err);
-
       if (err instanceof HttpError) {
         return err.toResponse();
       }
+
+      console.error((err as any)?.stack ?? err);
 
       const status = 500;
       const statusText = statuses.message[500];
