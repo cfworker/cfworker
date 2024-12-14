@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 5.0.5
+
+### Patch Changes
+
+- 0d2124e: Don't log console error for HttpError instances
+
 ## 5.0.4
 
 ### Patch Changes
