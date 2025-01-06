@@ -22,17 +22,17 @@ const JSON_POINTER_URI_FRAGMENT =
 const RELATIVE_JSON_POINTER =
   /^(?:0|[1-9][0-9]*)(?:#|(?:\/(?:[^~/]|~0|~1)*)*)$/;
 
-// date: http://tools.ietf.org/html/rfc3339#section-5.6
-const FASTDATE = /^\d\d\d\d-[0-1]\d-[0-3]\d$/;
-// date-time: http://tools.ietf.org/html/rfc3339#section-5.6
-const FASTTIME =
-  /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i;
-const FASTDATETIME =
-  /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i;
-// uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
-// const FASTURI = /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i;
-const FASTURIREFERENCE =
-  /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i;
+// // date: http://tools.ietf.org/html/rfc3339#section-5.6
+// const FASTDATE = /^\d\d\d\d-[0-1]\d-[0-3]\d$/;
+// // date-time: http://tools.ietf.org/html/rfc3339#section-5.6
+// const FASTTIME =
+//   /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i;
+// const FASTDATETIME =
+//   /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i;
+// // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
+// // const FASTURI = /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i;
+// const FASTURIREFERENCE =
+//   /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i;
 
 // https://github.com/ExodusMovement/schemasafe/blob/master/src/formats.js
 const EMAIL = (input: string) => {
