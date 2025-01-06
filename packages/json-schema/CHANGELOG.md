@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 4.1.0
+
+### Minor Changes
+
+- 55975a6: Use strict date format validator
+
 ## 4.0.3
 
 ### Patch Changes
