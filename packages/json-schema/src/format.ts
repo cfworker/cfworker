@@ -79,7 +79,7 @@ function bind(r: RegExp) {
   return r.test.bind(r);
 }
 
-export const fullFormat: Record<string, (s: string) => boolean> = {
+export const format: Record<string, (s: string) => boolean> = {
   date,
   time: time.bind(undefined, false),
   'date-time': date_time,
@@ -97,14 +97,6 @@ export const fullFormat: Record<string, (s: string) => boolean> = {
   'json-pointer': bind(JSON_POINTER),
   'json-pointer-uri-fragment': bind(JSON_POINTER_URI_FRAGMENT),
   'relative-json-pointer': bind(RELATIVE_JSON_POINTER)
-};
-
-export const fastFormat: Record<string, (s: string) => boolean> = {
-  ...fullFormat,
-  date: bind(FASTDATE),
-  time: bind(FASTTIME),
-  'date-time': bind(FASTDATETIME),
-  'uri-reference': bind(FASTURIREFERENCE)
 };
 
 function isLeapYear(year: number) {

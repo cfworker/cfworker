@@ -1,6 +1,6 @@
 import { deepCompareStrict } from './deep-compare-strict.js';
 import { dereference } from './dereference.js';
-import { fastFormat } from './format.js';
+import { format } from './format.js';
 import { encodePointer } from './pointer.js';
 import {
   InstanceType,
@@ -1152,8 +1152,8 @@ export function validate(
     }
     if (
       $format !== undefined &&
-      fastFormat[$format] &&
-      !fastFormat[$format](instance)
+      format[$format] &&
+      !format[$format](instance)
     ) {
       errors.push({
         instanceLocation,
