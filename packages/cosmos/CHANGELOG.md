@@ -1,5 +1,11 @@
 # @cfworker/cosmos
 
+## 4.0.5
+
+### Patch Changes
+
+- 4379518: Update dependencies
+
 ## 4.0.4
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 4.1.1
+
+### Patch Changes
+
+- 4379518: Update dependencies
+
 ## 4.1.0
 
 ### Minor Changes

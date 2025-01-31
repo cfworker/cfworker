@@ -1,5 +1,11 @@
 # @cfworker/uuid
 
+## 4.0.4
+
+### Patch Changes
+
+- 4379518: Update dependencies
+
 ## 4.0.3
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @cfworker/site
 
+## 3.0.3
+
+### Patch Changes
+
+- 4379518: Update dependencies
+- Updated dependencies [4379518]
+  - @cfworker/web@5.0.6
+
 ## 3.0.2
 
 ### Patch Changes

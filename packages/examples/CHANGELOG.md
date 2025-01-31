@@ -1,5 +1,16 @@
 # @cfworker/examples
 
+## 4.0.4
+
+### Patch Changes
+
+- 4379518: Update dependencies
+- Updated dependencies [4379518]
+  - @cfworker/cosmos@4.0.5
+  - @cfworker/sentry@5.0.3
+  - @cfworker/jwt@7.0.4
+  - @cfworker/web@5.0.6
+
 ## 4.0.3
 
 ### Patch Changes
