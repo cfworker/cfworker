@@ -1,5 +1,13 @@
 # @cfworker/web
 
+## 5.0.6
+
+### Patch Changes
+
+- 4379518: Update dependencies
+- Updated dependencies [4379518]
+  - @cfworker/json-schema@4.1.1
+
 ## 5.0.5
 
 ### Patch Changes

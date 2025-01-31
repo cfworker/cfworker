@@ -1,5 +1,11 @@
 # @cfworker/sentry
 
+## 5.0.3
+
+### Patch Changes
+
+- 4379518: Update dependencies
+
 ## 5.0.2
 
 ### Patch Changes

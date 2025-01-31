@@ -1,5 +1,11 @@
 # @cfworker/jwt
 
+## 7.0.4
+
+### Patch Changes
+
+- 4379518: Update dependencies
+
 ## 7.0.3
 
 ### Patch Changes
