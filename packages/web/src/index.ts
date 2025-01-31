@@ -1,4 +1,3 @@
-export { escape as htmlEncode } from 'html-escaper';
 export * from './accepts.js';
 export * from './application.js';
 export * from './context.js';

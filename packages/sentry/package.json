@@ -45,7 +45,7 @@
     "test": "echo \"no tests 🥺\""
   },
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "tshy": {
     "exports": {

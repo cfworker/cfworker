@@ -21,10 +21,10 @@
     "deploy": "echo \"todo: deploy\""
   },
   "dependencies": {
-    "@cfworker/web": "^5.0.2",
-    "@cloudflare/workers-types": "^4.20241205.0"
+    "@cfworker/web": "^5.0.5",
+    "@cloudflare/workers-types": "^4.20250129.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   }
 }

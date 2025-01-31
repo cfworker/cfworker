@@ -45,25 +45,24 @@
     "test": "node ../../test.mjs"
   },
   "dependencies": {
-    "@cfworker/json-schema": "^4.0.3",
-    "@types/html-escaper": "^3.0.2",
+    "@cfworker/json-schema": "^4.1.0",
     "@types/statuses": "^2.0.5",
     "cookie": "^1.0.2",
     "html-escaper": "^3.0.3",
     "negotiator": "^1.0.0",
     "path-to-regexp": "7.1.0",
-    "secure-json-parse": "^3.0.1",
+    "secure-json-parse": "^3.0.2",
     "statuses": "^2.0.1"
   },
   "devDependencies": {
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
     "chai": "^5.1.2",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.24.2",
     "jsonpointer": "^5.0.1",
-    "mocha": "^11.0.1",
-    "typescript": "^5.7.2",
-    "wrangler": "^3.95.0"
+    "mocha": "^11.1.0",
+    "typescript": "^5.7.3",
+    "wrangler": "^3.107.2"
   },
   "tshy": {
     "exports": {
