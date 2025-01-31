@@ -54,11 +54,11 @@
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
     "chai": "^5.1.2",
-    "esbuild": "^0.24.0",
-    "mocha": "^11.0.1",
+    "esbuild": "^0.24.2",
+    "mocha": "^11.1.0",
     "tshy": "^3.0.2",
-    "typescript": "^5.7.2",
-    "wrangler": "^3.95.0"
+    "typescript": "^5.7.3",
+    "wrangler": "^3.107.2"
   },
   "tshy": {
     "exports": {
