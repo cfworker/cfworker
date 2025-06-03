@@ -1,14 +1,9 @@
+import { coerceValue, getInstanceType } from './coercion.js';
 import { deepCompareStrict } from './deep-compare-strict.js';
 import { dereference } from './dereference.js';
 import { format } from './format.js';
 import { encodePointer } from './pointer.js';
-import {
-  InstanceType,
-  OutputUnit,
-  Schema,
-  SchemaDraft,
-  ValidationResult
-} from './types.js';
+import { OutputUnit, Schema, SchemaDraft, ValidationResult } from './types.js';
 import { ucs2length } from './ucs2-length.js';
 
 export type Evaluated = Record<string | number, boolean>;
@@ -18,6 +13,7 @@ export function validate(
   schema: Schema | boolean,
   draft: SchemaDraft = '2019-09',
   lookup: Record<string, Schema | boolean> = dereference(schema),
+  coerce = false,
   shortCircuit = true,
   recursiveAnchor: Schema | null = null,
   instanceLocation = '#',
@@ -25,12 +21,13 @@ export function validate(
   evaluated: Evaluated = Object.create(null)
 ): ValidationResult {
   if (schema === true) {
-    return { valid: true, errors: [] };
+    return { valid: true, errors: [], instance };
   }
 
   if (schema === false) {
     return {
       valid: false,
+      instance,
       errors: [
         {
           instanceLocation,
@@ -42,29 +39,7 @@ export function validate(
     };
   }
 
-  const rawInstanceType = typeof instance;
-  let instanceType: Exclude<InstanceType, 'integer'>;
-  switch (rawInstanceType) {
-    case 'boolean':
-    case 'number':
-    case 'string':
-      instanceType = rawInstanceType;
-      break;
-    case 'object':
-      if (instance === null) {
-        instanceType = 'null';
-      } else if (Array.isArray(instance)) {
-        instanceType = 'array';
-      } else {
-        instanceType = 'object';
-      }
-      break;
-    default:
-      // undefined, bigint, function, symbol
-      throw new Error(
-        `Instances of "${rawInstanceType}" type are not supported.`
-      );
-  }
+  let instanceType = getInstanceType(instance);
 
   const {
     $ref,
@@ -137,6 +112,7 @@ export function validate(
       recursiveAnchor === null ? schema : recursiveAnchor,
       draft,
       lookup,
+      coerce,
       shortCircuit,
       refSchema,
       instanceLocation,
@@ -173,6 +149,7 @@ export function validate(
       refSchema,
       draft,
       lookup,
+      coerce,
       shortCircuit,
       recursiveAnchor,
       instanceLocation,
@@ -191,7 +168,7 @@ export function validate(
       );
     }
     if (draft === '4' || draft === '7') {
-      return { valid: errors.length === 0, errors };
+      return { valid: errors.length === 0, instance, errors };
     }
   }
 
@@ -222,6 +199,39 @@ export function validate(
     }
   } else if ($type === 'integer') {
     if (instanceType !== 'number' || instance % 1 || instance !== instance) {
+      const coercedInstance = coerce
+        ? coerceValue({
+            instance,
+            instanceType,
+            $type
+          })
+        : undefined;
+
+      if (coercedInstance !== undefined) {
+        instance = coercedInstance;
+        instanceType = getInstanceType(instance);
+      } else {
+        errors.push({
+          instanceLocation,
+          keyword: 'type',
+          keywordLocation: `${schemaLocation}/type`,
+          error: `Instance type "${instanceType}" is invalid. Expected "${$type}".`
+        });
+      }
+    }
+  } else if ($type !== undefined && instanceType !== $type) {
+    const coercedInstance = coerce
+      ? coerceValue({
+          instance,
+          instanceType,
+          $type
+        })
+      : undefined;
+
+    if (coercedInstance !== undefined) {
+      instance = coercedInstance;
+      instanceType = getInstanceType(instance);
+    } else {
       errors.push({
         instanceLocation,
         keyword: 'type',
@@ -229,13 +239,6 @@ export function validate(
         error: `Instance type "${instanceType}" is invalid. Expected "${$type}".`
       });
     }
-  } else if ($type !== undefined && instanceType !== $type) {
-    errors.push({
-      instanceLocation,
-      keyword: 'type',
-      keywordLocation: `${schemaLocation}/type`,
-      error: `Instance type "${instanceType}" is invalid. Expected "${$type}".`
-    });
   }
 
   if ($const !== undefined) {
@@ -285,6 +288,7 @@ export function validate(
       $not,
       draft,
       lookup,
+      coerce,
       shortCircuit,
       recursiveAnchor,
       instanceLocation,
@@ -315,6 +319,7 @@ export function validate(
         subSchema,
         draft,
         lookup,
+        coerce,
         shortCircuit,
         $recursiveAnchor === true ? recursiveAnchor : null,
         instanceLocation,
@@ -351,6 +356,7 @@ export function validate(
         subSchema,
         draft,
         lookup,
+        coerce,
         shortCircuit,
         $recursiveAnchor === true ? recursiveAnchor : null,
         instanceLocation,
@@ -385,6 +391,7 @@ export function validate(
         subSchema,
         draft,
         lookup,
+        coerce,
         shortCircuit,
         $recursiveAnchor === true ? recursiveAnchor : null,
         instanceLocation,
@@ -420,6 +427,7 @@ export function validate(
       $if,
       draft,
       lookup,
+      coerce,
       shortCircuit,
       recursiveAnchor,
       instanceLocation,
@@ -433,6 +441,7 @@ export function validate(
           $then,
           draft,
           lookup,
+          coerce,
           shortCircuit,
           recursiveAnchor,
           instanceLocation,
@@ -457,6 +466,7 @@ export function validate(
         $else,
         draft,
         lookup,
+        coerce,
         shortCircuit,
         recursiveAnchor,
         instanceLocation,
@@ -520,6 +530,7 @@ export function validate(
           $propertyNames,
           draft,
           lookup,
+          coerce,
           shortCircuit,
           recursiveAnchor,
           subInstancePointer,
@@ -567,6 +578,7 @@ export function validate(
             $dependentSchemas[key],
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             instanceLocation,
@@ -610,6 +622,7 @@ export function validate(
               propsOrSchema,
               draft,
               lookup,
+              coerce,
               shortCircuit,
               recursiveAnchor,
               instanceLocation,
@@ -647,6 +660,7 @@ export function validate(
           $properties[key],
           draft,
           lookup,
+          coerce,
           shortCircuit,
           recursiveAnchor,
           subInstancePointer,
@@ -687,6 +701,7 @@ export function validate(
             subSchema,
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             subInstancePointer,
@@ -722,6 +737,7 @@ export function validate(
           $additionalProperties,
           draft,
           lookup,
+          coerce,
           shortCircuit,
           recursiveAnchor,
           subInstancePointer,
@@ -754,6 +770,7 @@ export function validate(
             $unevaluatedProperties,
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             subInstancePointer,
@@ -807,6 +824,7 @@ export function validate(
           $prefixItems[i],
           draft,
           lookup,
+          coerce,
           shortCircuit,
           recursiveAnchor,
           `${instanceLocation}/${i}`,
@@ -839,6 +857,7 @@ export function validate(
             $items[i],
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
@@ -866,6 +885,7 @@ export function validate(
             $items,
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
@@ -896,6 +916,7 @@ export function validate(
             $additionalItems,
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${i}`,
@@ -943,6 +964,7 @@ export function validate(
             $contains,
             draft,
             lookup,
+            coerce,
             shortCircuit,
             recursiveAnchor,
             `${instanceLocation}/${j}`,
@@ -1000,6 +1022,7 @@ export function validate(
           $unevaluatedItems,
           draft,
           lookup,
+          coerce,
           shortCircuit,
           recursiveAnchor,
           `${instanceLocation}/${i}`,
@@ -1164,5 +1187,5 @@ export function validate(
     }
   }
 
-  return { valid: errors.length === 0, errors };
+  return { valid: errors.length === 0, instance, errors };
 }
