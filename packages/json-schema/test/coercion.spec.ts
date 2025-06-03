@@ -41,7 +41,7 @@ describe('json-schema coercion', () => {
     expect(result.instance).to.equal(0);
   });
 
-  it.only('array => number coercion', () => {
+  it('array => number coercion', () => {
     const result = validate(
       [1],
       { type: 'number' },
