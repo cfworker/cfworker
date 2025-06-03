@@ -40,6 +40,10 @@ export function coerceValue({
     return instance;
   }
 
+  if (Number.isNaN(instance)) {
+    return undefined;
+  }
+
   let valid = true;
 
   if ($type === 'integer') {
