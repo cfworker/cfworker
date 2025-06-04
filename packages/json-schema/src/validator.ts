@@ -20,8 +20,8 @@ export class Validator {
       this.schema,
       this.draft,
       this.lookup,
-      this.shortCircuit,
-      this.coerce
+      this.coerce,
+      this.shortCircuit
     );
   }
 
