@@ -32,4 +32,21 @@ describe('HttpError', () => {
     expect(response.statusText).to.equal('No Content');
     expect(response.headers.get('content-type')).to.equal(null);
   });
+
+  it('Supports custom headers', async () => {
+    const response = new HttpError(404, 'not found here', {
+      'my-header': 'my value'
+    }).toResponse();
+    expect(response.status).to.equal(404);
+    expect(response.headers.get('content-type')).to.equal('text/plain');
+    expect(response.headers.get('my-header')).to.equal('my value');
+  });
+
+  it('Custom headers override content-type sniffing', async () => {
+    const response = new HttpError(404, '<body></body>', {
+      'Content-Type': 'text/html'
+    }).toResponse();
+    expect(response.status).to.equal(404);
+    expect(response.headers.get('content-type')).to.equal('text/html');
+  });
 });

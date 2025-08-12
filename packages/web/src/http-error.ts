@@ -4,8 +4,13 @@ export class HttpError extends Error {
   public readonly status: number;
   public readonly statusText: string;
   public readonly body: string | object | null;
+  public readonly headers: Headers;
 
-  constructor(status: number, body: string | object | null = null) {
+  constructor(
+    status: number,
+    body: string | object | null = null,
+    headers: HeadersInit = {}
+  ) {
     const statusText = statuses.message[status]!;
 
     super(statusText);
@@ -18,16 +23,21 @@ export class HttpError extends Error {
     this.status = status;
     this.statusText = statusText;
     this.body = statuses.empty[this.status] ? null : (body ?? statusText);
+    this.headers = headers instanceof Headers ? headers : new Headers(headers);
   }
 
   public toResponse(): Response {
     let body = this.body;
-    const headers: HeadersInit = {};
+    const headers = this.headers;
     if (body === null) {
     } else if (typeof body === 'string') {
-      headers['content-type'] = 'text/plain';
+      if (!headers.has('content-type')) {
+        headers.set('content-type', 'text/plain');
+      }
     } else {
-      headers['content-type'] = 'application/json';
+      if (!headers.has('content-type')) {
+        headers.set('content-type', 'application/json');
+      }
       body = JSON.stringify(body);
     }
     const { status, statusText } = this;

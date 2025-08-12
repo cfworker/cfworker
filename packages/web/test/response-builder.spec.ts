@@ -91,7 +91,7 @@ describe('ResponseBuilder', () => {
     expect(type && type.startsWith('multipart/form-data')).to.be.true;
   });
 
-  it.skip('sets content-type to form-urlencoded when URLSearchParams body is assigned', () => {
+  it('sets content-type to form-urlencoded when URLSearchParams body is assigned', () => {
     const res = new ResponseBuilder();
     res.body = new URLSearchParams();
     expect(res.type).to.equal('');
