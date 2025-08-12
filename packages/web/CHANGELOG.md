@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 5.1.0
+
+### Minor Changes
+
+- 7f3d122: Update HttpError to accept custom headers init
+
 ## 5.0.6
 
 ### Patch Changes
