@@ -37,7 +37,7 @@ describe('HttpError', () => {
     const response = new HttpError(404, 'not found here', {
       'my-header': 'my value'
     }).toResponse();
-    expect(response.status).to.equal(302);
+    expect(response.status).to.equal(404);
     expect(response.headers.get('content-type')).to.equal('text/plain');
     expect(response.headers.get('my-header')).to.equal('my value');
   });
