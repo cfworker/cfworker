@@ -8,4 +8,5 @@ import './normalize-pathname.spec.js';
 import './req.spec.js';
 import './response-builder.spec.js';
 import './validate.spec.js';
+import './router.spec.js';
 export default worker;
