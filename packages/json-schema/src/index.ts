@@ -1,3 +1,4 @@
+export * from './coercion.js';
 export * from './deep-compare-strict.js';
 export * from './dereference.js';
 export * from './format.js';

@@ -8,7 +8,8 @@ export class Validator {
   constructor(
     private readonly schema: Schema | boolean,
     private readonly draft: SchemaDraft = '2019-09',
-    private readonly shortCircuit = true
+    private readonly shortCircuit = true,
+    private readonly coerce = false
   ) {
     this.lookup = dereference(schema);
   }
@@ -19,6 +20,7 @@ export class Validator {
       this.schema,
       this.draft,
       this.lookup,
+      this.coerce,
       this.shortCircuit
     );
   }

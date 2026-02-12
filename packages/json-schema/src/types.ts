@@ -86,7 +86,8 @@ export interface OutputUnit {
   error: string;
 }
 
-export interface ValidationResult {
+export type ValidationResult = {
   valid: boolean;
   errors: OutputUnit[];
-}
+  instance: any;
+};
