@@ -119,11 +119,11 @@ export const authentication: Middleware = async ({ cookies, state }, next) => {
     return;
   }
 
-  const result = await parseJwt(
-    token,
-    auth0Origin,
-    process.env.AUTH0_CLIENT_ID
-  );
+  const result = await parseJwt({
+    jwt: token,
+    issuer: auth0Origin,
+    audience: process.env.AUTH0_CLIENT_ID
+  });
   if (!result.valid) {
     cookies.set('reason', result.reason);
     await next();
