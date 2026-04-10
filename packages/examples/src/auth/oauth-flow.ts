@@ -102,7 +102,10 @@ export async function handleTokenCallback(context: Context) {
   // Encode the validated redirect_uri for safe interpolation into the HTML attribute.
   const safeRedirectUri = redirect_uri
     .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
   context.res.status = 200;
   context.res.headers.set('content-type', 'text/html');
   context.res.body = `<!doctype html><html><head><meta http-equiv="Refresh" content="0; URL=${safeRedirectUri}"></head></html>`;
