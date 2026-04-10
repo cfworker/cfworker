@@ -78,6 +78,17 @@ export async function handleTokenCallback(context: Context) {
     throw new HttpError(400, 'redirect_uri is expected.');
   }
 
+  // Validate redirect_uri is on the same origin to prevent open redirects.
+  let parsedRedirect: URL;
+  try {
+    parsedRedirect = new URL(redirect_uri);
+  } catch {
+    throw new HttpError(400, 'Invalid redirect_uri.');
+  }
+  if (parsedRedirect.origin !== context.req.url.origin) {
+    throw new HttpError(400, 'Invalid redirect_uri: must be on the same origin.');
+  }
+
   let tokenResponse: TokenResponse;
   try {
     tokenResponse = await exchangeCode(code, redirect_uri);
@@ -88,9 +99,16 @@ export async function handleTokenCallback(context: Context) {
   setTokenCookie(context.cookies, tokenResponse);
 
   // https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
+  // Encode the validated redirect_uri for safe interpolation into the HTML attribute.
+  const safeRedirectUri = redirect_uri
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
   context.res.status = 200;
   context.res.headers.set('content-type', 'text/html');
-  context.res.body = `<!doctype html><html><head><meta http-equiv="Refresh" content="0; URL=${redirect_uri}"></head></html>`;
+  context.res.body = `<!doctype html><html><head><meta http-equiv="Refresh" content="0; URL=${safeRedirectUri}"></head></html>`;
 }
 
 export const auth0Origin = new URL('https://' + process.env.AUTH0_DOMAIN)
@@ -104,11 +122,11 @@ export const authentication: Middleware = async ({ cookies, state }, next) => {
     return;
   }
 
-  const result = await parseJwt(
-    token,
-    auth0Origin,
-    process.env.AUTH0_CLIENT_ID
-  );
+  const result = await parseJwt({
+    jwt: token,
+    issuer: auth0Origin,
+    audience: process.env.AUTH0_CLIENT_ID
+  });
   if (!result.valid) {
     cookies.set('reason', result.reason);
     await next();
