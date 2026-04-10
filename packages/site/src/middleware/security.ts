@@ -15,6 +15,19 @@ export const securityMiddleware: Middleware = async ({ res }, next) => {
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   res.headers.set('X-Content-Type-Options', 'nosniff');
 
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
+  res.headers.set('X-Frame-Options', 'SAMEORIGIN');
+
+  // Disable the broken IE XSS auditor; CSP is the correct mitigation.
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
+  res.headers.set('X-XSS-Protection', '0');
+
+  // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy
+  res.headers.set(
+    'Permissions-Policy',
+    'camera=(), microphone=(), geolocation=(), payment=()'
+  );
+
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   res.headers.set(
     'Content-Security-Policy',
