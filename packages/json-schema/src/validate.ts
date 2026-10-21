@@ -1,6 +1,7 @@
 import { deepCompareStrict } from './deep-compare-strict.js';
 import { dereference } from './dereference.js';
 import { format } from './format.js';
+import { isMultipleOf } from './multiple-of.js';
 import { encodePointer } from './pointer.js';
 import {
   InstanceType,
@@ -1107,19 +1108,13 @@ export function validate(
         });
       }
     }
-    if ($multipleOf !== undefined) {
-      const remainder = instance % $multipleOf;
-      if (
-        Math.abs(0 - remainder) >= 1.1920929e-7 &&
-        Math.abs($multipleOf - remainder) >= 1.1920929e-7
-      ) {
-        errors.push({
-          instanceLocation,
-          keyword: 'multipleOf',
-          keywordLocation: `${schemaLocation}/multipleOf`,
-          error: `${instance} is not a multiple of ${$multipleOf}.`
-        });
-      }
+    if ($multipleOf !== undefined && !isMultipleOf(instance, $multipleOf)) {
+      errors.push({
+        instanceLocation,
+        keyword: 'multipleOf',
+        keywordLocation: `${schemaLocation}/multipleOf`,
+        error: `${instance} is not a multiple of ${$multipleOf}.`
+      });
     }
   } else if (instanceType === 'string') {
     const length =
@@ -1152,6 +1147,7 @@ export function validate(
     }
     if (
       $format !== undefined &&
+      Object.prototype.hasOwnProperty.call(format, $format) &&
       format[$format] &&
       !format[$format](instance)
     ) {
