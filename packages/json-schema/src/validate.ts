@@ -650,8 +650,11 @@ export function validate(
           subInstancePointer,
           `${keywordLocation}/${encodePointer(key)}`
         );
+        // Covered by "properties" whether or not it is valid, so "additionalProperties"
+        // must not apply to it. Only a valid result is an annotation for "unevaluatedProperties".
+        thisEvaluated[key] = true;
         if (result.valid) {
-          evaluated[key] = thisEvaluated[key] = true;
+          evaluated[key] = true;
         } else {
           stop = shortCircuit;
           errors.push(
@@ -689,8 +692,10 @@ export function validate(
             subInstancePointer,
             `${keywordLocation}/${encodePointer(pattern)}`
           );
+          // Covered by "patternProperties" whether or not it is valid; see "properties" above.
+          thisEvaluated[key] = true;
           if (result.valid) {
-            evaluated[key] = thisEvaluated[key] = true;
+            evaluated[key] = true;
           } else {
             stop = shortCircuit;
             errors.push(

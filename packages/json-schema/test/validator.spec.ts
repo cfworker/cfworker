@@ -84,4 +84,48 @@ describe('Validator', () => {
     expect(res.valid).to.equal(false);
     expect(res.errors.length).to.equal(4);
   });
+
+  it('does not report a declared property that fails its own schema as additional', () => {
+    const validator = new Validator(
+      {
+        type: 'object',
+        required: ['status'],
+        properties: {
+          status: { type: 'string', enum: ['To-Do', 'Doing', 'Review'] }
+        },
+        patternProperties: { '^x-': { type: 'string' } },
+        additionalProperties: false
+      },
+      '2020-12',
+      false
+    );
+
+    const res = validator.validate({ status: 123, 'x-note': 1, extra: true });
+    expect(res.valid).to.equal(false);
+    expect(
+      res.errors
+        .filter(e => e.keyword === 'additionalProperties')
+        .map(e => e.error)
+    ).to.deep.equal([
+      'Property "extra" does not match additional properties schema.'
+    ]);
+  });
+
+  it('still leaves a declared property that fails its own schema unevaluated', () => {
+    const validator = new Validator(
+      {
+        type: 'object',
+        allOf: [{ properties: { status: { type: 'string' } } }],
+        unevaluatedProperties: false
+      },
+      '2020-12',
+      false
+    );
+
+    const res = validator.validate({ status: 123 });
+    expect(res.valid).to.equal(false);
+    expect(
+      res.errors.some(e => e.keyword === 'unevaluatedProperties')
+    ).to.equal(true);
+  });
 });
