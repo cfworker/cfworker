@@ -14,7 +14,7 @@ export async function verifyJwtSignature(
   return crypto.subtle.verify(
     'RSASSA-PKCS1-v1_5',
     key,
-    decoded.signature,
+    Uint8Array.from(decoded.signature),
     data
   );
 }

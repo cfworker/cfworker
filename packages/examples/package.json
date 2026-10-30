@@ -26,10 +26,10 @@
     "@cfworker/cosmos": "^4.0.5",
     "@cfworker/jwt": "^7.0.4",
     "@cfworker/sentry": "^5.0.3",
-    "@cfworker/web": "^5.0.6"
+    "@cfworker/web": "^5.1.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.3",
-    "wrangler": "^3.107.2"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.156.0"
   }
 }

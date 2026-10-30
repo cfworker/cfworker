@@ -8,7 +8,7 @@ export class Signer {
   constructor(masterkey: string) {
     const promiseLike = crypto.subtle.importKey(
       'raw',
-      base64.parse(masterkey),
+      Uint8Array.from(base64.parse(masterkey)),
       { name: 'HMAC', hash: { name: 'SHA-256' } },
       false,
       ['sign']
@@ -28,7 +28,7 @@ export class Signer {
     request.headers.set('x-ms-date', date.toUTCString());
   }
 
-  public getPayload(request: Request, date: Date): Uint8Array {
+  public getPayload(request: Request, date: Date): Uint8Array<ArrayBuffer> {
     const url = new URL(request.url);
     const { resourceType, resourceId } = this.pathnameToResource(url.pathname);
     const method = request.method.toLowerCase();
