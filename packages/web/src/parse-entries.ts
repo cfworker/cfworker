@@ -1,4 +1,4 @@
-type ParsedEntries<T> = Record<string, T | T[]>;
+export type ParsedEntries<T> = Record<string, T | T[]>;
 
 export function parseEntries<T>(
   input: Iterable<readonly [string, T]>
