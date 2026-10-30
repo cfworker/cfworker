@@ -1,5 +1,12 @@
 # @cfworker/web
 
+## 6.1.0
+
+### Minor Changes
+
+- 231d4d1: Export the duplicate-preserving `parseEntries` utility and its `ParsedEntries`
+  return type.
+
 ## 6.0.0
 
 ### Major Changes
