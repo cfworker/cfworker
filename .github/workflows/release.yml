@@ -5,10 +5,16 @@ on:
     branches:
       - main
 
+permissions: {}
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
     env:
       COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
       COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
@@ -25,7 +31,8 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 26.x
-          cache: npm
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
@@ -37,6 +44,3 @@ jobs:
           # This expects you to have a script called release which does a build for your packages
           # and calls changeset publish
           publish-script: npm run release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
