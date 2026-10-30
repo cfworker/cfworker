@@ -43,6 +43,7 @@ export const ignoredKeyword: Record<string, boolean> = {
   enum: true,
   const: true,
   required: true,
+  dependentRequired: true,
   type: true,
   maximum: true,
   minimum: true,

@@ -13,6 +13,48 @@ import { ucs2length } from './ucs2-length.js';
 
 export type Evaluated = Record<string | number, boolean>;
 
+function hasOwnProperty(instance: object, key: PropertyKey): boolean {
+  return Object.prototype.hasOwnProperty.call(instance, key);
+}
+
+function decimalInteger(
+  value: number
+): [coefficient: bigint, exponent: number] {
+  const coefficientAndExponent = Math.abs(value).toString().split('e');
+  const coefficient = coefficientAndExponent[0]!;
+  const exponent = coefficientAndExponent[1] ?? '0';
+  const point = coefficient.indexOf('.');
+  const fractionLength = point === -1 ? 0 : coefficient.length - point - 1;
+  return [
+    BigInt(coefficient.replace('.', '')),
+    Number(exponent) - fractionLength
+  ];
+}
+
+function isMultipleOf(instance: number, divisor: number): boolean {
+  if (!Number.isFinite(instance) || !Number.isFinite(divisor) || divisor <= 0) {
+    return false;
+  }
+
+  const [instanceCoefficient, instanceExponent] = decimalInteger(instance);
+  const [divisorCoefficient, divisorExponent] = decimalInteger(divisor);
+  const exponentDifference = instanceExponent - divisorExponent;
+
+  if (exponentDifference >= 0) {
+    return (
+      (instanceCoefficient * 10n ** BigInt(exponentDifference)) %
+        divisorCoefficient ===
+      0n
+    );
+  }
+
+  return (
+    instanceCoefficient %
+      (divisorCoefficient * 10n ** BigInt(-exponentDifference)) ===
+    0n
+  );
+}
+
 export function validate(
   instance: any,
   schema: Schema | boolean,
@@ -478,7 +520,7 @@ export function validate(
   if (instanceType === 'object') {
     if ($required !== undefined) {
       for (const key of $required) {
-        if (!(key in instance)) {
+        if (!hasOwnProperty(instance, key)) {
           errors.push({
             instanceLocation,
             keyword: 'required',
@@ -540,10 +582,10 @@ export function validate(
     if ($dependentRequired !== undefined) {
       const keywordLocation = `${schemaLocation}/dependantRequired`;
       for (const key in $dependentRequired) {
-        if (key in instance) {
+        if (hasOwnProperty(instance, key)) {
           const required = $dependentRequired[key] as string[];
           for (const dependantKey of required) {
-            if (!(dependantKey in instance)) {
+            if (!hasOwnProperty(instance, dependantKey)) {
               errors.push({
                 instanceLocation,
                 keyword: 'dependentRequired',
@@ -559,7 +601,7 @@ export function validate(
     if ($dependentSchemas !== undefined) {
       for (const [key, dependentSchema] of Object.entries($dependentSchemas)) {
         const keywordLocation = `${schemaLocation}/dependentSchemas`;
-        if (key in instance) {
+        if (hasOwnProperty(instance, key)) {
           const result = validate(
             instance,
             dependentSchema,
@@ -589,11 +631,11 @@ export function validate(
     if ($dependencies !== undefined) {
       const keywordLocation = `${schemaLocation}/dependencies`;
       for (const key in $dependencies) {
-        if (key in instance) {
+        if (hasOwnProperty(instance, key)) {
           const propsOrSchema = $dependencies[key] as Schema | string[];
           if (Array.isArray(propsOrSchema)) {
             for (const dependantKey of propsOrSchema) {
-              if (!(dependantKey in instance)) {
+              if (!hasOwnProperty(instance, dependantKey)) {
                 errors.push({
                   instanceLocation,
                   keyword: 'dependencies',
@@ -636,7 +678,7 @@ export function validate(
     if ($properties !== undefined) {
       const keywordLocation = `${schemaLocation}/properties`;
       for (const [key, propertySchema] of Object.entries($properties)) {
-        if (!(key in instance)) {
+        if (!hasOwnProperty(instance, key)) {
           continue;
         }
         const subInstancePointer = `${instanceLocation}/${encodePointer(key)}`;
@@ -962,11 +1004,7 @@ export function validate(
           errors.length = errorsLength;
         }
 
-        if (
-          $minContains === undefined &&
-          $maxContains === undefined &&
-          contained === 0
-        ) {
+        if ($minContains === undefined && contained === 0) {
           errors.splice(errorsLength, 0, {
             instanceLocation,
             keyword: 'contains',
@@ -1110,11 +1148,7 @@ export function validate(
       }
     }
     if ($multipleOf !== undefined) {
-      const remainder = instance % $multipleOf;
-      if (
-        Math.abs(0 - remainder) >= 1.1920929e-7 &&
-        Math.abs($multipleOf - Math.abs(remainder)) >= 1.1920929e-7
-      ) {
+      if (!isMultipleOf(instance, $multipleOf)) {
         errors.push({
           instanceLocation,
           keyword: 'multipleOf',

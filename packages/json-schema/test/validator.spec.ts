@@ -128,4 +128,65 @@ describe('Validator', () => {
       res.errors.some(e => e.keyword === 'unevaluatedProperties')
     ).to.equal(true);
   });
+
+  describe('issue #338 regressions', () => {
+    it('defaults minContains to one when maxContains is present', () => {
+      const validator = new Validator(
+        { contains: { const: 'urgent' }, maxContains: 1 },
+        '2020-12'
+      );
+
+      expect(validator.validate(['normal']).valid).to.equal(false);
+    });
+
+    it('rejects a fractional non-multiple smaller than the old tolerance', () => {
+      const validator = new Validator({ multipleOf: 1e-7 }, '2020-12');
+
+      expect(validator.validate(1.5e-7).valid).to.equal(false);
+    });
+
+    it('requires an own object property', () => {
+      const validator = new Validator(
+        { type: 'object', required: ['constructor'] },
+        '2020-12'
+      );
+
+      expect(validator.validate({}).valid).to.equal(false);
+    });
+
+    it('only applies dependentRequired for an own object property', () => {
+      const validator = new Validator(
+        { dependentRequired: { constructor: ['name'] } },
+        '2020-12'
+      );
+
+      expect(validator.validate({}).valid).to.equal(true);
+    });
+
+    it('does not consider arrays and objects equal for const', () => {
+      expect(
+        new Validator({ const: [] }, '2020-12').validate({}).valid
+      ).to.equal(false);
+      expect(
+        new Validator({ const: [1] }, '2020-12').validate({ '0': 1 }).valid
+      ).to.equal(false);
+    });
+
+    it('considers an empty array and an empty object unique', () => {
+      const validator = new Validator({ uniqueItems: true }, '2020-12');
+
+      expect(validator.validate([[], {}]).valid).to.equal(true);
+    });
+
+    it('does not interpret dependentRequired entries as subschemas', () => {
+      const schemas = [
+        { dependentRequired: { id: [] } },
+        { dependentRequired: { $id: ['#'] } }
+      ];
+
+      for (const schema of schemas) {
+        expect(() => new Validator(schema, '2020-12')).not.to.throw();
+      }
+    });
+  });
 });

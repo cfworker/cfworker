@@ -3,10 +3,12 @@ export function deepCompareStrict(a: any, b: any): boolean {
   if (typeofa !== typeof b) {
     return false;
   }
-  if (Array.isArray(a)) {
-    if (!Array.isArray(b)) {
-      return false;
-    }
+  const aIsArray = Array.isArray(a);
+  const bIsArray = Array.isArray(b);
+  if (aIsArray !== bIsArray) {
+    return false;
+  }
+  if (aIsArray) {
     const length = a.length;
     if (length !== b.length) {
       return false;
@@ -29,6 +31,9 @@ export function deepCompareStrict(a: any, b: any): boolean {
       return false;
     }
     for (const k of aKeys) {
+      if (!Object.prototype.hasOwnProperty.call(b, k)) {
+        return false;
+      }
       if (!deepCompareStrict(a[k], b[k])) {
         return false;
       }
