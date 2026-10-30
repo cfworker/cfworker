@@ -1,12 +1,7 @@
 import statuses from 'statuses';
 
 export type ExtendedBodyInit =
-  | BodyInit
-  | boolean
-  | Date
-  | number
-  | object
-  | null;
+  BodyInit | boolean | Date | number | object | null;
 
 export class ResponseBuilder {
   public readonly headers: Headers = new Headers();

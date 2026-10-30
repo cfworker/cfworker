@@ -5,13 +5,7 @@ export declare const enum OutputFormat {
   Detailed = 4
 }
 export type InstanceType =
-  | 'array'
-  | 'boolean'
-  | 'integer'
-  | 'null'
-  | 'number'
-  | 'object'
-  | 'string';
+  'array' | 'boolean' | 'integer' | 'null' | 'number' | 'object' | 'string';
 export interface Schema {
   $id?: string;
   $anchor?: string;
