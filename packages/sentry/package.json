@@ -42,8 +42,7 @@
     "prepare": "tshy",
     "build": "tshy",
     "typecheck": "tsc --project tsconfig.json",
-    "clean": "tsc --build tsconfig.build.json --clean",
-    "test": "echo \"no tests 🥺\""
+    "clean": "tsc --build tsconfig.build.json --clean"
   },
   "devDependencies": {
     "typescript": "^7.0.2"

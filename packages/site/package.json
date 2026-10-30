@@ -14,12 +14,9 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=esm --platform=browser --target=es2022 --conditions=worker,browser --define:process.env.NODE_ENV='\"production\"' --outfile=dist/index.js",
+    "build": "npm run build --workspace @cfworker/web && esbuild src/index.ts --bundle --format=esm --platform=browser --target=es2022 --conditions=worker,browser --define:process.env.NODE_ENV='\"production\"' --outfile=dist/index.js",
     "typecheck": "tsc --project tsconfig.json",
-    "start": "echo \"todo: start\"",
-    "clean": "rm -rf dist",
-    "test": "echo \"no tests 🥺\"",
-    "deploy": "echo \"todo: deploy\""
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@cfworker/web": "^5.1.1",
