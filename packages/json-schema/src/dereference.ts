@@ -81,7 +81,7 @@ export function dereference(
   basePointer = ''
 ): Record<string, Schema | boolean> {
   if (schema && typeof schema === 'object' && !Array.isArray(schema)) {
-    const id: string = schema.$id || schema.id;
+    const id: string = schema.$id || schema['id'];
     if (id) {
       const url = new URL(id, baseURI.href);
       if (url.hash.length > 1) {

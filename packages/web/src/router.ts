@@ -136,11 +136,11 @@ function collectParameters(
   params: Record<string, string>
 ) {
   for (let i = 1; i < match.length; i++) {
-    const name = keys[i - 1].name;
+    const key = keys[i - 1];
     const value = match[i];
-    if (!value) {
+    if (!key || !value) {
       continue;
     }
-    params[name] = decodeURIComponent(value);
+    params[key.name] = decodeURIComponent(value);
   }
 }

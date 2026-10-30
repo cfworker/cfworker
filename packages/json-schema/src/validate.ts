@@ -307,8 +307,7 @@ export function validate(
     const keywordLocation = `${schemaLocation}/anyOf`;
     const errorsLength = errors.length;
     let anyValid = false;
-    for (let i = 0; i < $anyOf.length; i++) {
-      const subSchema = $anyOf[i];
+    for (const [i, subSchema] of $anyOf.entries()) {
       const subEvaluated: Evaluated = Object.create(evaluated);
       const result = validate(
         instance,
@@ -343,8 +342,7 @@ export function validate(
     const keywordLocation = `${schemaLocation}/allOf`;
     const errorsLength = errors.length;
     let allValid = true;
-    for (let i = 0; i < $allOf.length; i++) {
-      const subSchema = $allOf[i];
+    for (const [i, subSchema] of $allOf.entries()) {
       const subEvaluated: Evaluated = Object.create(evaluated);
       const result = validate(
         instance,
@@ -559,12 +557,12 @@ export function validate(
     }
 
     if ($dependentSchemas !== undefined) {
-      for (const key in $dependentSchemas) {
+      for (const [key, dependentSchema] of Object.entries($dependentSchemas)) {
         const keywordLocation = `${schemaLocation}/dependentSchemas`;
         if (key in instance) {
           const result = validate(
             instance,
-            $dependentSchemas[key],
+            dependentSchema,
             draft,
             lookup,
             shortCircuit,
@@ -637,14 +635,14 @@ export function validate(
 
     if ($properties !== undefined) {
       const keywordLocation = `${schemaLocation}/properties`;
-      for (const key in $properties) {
+      for (const [key, propertySchema] of Object.entries($properties)) {
         if (!(key in instance)) {
           continue;
         }
         const subInstancePointer = `${instanceLocation}/${encodePointer(key)}`;
         const result = validate(
           instance[key],
-          $properties[key],
+          propertySchema,
           draft,
           lookup,
           shortCircuit,
@@ -672,9 +670,8 @@ export function validate(
 
     if (!stop && $patternProperties !== undefined) {
       const keywordLocation = `${schemaLocation}/patternProperties`;
-      for (const pattern in $patternProperties) {
+      for (const [pattern, subSchema] of Object.entries($patternProperties)) {
         const regex = new RegExp(pattern, 'u');
-        const subSchema = $patternProperties[pattern];
         for (const key in instance) {
           if (!regex.test(key)) {
             continue;
@@ -804,7 +801,7 @@ export function validate(
       for (; i < length2; i++) {
         const result = validate(
           instance[i],
-          $prefixItems[i],
+          $prefixItems[i]!,
           draft,
           lookup,
           shortCircuit,
@@ -836,7 +833,7 @@ export function validate(
         for (; i < length2; i++) {
           const result = validate(
             instance[i],
-            $items[i],
+            $items[i]!,
             draft,
             lookup,
             shortCircuit,

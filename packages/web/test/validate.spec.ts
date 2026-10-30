@@ -25,7 +25,7 @@ describe('validate', () => {
       }
     });
     const context = new Context(request, {}, { waitUntil() {} });
-    context.req.params.id = '899934';
+    context.req.params['id'] = '899934';
     let resolved = false;
     await middleware(context, async () => {
       resolved = true;
@@ -62,7 +62,7 @@ describe('validate', () => {
       }
     });
     const context = new Context(request, {}, { waitUntil() {} });
-    context.req.params.id = '899934';
+    context.req.params['id'] = '899934';
     let resolved = false;
     try {
       await middleware(context, async () => {
@@ -83,7 +83,7 @@ describe('validate', () => {
       }
     });
     const context = new Context(request, {}, { waitUntil() {} });
-    context.req.params.id = '899934';
+    context.req.params['id'] = '899934';
     let resolved = false;
     try {
       await middleware(context, async () => {

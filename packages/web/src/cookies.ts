@@ -21,7 +21,10 @@ export class Cookies {
     const { encode, ...cookieOptions } = options ?? {};
     this.responseHeaders.append(
       'Set-Cookie',
-      stringifySetCookie({ name, value: val, ...cookieOptions }, { encode })
+      stringifySetCookie(
+        { name, value: val, ...cookieOptions },
+        encode ? { encode } : undefined
+      )
     );
   }
 }

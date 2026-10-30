@@ -18,30 +18,33 @@ export function uuid(arr?: Uint8Array): string {
     crypto.getRandomValues(randomArr);
     arr = randomArr;
   }
+  if (arr.length < 16) {
+    throw new TypeError('UUID byte array must contain at least 16 bytes');
+  }
   // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-  arr[6] = (arr[6] & 0x0f) | 0x40;
-  arr[8] = (arr[8] & 0x3f) | 0x80;
+  arr[6] = (arr[6]! & 0x0f) | 0x40;
+  arr[8] = (arr[8]! & 0x3f) | 0x80;
   const s = (
-    bth[arr[0]] +
-    bth[arr[1]] +
-    bth[arr[2]] +
-    bth[arr[3]] +
+    byteToHex(arr[0]) +
+    byteToHex(arr[1]) +
+    byteToHex(arr[2]) +
+    byteToHex(arr[3]) +
     separator +
-    bth[arr[4]] +
-    bth[arr[5]] +
+    byteToHex(arr[4]) +
+    byteToHex(arr[5]) +
     separator +
-    bth[arr[6]] +
-    bth[arr[7]] +
+    byteToHex(arr[6]) +
+    byteToHex(arr[7]) +
     separator +
-    bth[arr[8]] +
-    bth[arr[9]] +
+    byteToHex(arr[8]) +
+    byteToHex(arr[9]) +
     separator +
-    bth[arr[10]] +
-    bth[arr[11]] +
-    bth[arr[12]] +
-    bth[arr[13]] +
-    bth[arr[14]] +
-    bth[arr[15]]
+    byteToHex(arr[10]) +
+    byteToHex(arr[11]) +
+    byteToHex(arr[12]) +
+    byteToHex(arr[13]) +
+    byteToHex(arr[14]) +
+    byteToHex(arr[15])
   ).toLowerCase(); // https://bugs.chromium.org/p/v8/issues/detail?id=3175#c4 https://github.com/uuidjs/uuid/pull/434
   if (!reg.test(s)) {
     throw new TypeError('Invalid uuid');
@@ -94,4 +97,12 @@ const bth: string[] = [];
 
 for (let i = 0; i < 256; i++) {
   bth[i] = (i + 0x100).toString(16).substr(1);
+}
+
+function byteToHex(byte: number | undefined): string {
+  const hex = byte === undefined ? undefined : bth[byte];
+  if (hex === undefined) {
+    throw new TypeError('Invalid UUID byte');
+  }
+  return hex;
 }

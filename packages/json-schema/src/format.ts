@@ -109,15 +109,22 @@ function date(str: string) {
   const matches = str.match(DATE);
   if (!matches) return false;
 
-  const year = +matches[1];
-  const month = +matches[2];
-  const day = +matches[3];
+  const yearPart = matches[1];
+  const monthPart = matches[2];
+  const dayPart = matches[3];
+  if (!yearPart || !monthPart || !dayPart) return false;
+
+  const year = +yearPart;
+  const month = +monthPart;
+  const day = +dayPart;
+  const maxDay = month == 2 && isLeapYear(year) ? 29 : DAYS[month];
 
   return (
     month >= 1 &&
     month <= 12 &&
     day >= 1 &&
-    day <= (month == 2 && isLeapYear(year) ? 29 : DAYS[month])
+    maxDay !== undefined &&
+    day <= maxDay
   );
 }
 
@@ -125,9 +132,14 @@ function time(full: boolean, str: string) {
   const matches = str.match(TIME);
   if (!matches) return false;
 
-  const hour = +matches[1];
-  const minute = +matches[2];
-  const second = +matches[3];
+  const hourPart = matches[1];
+  const minutePart = matches[2];
+  const secondPart = matches[3];
+  if (!hourPart || !minutePart || !secondPart) return false;
+
+  const hour = +hourPart;
+  const minute = +minutePart;
+  const second = +secondPart;
   const timeZone = !!matches[5];
   return (
     ((hour <= 23 && minute <= 59 && second <= 59) ||
@@ -139,8 +151,14 @@ function time(full: boolean, str: string) {
 const DATE_TIME_SEPARATOR = /t|\s/i;
 function date_time(str: string) {
   // http://tools.ietf.org/html/rfc3339#section-5.6
-  const dateTime = str.split(DATE_TIME_SEPARATOR);
-  return dateTime.length == 2 && date(dateTime[0]) && time(true, dateTime[1]);
+  const [datePart, timePart, extra] = str.split(DATE_TIME_SEPARATOR);
+  return (
+    datePart !== undefined &&
+    timePart !== undefined &&
+    extra === undefined &&
+    date(datePart) &&
+    time(true, timePart)
+  );
 }
 
 const NOT_URI_FRAGMENT = /\/|:/;
