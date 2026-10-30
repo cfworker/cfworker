@@ -934,11 +934,6 @@ export const unsupportedTests: Record<
       mismatch: true
     }
   },
-  'draft2019-09/properties': {
-    'properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true
-    }
-  },
   'draft2019-09/recursiveRef': {
     '$recursiveRef without $recursiveAnchor works like $ref': {
       match: true,
@@ -1082,14 +1077,6 @@ export const unsupportedTests: Record<
       'non-number is invalid': true
     }
   },
-  'draft2019-09/required': {
-    'required properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true,
-      '__proto__ present': true,
-      'toString present': true,
-      'constructor present': true
-    }
-  },
   'draft2019-09/unevaluatedItems': {
     'unevaluatedItems can see annotations from if without then and else': {
       'invalid in case if is evaluated': true
@@ -1221,11 +1208,6 @@ export const unsupportedTests: Record<
       mismatch: true
     }
   },
-  'draft2020-12/properties': {
-    'properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true
-    }
-  },
   'draft2020-12/refRemote': {
     'remote ref': {
       'remote ref valid': true,
@@ -1271,14 +1253,6 @@ export const unsupportedTests: Record<
     '$ref to $ref finds detached $anchor': {
       'number is valid': true,
       'non-number is invalid': true
-    }
-  },
-  'draft2020-12/required': {
-    'required properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true,
-      '__proto__ present': true,
-      'toString present': true,
-      'constructor present': true
     }
   },
   'draft2020-12/unevaluatedItems': {
@@ -1350,11 +1324,6 @@ export const unsupportedTests: Record<
       'an IPv6 address without enclosing brackets is invalid': true
     }
   },
-  'draft4/properties': {
-    'properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true
-    }
-  },
   'draft4/ref': {
     'root pointer ref': {
       match: true,
@@ -1399,14 +1368,6 @@ export const unsupportedTests: Record<
       'string is valid': true,
       'null is valid': true,
       'object is invalid': true
-    }
-  },
-  'draft4/required': {
-    'required properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true,
-      '__proto__ present': true,
-      'toString present': true,
-      'constructor present': true
     }
   },
   'draft7/definitions': {
@@ -1492,11 +1453,6 @@ export const unsupportedTests: Record<
       'leading zero in an embedded IPv4 address is invalid': true,
       'square brackets are not allowed in a path segment': true,
       'an IPv6 address without enclosing brackets is invalid': true
-    }
-  },
-  'draft7/properties': {
-    'properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true
     }
   },
   'draft7/ref': {
@@ -1585,14 +1541,6 @@ export const unsupportedTests: Record<
     '$ref to $ref finds location-independent $id': {
       'number is valid': true,
       'non-number is invalid': true
-    }
-  },
-  'draft7/required': {
-    'required properties whose names are Javascript object property names': {
-      'none of the properties mentioned': true,
-      '__proto__ present': true,
-      'toString present': true,
-      'constructor present': true
     }
   }
 };
