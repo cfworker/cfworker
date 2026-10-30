@@ -1,5 +1,25 @@
 # @cfworker/web
 
+## 5.1.1
+
+### Patch Changes
+
+- 48962e9: Modernize the build and test toolchain for Node.js 26 and TypeScript 7. Packages
+  are now checked with stricter optional-property and indexed-access rules, and
+  library builds produce both ESM and CommonJS output through tshy.
+
+  Refresh runtime dependencies and harden dynamic input handling. This includes
+  migrating Web's safe JSON parsing to `@hapi/bourne`, adopting cookie 2,
+  rejecting malformed JWT structures and unsupported verification algorithms,
+  storing JWKS keys in prototype-safe maps, rejecting undersized UUID byte
+  arrays, avoiding shared UUID fallback state, and making schema, routing, and
+  session lookups safer.
+
+- Updated dependencies [4dbbcbc]
+- Updated dependencies [72d2f31]
+- Updated dependencies [48962e9]
+  - @cfworker/json-schema@4.1.3
+
 ## 5.1.0
 
 ### Minor Changes

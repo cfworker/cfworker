@@ -24,10 +24,10 @@
     "test": "echo \"no tests 🥺\""
   },
   "dependencies": {
-    "@cfworker/cosmos": "^4.0.5",
-    "@cfworker/jwt": "^7.0.4",
-    "@cfworker/sentry": "^5.0.3",
-    "@cfworker/web": "^5.1.0",
+    "@cfworker/cosmos": "^4.0.6",
+    "@cfworker/jwt": "^7.0.5",
+    "@cfworker/sentry": "^5.0.4",
+    "@cfworker/web": "^5.1.1",
     "rfc4648": "^1.5.4"
   },
   "devDependencies": {
