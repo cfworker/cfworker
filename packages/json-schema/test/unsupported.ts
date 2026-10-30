@@ -31,8 +31,7 @@ export const unsupportedTests: Record<
       'invalid json-pointer string is only an annotation by default': true
     },
     'relative-json-pointer format': {
-      'invalid relative-json-pointer string is only an annotation by default':
-        true
+      'invalid relative-json-pointer string is only an annotation by default': true
     },
     'uri format': {
       'invalid uri string is only an annotation by default': true
@@ -124,8 +123,7 @@ export const unsupportedTests: Record<
       'a label of only Arabic-Indic digits is invalid': true,
       'zero width non-joiner must pass at every occurrence': true,
       'Bidi domain name with a digit-first label is invalid': true,
-      'label starting with a digit before a right-to-left letter is invalid':
-        true,
+      'label starting with a digit before a right-to-left letter is invalid': true,
       'left-to-right label containing a right-to-left letter is invalid': true,
       'right-to-left label mixing both digit types is invalid': true,
       'A-label that decodes to a disallowed code point is invalid': true,
@@ -134,8 +132,7 @@ export const unsupportedTests: Record<
       'empty label between two dots is invalid': true,
       'a name longer than 253 characters is invalid': true,
       'A-label that decodes to only ASCII is invalid': true,
-      'non-canonical Punycode that does not re-encode to itself is invalid':
-        true
+      'non-canonical Punycode that does not re-encode to itself is invalid': true
     },
     'validation of separators in internationalized host names': {
       'single dot': true,
@@ -260,8 +257,7 @@ export const unsupportedTests: Record<
       'string list with number values': true
     },
     'after leaving a dynamic scope, it should not be used by a $dynamicRef': {
-      'string matches /$defs/thingy, but the $dynamicRef does not stop here':
-        true,
+      'string matches /$defs/thingy, but the $dynamicRef does not stop here': true,
       'first_scope is not in dynamic scope for the $dynamicRef': true
     },
     'A $dynamicRef to a $dynamicAnchor in the same schema resource behaves like a normal $ref to an $anchor':
@@ -293,8 +289,7 @@ export const unsupportedTests: Record<
         'The recursive part is not valid against the root': true
       },
     'after leaving a dynamic scope, it is not used by a $dynamicRef': {
-      'string matches /$defs/thingy, but the $dynamicRef does not stop here':
-        true,
+      'string matches /$defs/thingy, but the $dynamicRef does not stop here': true,
       'first_scope is not in dynamic scope for the $dynamicRef': true
     },
     'strict-tree schema, guards against misspelled properties': {
@@ -354,8 +349,7 @@ export const unsupportedTests: Record<
       'invalid json-pointer string is only an annotation by default': true
     },
     'relative-json-pointer format': {
-      'invalid relative-json-pointer string is only an annotation by default':
-        true
+      'invalid relative-json-pointer string is only an annotation by default': true
     },
     'uri format': {
       'invalid uri string is only an annotation by default': true
@@ -458,8 +452,7 @@ export const unsupportedTests: Record<
       'a label of only Arabic-Indic digits is invalid': true,
       'zero width non-joiner must pass at every occurrence': true,
       'Bidi domain name with a digit-first label is invalid': true,
-      'label starting with a digit before a right-to-left letter is invalid':
-        true,
+      'label starting with a digit before a right-to-left letter is invalid': true,
       'left-to-right label containing a right-to-left letter is invalid': true,
       'right-to-left label mixing both digit types is invalid': true,
       'A-label that decodes to a disallowed code point is invalid': true,
@@ -468,8 +461,7 @@ export const unsupportedTests: Record<
       'empty label between two dots is invalid': true,
       'a name longer than 253 characters is invalid': true,
       'A-label that decodes to only ASCII is invalid': true,
-      'non-canonical Punycode that does not re-encode to itself is invalid':
-        true
+      'non-canonical Punycode that does not re-encode to itself is invalid': true
     },
     'validation of separators in internationalized host names': {
       'single dot': true,
@@ -735,8 +727,7 @@ export const unsupportedTests: Record<
       'a label of only Arabic-Indic digits is invalid': true,
       'zero width non-joiner must pass at every occurrence': true,
       'Bidi domain name with a digit-first label is invalid': true,
-      'label starting with a digit before a right-to-left letter is invalid':
-        true,
+      'label starting with a digit before a right-to-left letter is invalid': true,
       'left-to-right label containing a right-to-left letter is invalid': true,
       'right-to-left label mixing both digit types is invalid': true,
       'A-label that decodes to a disallowed code point is invalid': true,
@@ -745,8 +736,7 @@ export const unsupportedTests: Record<
       'empty label between two dots is invalid': true,
       'a name longer than 253 characters is invalid': true,
       'A-label that decodes to only ASCII is invalid': true,
-      'non-canonical Punycode that does not re-encode to itself is invalid':
-        true
+      'non-canonical Punycode that does not re-encode to itself is invalid': true
     },
     'validation of separators in internationalized host names': {
       'single dot': true,
@@ -870,10 +860,8 @@ export const unsupportedTests: Record<
       'an IPv4-address-literal after the @ is valid': true,
       'an IPv6-address-literal after the @ is valid': true,
       'an empty quoted string in the local part is valid': true,
-      'a quoted string containing only a space in the local part is valid':
-        true,
-      'a quoted string with no special characters in the local part is valid':
-        true,
+      'a quoted string containing only a space in the local part is valid': true,
+      'a quoted string with no special characters in the local part is valid': true,
       'a quoted pair in the local part is valid': true,
       'an escaped double quote in the local part is valid': true,
       'an escaped backslash in the local part is valid': true,
@@ -1159,10 +1147,8 @@ export const unsupportedTests: Record<
       'an IPv4-address-literal after the @ is valid': true,
       'an IPv6-address-literal after the @ is valid': true,
       'an empty quoted string in the local part is valid': true,
-      'a quoted string containing only a space in the local part is valid':
-        true,
-      'a quoted string with no special characters in the local part is valid':
-        true,
+      'a quoted string containing only a space in the local part is valid': true,
+      'a quoted string with no special characters in the local part is valid': true,
       'a quoted pair in the local part is valid': true,
       'an escaped double quote in the local part is valid': true,
       'an escaped backslash in the local part is valid': true,
@@ -1343,10 +1329,8 @@ export const unsupportedTests: Record<
       'an IPv4-address-literal after the @ is valid': true,
       'an IPv6-address-literal after the @ is valid': true,
       'an empty quoted string in the local part is valid': true,
-      'a quoted string containing only a space in the local part is valid':
-        true,
-      'a quoted string with no special characters in the local part is valid':
-        true,
+      'a quoted string containing only a space in the local part is valid': true,
+      'a quoted string with no special characters in the local part is valid': true,
       'a quoted pair in the local part is valid': true,
       'an escaped double quote in the local part is valid': true,
       'an escaped backslash in the local part is valid': true,
@@ -1447,10 +1431,8 @@ export const unsupportedTests: Record<
       'an IPv4-address-literal after the @ is valid': true,
       'an IPv6-address-literal after the @ is valid': true,
       'an empty quoted string in the local part is valid': true,
-      'a quoted string containing only a space in the local part is valid':
-        true,
-      'a quoted string with no special characters in the local part is valid':
-        true,
+      'a quoted string containing only a space in the local part is valid': true,
+      'a quoted string with no special characters in the local part is valid': true,
       'a quoted pair in the local part is valid': true,
       'an escaped double quote in the local part is valid': true,
       'an escaped backslash in the local part is valid': true,
