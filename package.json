@@ -10,7 +10,7 @@
   "private": true,
   "engines": {
     "npm": ">=10.9.0",
-    "node": ">=22.22.1"
+    "node": ">=26.0.0"
   },
   "workspaces": [
     "packages/*"
