@@ -6,7 +6,18 @@ import { DecodedJwt } from './types.js';
  * Decode a JWT into header, payload, and signature components.
  */
 export function decodeJwt(token: string): DecodedJwt {
-  const [header, payload, signature] = token.split('.');
+  const segments = token.split('.');
+  const header = segments[0];
+  const payload = segments[1];
+  const signature = segments[2];
+  if (
+    segments.length !== 3 ||
+    header === undefined ||
+    payload === undefined ||
+    signature === undefined
+  ) {
+    throw new TypeError('JWT must contain three segments.');
+  }
   const decoder = new TextDecoder();
   return {
     header: JSON.parse(

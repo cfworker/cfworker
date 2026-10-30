@@ -61,8 +61,8 @@ export async function importKey(iss: string, jwk: JsonWebKey): Promise<void> {
     false,
     ['verify']
   );
-  importedKeys[iss] = importedKeys[iss] || {};
-  importedKeys[iss][jwk.kid ?? 'default'] = key;
+  const issuerKeys = (importedKeys[iss] ??= {});
+  issuerKeys[jwk.kid ?? 'default'] = key;
 }
 
 /**
@@ -74,12 +74,14 @@ export async function getKey(decoded: DecodedJwt): Promise<CryptoKey> {
     payload: { iss }
   } = decoded;
 
-  if (!importedKeys[iss]) {
+  let issuerKeys = importedKeys[iss];
+  if (!issuerKeys) {
     const jwks = await getJwks(iss);
     await Promise.all(jwks.keys.map(jwk => importKey(iss, jwk)));
+    issuerKeys = importedKeys[iss];
   }
 
-  const key = importedKeys[iss][kid];
+  const key = issuerKeys?.[kid];
 
   if (!key) {
     throw new Error(`Error jwk not found. iss: ${iss}; kid: ${kid};`);

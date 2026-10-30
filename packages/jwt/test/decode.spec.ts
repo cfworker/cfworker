@@ -5,7 +5,7 @@ import { decodeJwt } from '../src/decode.js';
 describe('decodeJwt', () => {
   const encoded =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-  const [rawHeader, rawPayload, rawSignature] = encoded.split('.');
+  const [rawHeader, rawPayload, rawSignature] = splitJwt(encoded);
 
   const encodedUndefinedType =
     'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.GuoUe6tw79bJlbU1HU0ADX0pr0u2kf3r_4OdrDufSfQ';
@@ -13,7 +13,7 @@ describe('decodeJwt', () => {
     rawHeaderUndefinedType,
     rawPayloadUndefinedType,
     rawSignatureUndefinedType
-  ] = encodedUndefinedType.split('.');
+  ] = splitJwt(encodedUndefinedType);
 
   it('decodes a JWT', () => {
     expect(decodeJwt(encoded)).to.eql({
@@ -53,4 +53,24 @@ describe('decodeJwt', () => {
       }
     });
   });
+
+  it('rejects a JWT without three segments', () => {
+    expect(() => decodeJwt('header.payload')).to.throw(
+      TypeError,
+      'JWT must contain three segments.'
+    );
+  });
 });
+
+function splitJwt(token: string): [string, string, string] {
+  const [header, payload, signature, extra] = token.split('.');
+  if (
+    header === undefined ||
+    payload === undefined ||
+    signature === undefined ||
+    extra !== undefined
+  ) {
+    throw new TypeError('Expected a JWT with three segments.');
+  }
+  return [header, payload, signature];
+}

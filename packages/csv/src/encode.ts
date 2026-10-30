@@ -31,9 +31,10 @@ export function encode<T extends {}>(
   const { readable, writable } = new TransformStream();
   (async () => {
     const writer = writable.getWriter();
-    if (rows.length > 0) {
+    const firstRow = rows[0];
+    if (firstRow !== undefined) {
       if (!columns) {
-        columns = Object.keys(rows[0]).map(key => ({
+        columns = Object.keys(firstRow).map(key => ({
           key: key as keyof T,
           label: key,
           format: (x: any) => x

@@ -25,9 +25,9 @@ export function assertArg(name: string, value: any): asserts value {
  * Template literal tag which URI encodes values.
  */
 export function uri(strings: TemplateStringsArray, ...values: any[]): string {
-  let s = strings[0];
+  let s = strings[0] ?? '';
   for (let i = 0; i < values.length; i++) {
-    s += encodeURIComponent(values[i]) + strings[i + 1];
+    s += encodeURIComponent(values[i]) + (strings[i + 1] ?? '');
   }
   return s;
 }
@@ -49,11 +49,13 @@ export function parseConnectionString(connString: string): ConnectionInfo {
       props[key] = val;
     }
   });
-  if (!props.AccountEndpoint || !props.AccountKey) {
+  const endpoint = props['AccountEndpoint'];
+  const masterKey = props['AccountKey'];
+  if (!endpoint || !masterKey) {
     throw new Error('Invalid connection string');
   }
   return {
-    endpoint: props.AccountEndpoint,
-    masterKey: props.AccountKey
+    endpoint,
+    masterKey
   };
 }

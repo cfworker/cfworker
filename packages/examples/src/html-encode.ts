@@ -7,5 +7,8 @@ const entities: Record<string, string> = {
 };
 
 export function htmlEncode(value: string): string {
-  return value.replace(/[&<>"']/g, character => entities[character]);
+  return value.replace(
+    /[&<>"']/g,
+    character => entities[character] ?? character
+  );
 }

@@ -103,7 +103,7 @@ export class ResponseBuilder {
     if (!type) {
       return '';
     }
-    return type.split(';', 1)[0];
+    return type.split(';', 1)[0] ?? '';
   }
   set type(value) {
     this._implicitType = false;

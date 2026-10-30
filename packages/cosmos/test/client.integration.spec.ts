@@ -8,11 +8,12 @@ import {
 
 const env: Record<string, string> = {};
 
-if (env.COSMOS_DB_ORIGIN) {
-  const endpoint = env.COSMOS_DB_ORIGIN;
-  const connectionString = env.COSMOS_DB_CONNECTION_STRING;
-  const masterKey = env.COSMOS_DB_MASTER_KEY;
-  const dbId = env.COSMOS_DB_DATABASE;
+const endpoint = env['COSMOS_DB_ORIGIN'];
+const connectionString = env['COSMOS_DB_CONNECTION_STRING'];
+const masterKey = env['COSMOS_DB_MASTER_KEY'];
+const dbId = env['COSMOS_DB_DATABASE'];
+
+if (endpoint && connectionString && masterKey && dbId) {
   const collId = 'integration-test-' + Date.now();
   const partitionKey: PartitionKeyDefinition = {
     paths: ['/_partitionKey'],
@@ -347,8 +348,8 @@ if (env.COSMOS_DB_ORIGIN) {
         }
 
         expect(results.length).to.equal(10);
-        for (let i = 0; i < 10; i++) {
-          expect(results[i].id).to.equal(`id-${i}`);
+        for (const [i, result] of results.entries()) {
+          expect(result.id).to.equal(`id-${i}`);
         }
       });
     });
