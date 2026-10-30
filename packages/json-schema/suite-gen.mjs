@@ -65,11 +65,11 @@ async function generate() {
     const [from, name] = match;
     const importName = 'remote_' + name.replace(/[-/]/g, '_');
     imports += `// @ts-ignore\nimport ${importName} from '${from}';\n`;
-    remotes += `  { name: 'http://localhost:1234/${name}.json', schema: ${importName} },\n`;
+    remotes += `  { name: 'http://localhost:1234/${name}.json', schema: ${importName} as Remote['schema'] },\n`;
   }
 
   const code =
-    `import { SchemaTestSuite, Remote } from './types';\n${imports}\n` +
+    `import type { SchemaTestSuite, Remote } from './types.js';\n${imports}\n` +
     `export const suites: SchemaTestSuite[] = [\n${suites}\n];\n` +
     `export const remotes: Remote[] = [\n${remotes}\n];\n`;
 

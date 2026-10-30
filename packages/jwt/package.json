@@ -40,8 +40,9 @@
   ],
   "scripts": {
     "prepare": "tshy",
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
+    "build": "tshy",
+    "typecheck": "tsc --project tsconfig.json",
+    "clean": "tsc --build tsconfig.build.json --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },
@@ -58,6 +59,7 @@
     "wrangler": "^4.156.0"
   },
   "tshy": {
+    "project": "./tsconfig.build.json",
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts"

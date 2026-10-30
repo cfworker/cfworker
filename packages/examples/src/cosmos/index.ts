@@ -9,11 +9,7 @@ const partitionKey = 'test';
 const client = new CosmosClient({ endpoint, masterKey, dbId, collId });
 
 export default {
-  async fetch(
-    request: Request,
-    env: any,
-    context: { waitUntil(promise: Promise<any>): void }
-  ) {
+  async fetch(request: Request) {
     const url = new URL(request.url);
     const docId = url.searchParams.get('id') ?? 'demo';
 

@@ -9,14 +9,15 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "npm": ">= 7.18.1",
-    "node": ">= v16.14.0"
+    "npm": ">=10.9.0",
+    "node": ">=22.22.1"
   },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
     "start": "npm run start --workspace=@cfworker/examples",
     "test": "npm run test --workspaces",
     "deploy": "npm run deploy --workspace=@cfworker/site",

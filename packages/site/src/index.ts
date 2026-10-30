@@ -10,8 +10,14 @@ if (String(process.env.NODE_ENV) === 'production') {
   application.use(securityMiddleware).use(cachingMiddleware);
 }
 
-application
-  .use(normalizePathnameMiddleware)
-  .use(stripIndex)
-  .use(routes)
-  .listen();
+application.use(normalizePathnameMiddleware).use(stripIndex).use(routes);
+
+export default {
+  fetch(
+    request: Request,
+    env: unknown,
+    context: { waitUntil(promise: Promise<unknown>): void }
+  ) {
+    return application.handleRequest(request, env, context);
+  }
+};

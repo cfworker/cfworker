@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig-worker",
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "isolatedDeclarations": true
+  }
+}

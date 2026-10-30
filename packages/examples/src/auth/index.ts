@@ -1,10 +1,5 @@
-import {
-  Application,
-  htmlEncode,
-  HttpError,
-  Middleware,
-  Router
-} from '@cfworker/web';
+import { Application, HttpError, Middleware, Router } from '@cfworker/web';
+import { htmlEncode } from '../html-encode.js';
 import { handleRegister } from './management.js';
 import {
   auth0Origin,

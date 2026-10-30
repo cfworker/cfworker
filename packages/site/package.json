@@ -15,6 +15,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "echo \"todo: build\"",
+    "typecheck": "tsc --project tsconfig.json",
     "start": "echo \"todo: start\"",
     "clean": "rm -rf dist",
     "test": "echo \"no tests 🥺\"",
