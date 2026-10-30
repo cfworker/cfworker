@@ -22,7 +22,7 @@
     "deploy": "echo \"todo: deploy\""
   },
   "dependencies": {
-    "@cfworker/web": "^5.1.0",
+    "@cfworker/web": "^5.1.1",
     "@cloudflare/workers-types": "^5.20261030.1"
   },
   "devDependencies": {
