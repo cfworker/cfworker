@@ -1,5 +1,20 @@
 # @cfworker/web
 
+## 6.0.0
+
+### Major Changes
+
+- f64729e: Preserve repeated query parameters and form fields as ordered arrays during
+  validation. Scalar schemas now reject duplicate keys instead of validating only
+  the last value while handlers may consume the first. Headers use the same safe
+  conversion after their values are normalized, and custom parser behavior is
+  unchanged.
+
+### Patch Changes
+
+- Updated dependencies [2ec889d]
+  - @cfworker/json-schema@4.1.4
+
 ## 5.1.1
 
 ### Patch Changes

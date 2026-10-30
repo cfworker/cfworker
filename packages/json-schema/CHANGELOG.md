@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 4.1.4
+
+### Patch Changes
+
+- 2ec889d: Remove obsolete declaration files that were shadowed by the TypeScript sources.
+
 ## 4.1.3
 
 ### Patch Changes
