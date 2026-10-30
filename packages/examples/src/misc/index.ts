@@ -1,12 +1,12 @@
 import { captureError } from '@cfworker/sentry';
 import {
   Application,
-  htmlEncode,
   HttpError,
   Middleware,
   Router,
   validate
 } from '@cfworker/web';
+import { htmlEncode } from '../html-encode.js';
 import { html } from './html-stream.js';
 
 const sentryLogging: Middleware = async (context, next) => {

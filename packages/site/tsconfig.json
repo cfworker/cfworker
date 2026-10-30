@@ -1,8 +1,4 @@
 {
-  "extends": "../../tsconfig-base",
-  "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
-    "composite": false
-  }
+  "extends": "../../tsconfig-app",
+  "include": ["src"]
 }

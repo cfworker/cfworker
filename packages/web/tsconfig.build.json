@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig-library",
+  "compilerOptions": {
+    "outDir": "dist/esm",
+    "rootDir": "./src"
+  },
+  "include": ["src"],
+  "references": [{ "path": "../json-schema/tsconfig.build.json" }]
+}

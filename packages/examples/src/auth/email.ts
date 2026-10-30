@@ -1,4 +1,4 @@
-import * as base64url from '@cfworker/base64url';
+import { base64 } from 'rfc4648';
 
 /**
  * Response from mailgun email validation API.
@@ -45,8 +45,8 @@ export async function validateEmail(
   url.searchParams.set('address', email);
   const response = await fetch(url.href, {
     headers: {
-      Authorization: `Basic ${base64url.encode(
-        `api:${process.env.MAILGUN_API_KEY}`
+      Authorization: `Basic ${base64.stringify(
+        new TextEncoder().encode(`api:${process.env.MAILGUN_API_KEY}`)
       )}`
     }
   });

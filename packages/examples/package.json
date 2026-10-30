@@ -14,6 +14,7 @@
   "type": "module",
   "scripts": {
     "build": "echo \"no build\"",
+    "typecheck": "tsc --project tsconfig.json",
     "clean": "echo \"no clean\"",
     "start-auth": "wrangler dev src/auth/index.ts",
     "start-cosmos": "wrangler dev src/cosmos/index.ts",
@@ -26,7 +27,8 @@
     "@cfworker/cosmos": "^4.0.5",
     "@cfworker/jwt": "^7.0.4",
     "@cfworker/sentry": "^5.0.3",
-    "@cfworker/web": "^5.1.0"
+    "@cfworker/web": "^5.1.0",
+    "rfc4648": "^1.5.4"
   },
   "devDependencies": {
     "typescript": "^7.0.2",

@@ -78,7 +78,7 @@ describe('normalizePathnameMiddleware', () => {
       { waitUntil() {} }
     );
     let resolved = false;
-    let error = new Error();
+    let error: unknown;
     try {
       await normalizePathnameMiddleware(context, async () => {
         resolved = true;
@@ -87,7 +87,11 @@ describe('normalizePathnameMiddleware', () => {
       error = err;
     }
     expect(resolved).to.be.false;
-    expect(error instanceof HttpError).to.be.true;
+    if (!(error instanceof HttpError)) {
+      throw new Error(
+        'Expected normalizePathnameMiddleware to throw HttpError'
+      );
+    }
     expect(error.message).to.eql('Bad Request');
   });
 });

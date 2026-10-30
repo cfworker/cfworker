@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig-worker",
+  "compilerOptions": {
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "noEmit": true
+  }
+}

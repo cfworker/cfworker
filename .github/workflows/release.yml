@@ -21,12 +21,14 @@ jobs:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs
           # with the correct commits
           fetch-depth: 0
-      - name: Use Node.js 22.x
+      - name: Use Node.js 22.22.1
         uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22.22.1
           cache: npm
       - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
       - run: npm test
       - name: Publish
         id: changesets

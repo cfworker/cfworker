@@ -40,14 +40,16 @@
   ],
   "scripts": {
     "prepare": "tshy",
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
+    "build": "tshy",
+    "typecheck": "tsc --project tsconfig.json",
+    "clean": "tsc --build tsconfig.build.json --clean",
     "test": "echo \"no tests 🥺\""
   },
   "devDependencies": {
     "typescript": "^7.0.2"
   },
   "tshy": {
+    "project": "./tsconfig.build.json",
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts"
