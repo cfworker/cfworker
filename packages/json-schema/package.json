@@ -53,8 +53,8 @@
     "@types/chai": "^5.0.1",
     "@types/mocha": "^10.0.10",
     "chai": "^5.1.2",
-    "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite#76b529f",
     "esbuild": "^0.24.2",
+    "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite.git#89e83a7",
     "mocha": "^11.1.0",
     "typescript": "^5.7.3",
     "wrangler": "^3.107.2"
