@@ -81,6 +81,45 @@ new Application()
   .listen();
 ```
 
+## Repeated validation values
+
+By default, `validate` converts headers, query parameters, and form fields into
+objects before applying their schemas. A value that occurs once is stored
+directly. Repeated values are stored as an array in encounter order, including
+empty values:
+
+```ts
+// ?tag=a&tag=&tag=b
+const query = { tag: ['a', '', 'b'] };
+```
+
+For query parameters and URL-encoded forms, values are strings. Multipart form
+values can also be `File` objects. `Headers` supplies normalized values and
+usually combines repeated header lines into one string before validation.
+
+The array shape makes a scalar schema reject duplicate query parameters or form
+fields rather than validating a different value from the one application code
+might read. To accept both single and repeated values, declare both shapes
+explicitly:
+
+```ts
+validate({
+  search: {
+    properties: {
+      tag: {
+        oneOf: [
+          { type: 'string' },
+          { type: 'array', items: { type: 'string' } }
+        ]
+      }
+    }
+  }
+});
+```
+
+A custom `RequestParser` continues to receive the original `URLSearchParams` or
+`FormData` input and controls its resulting shape.
+
 [To run this example](/packages/examples/web/index.ts):
 
 ```
