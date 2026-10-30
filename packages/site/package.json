@@ -14,17 +14,19 @@
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
-    "build": "echo \"todo: build\"",
+    "build": "esbuild src/index.ts --bundle --format=esm --platform=browser --target=es2022 --conditions=worker,browser --define:process.env.NODE_ENV='\"production\"' --outfile=dist/index.js",
+    "typecheck": "tsc --project tsconfig.json",
     "start": "echo \"todo: start\"",
     "clean": "rm -rf dist",
     "test": "echo \"no tests 🥺\"",
     "deploy": "echo \"todo: deploy\""
   },
   "dependencies": {
-    "@cfworker/web": "^5.0.6",
-    "@cloudflare/workers-types": "^4.20250129.0"
+    "@cfworker/web": "^5.1.0",
+    "@cloudflare/workers-types": "^5.20261030.1"
   },
   "devDependencies": {
-    "typescript": "^5.7.3"
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
   }
 }

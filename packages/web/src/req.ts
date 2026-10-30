@@ -1,5 +1,7 @@
-import { Reviver, safeParse } from 'secure-json-parse';
+import { safeParse } from '@hapi/bourne';
 import { Accepts } from './accepts.js';
+
+type Reviver = (this: any, key: string, value: any) => any;
 
 export class Req {
   public readonly raw: Request;

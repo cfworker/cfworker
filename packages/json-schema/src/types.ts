@@ -7,13 +7,7 @@ export const enum OutputFormat {
 }
 
 export type InstanceType =
-  | 'array'
-  | 'boolean'
-  | 'integer'
-  | 'null'
-  | 'number'
-  | 'object'
-  | 'string';
+  'array' | 'boolean' | 'integer' | 'null' | 'number' | 'object' | 'string';
 
 export interface Schema {
   $id?: string;

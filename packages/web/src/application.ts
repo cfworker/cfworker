@@ -7,7 +7,7 @@ const resolved = Promise.resolve();
 
 export class Application {
   private readonly middleware: Middleware[] = [];
-  private _composedMiddleware?: Middleware;
+  private _composedMiddleware: Middleware | undefined;
 
   private get composedMiddleware() {
     if (!this._composedMiddleware) {
@@ -47,7 +47,7 @@ export class Application {
       console.error((err as any)?.stack ?? err);
 
       const status = 500;
-      const statusText = statuses.message[500];
+      const statusText = statuses.message[500] ?? 'Internal Server Error';
       const headers = { 'content-type': 'text/plain' };
       return new Response(statusText, { status, statusText, headers });
     }

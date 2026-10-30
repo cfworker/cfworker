@@ -1,12 +1,12 @@
 import { captureError } from '@cfworker/sentry';
 import {
   Application,
-  htmlEncode,
   HttpError,
   Middleware,
   Router,
   validate
 } from '@cfworker/web';
+import { htmlEncode } from '../html-encode.js';
 import { html } from './html-stream.js';
 
 const sentryLogging: Middleware = async (context, next) => {
@@ -17,7 +17,7 @@ const sentryLogging: Middleware = async (context, next) => {
     if (!(err instanceof HttpError) || err.status === 500) {
       const { posted } = captureError({
         sentryDsn: process.env.SENTRY_DSN,
-        environment: process.env.NODE_ENV,
+        environment: process.env.NODE_ENV ?? 'development',
         release: 'demo',
         err,
         request: req.raw,

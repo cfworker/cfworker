@@ -66,6 +66,28 @@ describe('ReqBody', () => {
     expect(obj3).to.equal(obj2);
   });
 
+  it('applies a JSON reviver', async () => {
+    const request = new Request('https://a.b', {
+      method: 'POST',
+      body: JSON.stringify({ count: 1 })
+    });
+    const rb = new ReqBody(request);
+    const data = await rb.json((key, value) =>
+      key === 'count' ? value + 1 : value
+    );
+    expect(data).to.eql({ count: 2 });
+  });
+
+  it('rejects prototype poisoning', async () => {
+    const request = new Request('https://a.b', {
+      method: 'POST',
+      body: '{"__proto__":{"polluted":true}}'
+    });
+    const rb = new ReqBody(request);
+    expect(await rb.json()).to.be.null;
+    expect(({} as { polluted?: boolean }).polluted).to.be.undefined;
+  });
+
   it('reads text', async () => {
     const body = 'hello world';
     const request = new Request('https://a.b', {

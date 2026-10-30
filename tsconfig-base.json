@@ -1,22 +1,16 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "removeComments": true,
-    "typeRoots": [],
     "types": [],
-    "baseUrl": "./packages",
-    "paths": {
-      "@cfworker/*": ["./*"]
-    },
-    "composite": true,
-    "isolatedModules": true,
-    "isolatedDeclarations": true
+    "isolatedModules": true
   }
 }

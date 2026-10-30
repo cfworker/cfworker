@@ -16,21 +16,23 @@ jobs:
       COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs
           # with the correct commits
           fetch-depth: 0
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
+      - name: Use Node.js 26.x
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
-          node-version: 22.x
+          node-version: 26.x
           cache: npm
       - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
       - run: npm test
       - name: Publish
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
           # This expects you to have a script called release which does a build for your packages
           # and calls changeset publish

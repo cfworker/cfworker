@@ -9,14 +9,15 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "npm": ">= 7.18.1",
-    "node": ">= v16.14.0"
+    "npm": ">=10.9.0",
+    "node": ">=26.0.0"
   },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
     "start": "npm run start --workspace=@cfworker/examples",
     "test": "npm run test --workspaces",
     "deploy": "npm run deploy --workspace=@cfworker/site",
@@ -34,9 +35,9 @@
     "*.{ts,js,json,yml,html,xml}": "prettier --write"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.12",
+    "@changesets/cli": "^3.0.3",
     "husky": "^9.1.7",
-    "lint-staged": "15.4.3",
-    "prettier": "3.4.2"
+    "lint-staged": "17.6.0",
+    "prettier": "3.9.10"
   }
 }

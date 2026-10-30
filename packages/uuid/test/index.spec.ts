@@ -9,6 +9,13 @@ describe('uuid', () => {
     );
   });
 
+  it('rejects byte arrays that are too short', () => {
+    expect(() => uuid(new Uint8Array(15))).to.throw(
+      TypeError,
+      'UUID byte array must contain at least 16 bytes'
+    );
+  });
+
   it('parses a uuid', () => {
     const value = parseUuid('76a65416-a8ae-4eae-94ca-7dd75823a9ea');
 

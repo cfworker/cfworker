@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [26.x]
     env:
       COSMOS_DB_ORIGIN: ${{ secrets.COSMOS_DB_ORIGIN }}
       COSMOS_DB_MASTER_KEY: ${{ secrets.COSMOS_DB_MASTER_KEY }}
@@ -18,12 +18,14 @@ jobs:
       COSMOS_DB_CONNECTION_STRING: ${{ secrets.COSMOS_DB_CONNECTION_STRING }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
       - run: npm test

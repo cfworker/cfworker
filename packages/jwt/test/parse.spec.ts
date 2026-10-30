@@ -285,9 +285,7 @@ async function createJwt(
   header: JwtHeader,
   payload: JwtPayload
 ): Promise<string> {
-  if (!privateKey[kid]) {
-    privateKey[kid] = await generateKey(kid, alg);
-  }
+  const key = (privateKey[kid] ??= await generateKey(kid, alg));
   const encoder = new TextEncoder();
   const data =
     base64url.stringify(encoder.encode(JSON.stringify(header))) +
@@ -296,7 +294,7 @@ async function createJwt(
 
   const signature = await crypto.subtle.sign(
     'RSASSA-PKCS1-v1_5',
-    privateKey[kid],
+    key,
     encoder.encode(data)
   );
 
@@ -304,12 +302,16 @@ async function createJwt(
 }
 
 async function generateKey(kid: string, alg: string) {
+  const hash = algToHash[alg];
+  if (!hash) {
+    throw new TypeError(`Unsupported algorithm: ${alg}`);
+  }
   const keyPair = await crypto.subtle.generateKey(
     {
       name: 'RSASSA-PKCS1-v1_5',
       modulusLength: 2048,
       publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-      hash: { name: algToHash[alg] }
+      hash: { name: hash }
     },
     true,
     ['sign', 'verify']

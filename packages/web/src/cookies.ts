@@ -1,13 +1,9 @@
-import {
-  parse as parseCookie,
-  serialize as serializeCookie,
-  SerializeOptions
-} from 'cookie';
+import { parseCookie, stringifySetCookie, SerializeOptions } from 'cookie';
 
 const noCookies = Object.create(null);
 
 export class Cookies {
-  private readonly requestCookies: Record<string, string>;
+  private readonly requestCookies: Record<string, string | undefined>;
 
   constructor(
     requestHeaders: Headers,
@@ -22,9 +18,13 @@ export class Cookies {
   }
 
   public set(name: string, val: string, options?: SerializeOptions): void {
+    const { encode, ...cookieOptions } = options ?? {};
     this.responseHeaders.append(
       'Set-Cookie',
-      serializeCookie(name, val, options)
+      stringifySetCookie(
+        { name, value: val, ...cookieOptions },
+        encode ? { encode } : undefined
+      )
     );
   }
 }

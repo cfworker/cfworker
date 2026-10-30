@@ -21,7 +21,7 @@ export function getCollectionId({
   const path =
     headers.get('x-ms-alt-content-path') ?? new URL(url).pathname.substr(1);
   const [, dbId, colls, collId] = path.split('/');
-  if (colls !== 'colls' || !collId) {
+  if (!dbId || colls !== 'colls' || !collId) {
     return null;
   }
   return { dbId, collId };
@@ -60,15 +60,16 @@ export class DefaultSessionContainer implements SessionContainer {
       return;
     }
     if (readSessionNotAvailable(response)) {
-      if (this.tokens[ids.dbId]) {
-        delete this.tokens[ids.dbId][ids.collId];
+      const dbTokens = this.tokens[ids.dbId];
+      if (dbTokens) {
+        delete dbTokens[ids.collId];
       }
     }
     const token = response.headers.get('x-ms-session-token');
     if (!token) {
       return;
     }
-    this.tokens[ids.dbId] ??= {};
-    this.tokens[ids.dbId][ids.collId] = token;
+    const dbTokens = (this.tokens[ids.dbId] ??= {});
+    dbTokens[ids.collId] = token;
   }
 }

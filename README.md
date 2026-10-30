@@ -90,22 +90,27 @@ Web framework for Cloudflare Workers and service workers, inspired by Koa and fa
 
 ## contributing
 
-Install dependencies using npm. Npm workspaces will ensure cfworker packages that depend on other cfworker packages are linked properly.
+Development requires Node.js 26 or newer and npm 10.9.0 or newer.
+Install dependencies using npm. npm workspaces will ensure cfworker packages
+that depend on other cfworker packages are linked properly.
 
-```
+```sh
 npm install
 ```
 
-Run all tests
+Run the same checks used by CI:
 
-```
+```sh
+npm run lint
+npm run typecheck
+npm run build
 npm test
 ```
 
-Run a specific package's tests
+Run a specific package's tests:
 
-```
-npm run test --workspace=@cfworker/base64url
+```sh
+npm run test --workspace=@cfworker/web
 ```
 
 Refer to each package's README for more specific instructions and examples.

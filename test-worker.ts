@@ -1,4 +1,4 @@
-import mocha from 'mocha/mocha.js';
+import { mocha } from 'mocha/mocha.mjs';
 
 mocha.setup({
   ui: 'bdd',

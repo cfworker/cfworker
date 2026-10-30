@@ -39,32 +39,34 @@
   ],
   "scripts": {
     "prepare": "npm run prepare --workspace @cfworker/json-schema && tshy",
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
+    "build": "npm run build --workspace @cfworker/json-schema && tshy",
+    "typecheck": "tsc --project tsconfig.json",
+    "clean": "tsc --build tsconfig.build.json --clean",
     "pretest": "esbuild test/test.ts --target=esnext --bundle --format=esm --conditions=worker,browser --outdir=dist-test --ignore-annotations",
     "test": "node ../../test.mjs"
   },
   "dependencies": {
     "@cfworker/json-schema": "^4.1.1",
-    "@types/statuses": "^2.0.5",
-    "cookie": "^1.0.2",
+    "@hapi/bourne": "^4.0.1",
+    "@types/statuses": "^2.0.6",
+    "cookie": "^2.0.1",
     "html-escaper": "^3.0.3",
-    "negotiator": "^1.0.0",
+    "negotiator": "^1.1.0",
     "path-to-regexp": "7.1.0",
-    "secure-json-parse": "^3.0.2",
-    "statuses": "^2.0.1"
+    "statuses": "^2.0.2"
   },
   "devDependencies": {
-    "@types/chai": "^5.0.1",
+    "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
-    "chai": "^5.1.2",
-    "esbuild": "^0.24.2",
+    "chai": "^6.3.0",
+    "esbuild": "^0.28.2",
     "jsonpointer": "^5.0.1",
-    "mocha": "^11.1.0",
-    "typescript": "^5.7.3",
-    "wrangler": "^3.107.2"
+    "mocha": "^12.0.3",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.156.0"
   },
   "tshy": {
+    "project": "./tsconfig.build.json",
     "exports": {
       "./package.json": "./package.json",
       ".": "./src/index.ts"

@@ -1,10 +1,7 @@
 {
-  "extends": "../../tsconfig-base",
+  "extends": "../../tsconfig-app",
   "compilerOptions": {
-    "target": "ESNext",
-    "lib": ["ESNext", "WebWorker", "Webworker.Iterable"],
-    "outDir": "dist/esm",
-    "rootDir": "./src"
+    "types": ["mocha"]
   },
-  "include": ["src"]
+  "include": ["src", "test", "../../test-worker.ts", "../../test-types.d.ts"]
 }
