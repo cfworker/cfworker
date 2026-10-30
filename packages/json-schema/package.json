@@ -50,14 +50,14 @@
     "test": "node ../../test.mjs"
   },
   "devDependencies": {
-    "@types/chai": "^5.0.1",
+    "@types/chai": "^5.2.3",
     "@types/mocha": "^10.0.10",
-    "chai": "^5.1.2",
-    "esbuild": "^0.24.2",
+    "chai": "^6.3.0",
+    "esbuild": "^0.28.2",
     "json-schema-test-suite": "git+https://github.com/json-schema-org/JSON-Schema-Test-Suite.git#89e83a7",
-    "mocha": "^11.1.0",
-    "typescript": "^5.7.3",
-    "wrangler": "^3.107.2"
+    "mocha": "^12.0.3",
+    "typescript": "^7.0.2",
+    "wrangler": "^4.156.0"
   },
   "tshy": {
     "exports": {

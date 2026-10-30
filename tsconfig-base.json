@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
     "noUnusedLocals": true,
@@ -11,9 +10,8 @@
     "removeComments": true,
     "typeRoots": [],
     "types": [],
-    "baseUrl": "./packages",
     "paths": {
-      "@cfworker/*": ["./*"]
+      "@cfworker/*": ["./packages/*"]
     },
     "composite": true,
     "isolatedModules": true,
