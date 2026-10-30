@@ -90,7 +90,7 @@ Web framework for Cloudflare Workers and service workers, inspired by Koa and fa
 
 ## contributing
 
-Development requires Node.js 22.22.1 or newer and npm 10.9.0 or newer.
+Development requires Node.js 26 or newer and npm 10.9.0 or newer.
 Install dependencies using npm. npm workspaces will ensure cfworker packages
 that depend on other cfworker packages are linked properly.
 
