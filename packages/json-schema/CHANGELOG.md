@@ -1,5 +1,11 @@
 # @cfworker/json-schema
 
+## 4.1.2
+
+### Patch Changes
+
+- 793b9f4: Allow the same schema object to be indexed by the same URI more than once while continuing to reject conflicting schemas with duplicate URIs.
+
 ## 4.1.1
 
 ### Patch Changes

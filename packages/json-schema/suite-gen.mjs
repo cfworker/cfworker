@@ -30,7 +30,9 @@ const supportedDrafts = {
 
 async function generate() {
   const packageDir = dirname(
-    fileURLToPath(await import.meta.resolve('json-schema-test-suite'))
+    fileURLToPath(
+      await import.meta.resolve('json-schema-test-suite/package.json')
+    )
   );
 
   let imports = '';
@@ -40,7 +42,11 @@ async function generate() {
   const pattern = /json-schema-test-suite\/tests\/(draft([^/]+)+\/(.*))\.json$/;
   const dir = join(packageDir, 'tests');
   for await (const file of getFiles(dir)) {
-    const [from, name, draft] = pattern.exec(file);
+    const match = pattern.exec(file);
+    if (!match) {
+      continue;
+    }
+    const [from, name, draft] = match;
     if (!supportedDrafts[draft]) {
       continue;
     }
@@ -52,7 +58,11 @@ async function generate() {
   const pattern2 = /json-schema-test-suite\/remotes\/(.*)\.json$/;
   const dir2 = join(packageDir, 'remotes');
   for await (const file of getFiles(dir2)) {
-    const [from, name] = pattern2.exec(file);
+    const match = pattern2.exec(file);
+    if (!match) {
+      continue;
+    }
+    const [from, name] = match;
     const importName = 'remote_' + name.replace(/[-/]/g, '_');
     imports += `// @ts-ignore\nimport ${importName} from '${from}';\n`;
     remotes += `  { name: 'http://localhost:1234/${name}.json', schema: ${importName} },\n`;
