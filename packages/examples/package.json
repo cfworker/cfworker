@@ -13,15 +13,12 @@
   },
   "type": "module",
   "scripts": {
-    "build": "echo \"no build\"",
     "typecheck": "tsc --project tsconfig.json",
-    "clean": "echo \"no clean\"",
     "start-auth": "wrangler dev src/auth/index.ts",
     "start-cosmos": "wrangler dev src/cosmos/index.ts",
     "start-misc": "wrangler dev src/misc/index.ts",
     "start-web": "wrangler dev src/web/index.ts",
-    "start": "npm run start-web",
-    "test": "echo \"no tests 🥺\""
+    "start": "npm run start-web"
   },
   "dependencies": {
     "@cfworker/cosmos": "^4.0.6",

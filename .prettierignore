@@ -1,8 +1,2 @@
 dist
 packages/json-schema/test/json-schema-test-suite.ts
-packages/dev/test/fixtures
-.cfworker
-# preserve shebang formatting
-packages/dev/src/cli/index.js
-# lerna busts the formatting of this file
-lerna.json
