@@ -19,7 +19,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@cfworker/web": "^7.0.0"
+    "@cfworker/web": "^7.0.1"
   },
   "devDependencies": {
     "esbuild": "^0.28.2",

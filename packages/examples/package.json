@@ -24,7 +24,7 @@
     "@cfworker/cosmos": "^4.0.7",
     "@cfworker/jwt": "^7.0.6",
     "@cfworker/sentry": "^5.0.5",
-    "@cfworker/web": "^7.0.0",
+    "@cfworker/web": "^7.0.1",
     "rfc4648": "^1.5.4"
   },
   "devDependencies": {
