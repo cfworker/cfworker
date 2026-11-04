@@ -167,6 +167,17 @@ describe('Router pattern compatibility', () => {
 
   it('preserves case, trailing slash, and parameter decoding behavior', () => {
     expectMatch('/status', '/status/');
+    expectNoMatch('/status', '/status/', {
+      urlPatternOptions: { strict: true }
+    });
+    expectMatch(
+      '/status',
+      '/status',
+      {},
+      {
+        urlPatternOptions: { strict: true }
+      }
+    );
     expectMatch('/Profiles/:handle', '/profiles/Alice', { handle: 'Alice' });
     expectNoMatch('/Profiles/:handle', '/profiles/Alice', {
       urlPatternOptions: { ignoreCase: false }
