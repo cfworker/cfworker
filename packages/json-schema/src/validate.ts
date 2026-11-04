@@ -455,6 +455,7 @@ export function validate(
 
   if ($if !== undefined) {
     const keywordLocation = `${schemaLocation}/if`;
+    const ifEvaluated: Evaluated = Object.create(null);
     const conditionResult = validate(
       instance,
       $if,
@@ -464,9 +465,10 @@ export function validate(
       recursiveAnchor,
       instanceLocation,
       keywordLocation,
-      evaluated
+      ifEvaluated
     ).valid;
     if (conditionResult) {
+      Object.assign(evaluated, ifEvaluated);
       if ($then !== undefined) {
         const thenResult = validate(
           instance,
