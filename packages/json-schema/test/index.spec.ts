@@ -15,8 +15,22 @@ for (const { name, schema } of remotes) {
 }
 Object.freeze(remotesLookup);
 
+function testKey(name: string, description1: string, description2: string) {
+  return JSON.stringify([name, description1, description2]);
+}
+
 describe('json-schema', () => {
   const failures: Record<string, Record<string, Record<string, true>>> = {};
+  const unsupportedTestKeys = new Set<string>();
+  const matchedUnsupportedTestKeys = new Set<string>();
+  for (const [name, descriptions1] of Object.entries(unsupportedTests)) {
+    for (const [description1, descriptions2] of Object.entries(descriptions1)) {
+      for (const description2 of Object.keys(descriptions2)) {
+        unsupportedTestKeys.add(testKey(name, description1, description2));
+      }
+    }
+  }
+
   suites.forEach(({ draft, name, tests }) => {
     if (name.endsWith('/unknownKeyword')) {
       return;
@@ -26,8 +40,12 @@ describe('json-schema', () => {
         const schemaLookup = dereference(schema);
         describe(description1, () => {
           tests.forEach(({ data, valid, description: description2, debug }) => {
-            if (unsupportedTests[name]?.[description1]?.[description2]) {
-              return;
+            const unsupported =
+              unsupportedTests[name]?.[description1]?.[description2] === true;
+            if (unsupported) {
+              matchedUnsupportedTestKeys.add(
+                testKey(name, description1, description2)
+              );
             }
             (debug ? it.only : it)(description2, async () => {
               if (debug) {
@@ -43,18 +61,32 @@ describe('json-schema', () => {
               try {
                 result = validate(data, schema, draft, lookup);
               } catch (err) {}
-              if (result?.valid !== valid) {
+              if (!unsupported && result?.valid !== valid) {
                 failures[name] = failures[name] ?? {};
                 failures[name][description1] =
                   failures[name][description1] ?? {};
                 failures[name][description1][description2] = true;
               }
-              expect(result?.valid).to.equal(valid, description2);
+              if (unsupported) {
+                expect(
+                  result?.valid,
+                  `${description2} is now supported and should be removed from unsupported.ts`
+                ).not.to.equal(valid);
+              } else {
+                expect(result?.valid).to.equal(valid, description2);
+              }
             });
           });
         });
       });
     });
+  });
+
+  it('does not contain stale unsupported test entries', () => {
+    const stale = [...unsupportedTestKeys]
+      .filter(key => !matchedUnsupportedTestKeys.has(key))
+      .map(key => (JSON.parse(key) as string[]).join(' > '));
+    expect(stale).to.deep.equal([]);
   });
 
   it('normalizes URI fragments in $ref values', () => {
