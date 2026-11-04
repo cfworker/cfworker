@@ -1,5 +1,11 @@
 # @cfworker/web
 
+## 7.0.1
+
+### Patch Changes
+
+- 5ef97b5: Allow strict route matching to disable automatic trailing slash matches.
+
 ## 7.0.0
 
 ### Major Changes
