@@ -1,5 +1,12 @@
 # @cfworker/json-schema
 
+## 4.1.6
+
+### Patch Changes
+
+- 15254dc: Normalize URI fragments when resolving JSON Schema references.
+- 7ad813e: Improve JSON Schema conformance for date, time, duration, email, hostname, URI template, UUID, and conditional annotations, and keep unsupported-test exceptions synchronized with the test suite.
+
 ## 4.1.5
 
 ### Patch Changes
