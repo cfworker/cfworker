@@ -21,10 +21,10 @@
     "start": "npm run start-web"
   },
   "dependencies": {
-    "@cfworker/cosmos": "^4.0.6",
-    "@cfworker/jwt": "^7.0.5",
-    "@cfworker/sentry": "^5.0.4",
-    "@cfworker/web": "^6.1.0",
+    "@cfworker/cosmos": "^4.0.7",
+    "@cfworker/jwt": "^7.0.6",
+    "@cfworker/sentry": "^5.0.5",
+    "@cfworker/web": "^7.0.0",
     "rfc4648": "^1.5.4"
   },
   "devDependencies": {
