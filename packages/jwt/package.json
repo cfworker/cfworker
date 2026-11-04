@@ -55,8 +55,9 @@
     "chai": "^6.3.0",
     "esbuild": "^0.28.2",
     "mocha": "^12.0.3",
+    "tshy": "^4.1.4",
     "typescript": "^7.0.2",
-    "wrangler": "^4.156.0"
+    "wrangler": "^4.157.0"
   },
   "tshy": {
     "project": "./tsconfig.build.json",
