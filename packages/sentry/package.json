@@ -45,6 +45,7 @@
     "clean": "tsc --build tsconfig.build.json --clean"
   },
   "devDependencies": {
+    "tshy": "^4.1.4",
     "typescript": "^7.0.2"
   },
   "tshy": {
