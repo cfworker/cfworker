@@ -1,6 +1,30 @@
-import { Key, pathToRegexp, PathToRegexpOptions } from 'path-to-regexp';
 import { Context } from './context.js';
 import { composeMiddleware, Middleware } from './middleware.js';
+
+export interface URLPatternOptions {
+  ignoreCase?: boolean;
+}
+
+interface PathnamePatternResult {
+  pathname: {
+    groups: Record<string, string | undefined>;
+  };
+}
+
+interface PathnamePattern {
+  exec(input: { pathname: string }): PathnamePatternResult | null;
+}
+
+interface URLPatternConstructor {
+  new (
+    input: { pathname: string },
+    options?: URLPatternOptions
+  ): PathnamePattern;
+}
+
+const URLPattern = (
+  globalThis as unknown as { URLPattern: URLPatternConstructor }
+).URLPattern;
 
 export type Predicate = (context: Context) => boolean;
 
@@ -26,18 +50,25 @@ export const Header: (header: string, value: string) => Predicate = (
 export const Host: (host: string) => Predicate = (host: string) =>
   Header('host', host);
 
+export const defaultURLPatternOptions: URLPatternOptions = {
+  ignoreCase: true
+};
+
 export const Path: (
   pattern: string,
-  options?: PathToRegexpOptions
-) => Predicate = (pattern: string, options?: PathToRegexpOptions) => {
-  const regexp = pathToRegexp(pattern, options);
+  options?: URLPatternOptions
+) => Predicate = (pattern: string, options?: URLPatternOptions) => {
+  const urlPattern = new URLPattern(
+    { pathname: pattern },
+    { ...defaultURLPatternOptions, ...options }
+  );
 
   return ({ req: { url, params } }: Context) => {
-    const match = url.pathname.match(regexp);
+    const match = matchPathname(urlPattern, url.pathname);
     if (!match) {
       return false;
     }
-    collectParameters(regexp.keys, match, params);
+    collectParameters(match.pathname.groups, params);
     return true;
   };
 };
@@ -50,13 +81,11 @@ export interface Route {
 }
 
 export interface RouterOptions {
-  pathToRegExpOptions?: PathToRegexpOptions;
+  urlPatternOptions?: URLPatternOptions;
 }
 
 export const defaultRouterOptions: RouterOptions = {
-  pathToRegExpOptions: {
-    strict: true
-  }
+  urlPatternOptions: defaultURLPatternOptions
 };
 
 export class Router {
@@ -67,37 +96,37 @@ export class Router {
   }
 
   public get(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Get, Path(pathname, opts)], ...middleware);
   }
 
   public post(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Post, Path(pathname, opts)], ...middleware);
   }
 
   public put(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Put, Path(pathname, opts)], ...middleware);
   }
 
   public patch(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Patch, Path(pathname, opts)], ...middleware);
   }
 
   public delete(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Delete, Path(pathname, opts)], ...middleware);
   }
 
   public head(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Head, Path(pathname, opts)], ...middleware);
   }
 
   public all(pathname: string, ...middleware: Middleware[]): Router {
-    const opts = this.options.pathToRegExpOptions;
+    const opts = this.options.urlPatternOptions;
     return this.compose([Path(pathname, opts)], ...middleware);
   }
 
@@ -130,17 +159,27 @@ export class Router {
   }
 }
 
+function matchPathname(
+  pattern: PathnamePattern,
+  pathname: string
+): PathnamePatternResult | null {
+  const match = pattern.exec({ pathname });
+  if (match || !pathname.endsWith('/')) {
+    return match;
+  }
+
+  const pathnameWithoutTrailingSlashes = pathname.replace(/\/+$/, '') || '/';
+  return pattern.exec({ pathname: pathnameWithoutTrailingSlashes });
+}
+
 function collectParameters(
-  keys: Key[],
-  match: RegExpMatchArray,
+  groups: Record<string, string | undefined>,
   params: Record<string, string>
 ) {
-  for (let i = 1; i < match.length; i++) {
-    const key = keys[i - 1];
-    const value = match[i];
-    if (!key || !value) {
+  for (const [name, value] of Object.entries(groups)) {
+    if (!value) {
       continue;
     }
-    params[key.name] = decodeURIComponent(value);
+    params[name] = decodeURIComponent(value);
   }
 }

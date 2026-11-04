@@ -169,7 +169,7 @@ describe('Router pattern compatibility', () => {
     expectMatch('/status', '/status/');
     expectMatch('/Profiles/:handle', '/profiles/Alice', { handle: 'Alice' });
     expectNoMatch('/Profiles/:handle', '/profiles/Alice', {
-      pathToRegExpOptions: { sensitive: true, strict: true }
+      urlPatternOptions: { ignoreCase: false }
     });
     expectMatch('/files/:filename', '/files/hello%20world.pdf', {
       filename: 'hello world.pdf'
