@@ -1,6 +1,51 @@
 import { encodePointer } from './pointer.js';
 import { Schema } from './types.js';
 
+const uriFragmentCharacter = /^[A-Za-z0-9._~!$&'()*+,;=:@/?-]$/;
+const uriPercentEncoding = /^%[0-9A-Fa-f]{2}$/;
+const uriUnreservedCharacter = /^[A-Za-z0-9._~-]$/;
+
+/**
+ * Normalizes a URI fragment for comparison as described by RFC 3986.
+ *
+ * JSON Pointer fragments use percent-encoding for characters outside the URI
+ * fragment grammar (RFC 6901 section 6). Preserve encoded reserved characters,
+ * normalize hexadecimal digits to uppercase, and decode encoded unreserved
+ * characters. Encoding non-URI characters also retains compatibility with
+ * schema references produced without the required percent-encoding.
+ */
+function normalizeURIFragment(fragment: string): string {
+  let normalized = '';
+
+  for (let index = 0; index < fragment.length;) {
+    const character = fragment[index];
+    const encoded = fragment.slice(index, index + 3);
+
+    if (character === '%' && uriPercentEncoding.test(encoded)) {
+      const decoded = String.fromCharCode(parseInt(encoded.slice(1), 16));
+      normalized += uriUnreservedCharacter.test(decoded)
+        ? decoded
+        : encoded.toUpperCase();
+      index += 3;
+      continue;
+    }
+
+    const codePoint = String.fromCodePoint(fragment.codePointAt(index)!);
+    normalized += uriFragmentCharacter.test(codePoint)
+      ? codePoint
+      : encodeURIComponent(codePoint);
+    index += codePoint.length;
+  }
+
+  return normalized;
+}
+
+function resolveURI(reference: string, baseURI: URL): URL {
+  const url = new URL(reference, baseURI.href);
+  url.hash = url.hash ? normalizeURIFragment(url.hash.slice(1)) : '';
+  return url;
+}
+
 export const schemaKeyword: Record<string, boolean> = {
   additionalItems: true,
   unevaluatedItems: true,
@@ -84,7 +129,7 @@ export function dereference(
   if (schema && typeof schema === 'object' && !Array.isArray(schema)) {
     const id: string = schema.$id || schema['id'];
     if (id) {
-      const url = new URL(id, baseURI.href);
+      const url = resolveURI(id, baseURI);
       if (url.hash.length > 1) {
         lookup[url.href] = schema;
       } else {
@@ -122,8 +167,7 @@ export function dereference(
 
   // if a $ref is found, resolve it's absolute URI.
   if (schema.$ref && schema.__absolute_ref__ === undefined) {
-    const url = new URL(schema.$ref, baseURI.href);
-    url.hash = url.hash; // normalize hash https://url.spec.whatwg.org/#dom-url-hash
+    const url = resolveURI(schema.$ref, baseURI);
     Object.defineProperty(schema, '__absolute_ref__', {
       enumerable: false,
       value: url.href
@@ -132,8 +176,7 @@ export function dereference(
 
   // if a $recursiveRef is found, resolve it's absolute URI.
   if (schema.$recursiveRef && schema.__absolute_recursive_ref__ === undefined) {
-    const url = new URL(schema.$recursiveRef, baseURI.href);
-    url.hash = url.hash; // normalize hash https://url.spec.whatwg.org/#dom-url-hash
+    const url = resolveURI(schema.$recursiveRef, baseURI);
     Object.defineProperty(schema, '__absolute_recursive_ref__', {
       enumerable: false,
       value: url.href
@@ -142,7 +185,7 @@ export function dereference(
 
   // if an $anchor is found, compute it's URI and add it to the mapping.
   if (schema.$anchor) {
-    const url = new URL('#' + schema.$anchor, baseURI.href);
+    const url = resolveURI('#' + schema.$anchor, baseURI);
     lookup[url.href] = schema;
   }
 
