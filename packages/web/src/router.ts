@@ -3,6 +3,8 @@ import { composeMiddleware, Middleware } from './middleware.js';
 
 export interface URLPatternOptions {
   ignoreCase?: boolean;
+  /** Disable automatic matching of trailing slashes. */
+  strict?: boolean;
 }
 
 interface PathnamePatternResult {
@@ -58,13 +60,14 @@ export const Path: (
   pattern: string,
   options?: URLPatternOptions
 ) => Predicate = (pattern: string, options?: URLPatternOptions) => {
-  const urlPattern = new URLPattern(
-    { pathname: pattern },
-    { ...defaultURLPatternOptions, ...options }
-  );
+  const { strict, ...patternOptions } = {
+    ...defaultURLPatternOptions,
+    ...options
+  };
+  const urlPattern = new URLPattern({ pathname: pattern }, patternOptions);
 
   return ({ req: { url, params } }: Context) => {
-    const match = matchPathname(urlPattern, url.pathname);
+    const match = matchPathname(urlPattern, url.pathname, strict);
     if (!match) {
       return false;
     }
@@ -161,10 +164,11 @@ export class Router {
 
 function matchPathname(
   pattern: PathnamePattern,
-  pathname: string
+  pathname: string,
+  strict = false
 ): PathnamePatternResult | null {
   const match = pattern.exec({ pathname });
-  if (match || !pathname.endsWith('/')) {
+  if (match || strict || !pathname.endsWith('/')) {
     return match;
   }
 
