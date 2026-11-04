@@ -57,30 +57,34 @@ describe('json-schema', () => {
     });
   });
 
-  it('normalizes $ref values', () => {
+  it('normalizes URI fragments in $ref values', () => {
     // https://github.com/cfworker/cfworker/issues/285
 
     const schema = {
       type: 'object',
       definitions: {
-        'child[one]': { type: 'string' }
+        'child[one]': { type: 'string' },
+        'hash#field': { type: 'boolean' },
+        'tilde~field': { type: 'integer' }
       },
       properties: {
-        name: { type: 'string' },
-        children: {
-          type: 'array',
-          items: { $ref: '#/definitions/child[one]' }
-        }
+        encoded: { $ref: '#/definitions/child%5bone%5d' },
+        hash: { $ref: '#/definitions/hash%23field' },
+        unreserved: { $ref: '#/definitions/tilde%7e0field' },
+        unencoded: { $ref: '#/definitions/child[one]' }
       }
     } satisfies Schema;
 
     const input = {
-      name: 'John',
-      children: ['foo', 'bar']
+      encoded: 'value',
+      hash: true,
+      unreserved: 1,
+      unencoded: 'value'
     };
 
     const result = validate(input, schema);
     expect(result.valid).to.be.true;
+    expect(validate({ ...input, encoded: 1 }, schema).valid).to.be.false;
   });
 
   // after(() => console.log(JSON.stringify(failures, null, 2)));
