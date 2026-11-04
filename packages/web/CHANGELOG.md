@@ -1,5 +1,19 @@
 # @cfworker/web
 
+## 7.0.0
+
+### Major Changes
+
+- c8ba68e: Use the runtime's native `URLPattern` for route matching and replace
+  `pathToRegExpOptions` with `urlPatternOptions` in the router configuration.
+
+### Patch Changes
+
+- ffe1cbb: Remove unused dependencies, correct development dependency classifications, and
+  ensure each package declares the tooling required to build and test it.
+- Updated dependencies [ffe1cbb]
+  - @cfworker/json-schema@4.1.5
+
 ## 6.1.0
 
 ### Minor Changes

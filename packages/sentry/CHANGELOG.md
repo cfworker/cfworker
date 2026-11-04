@@ -1,5 +1,12 @@
 # @cfworker/sentry
 
+## 5.0.5
+
+### Patch Changes
+
+- ffe1cbb: Remove unused dependencies, correct development dependency classifications, and
+  ensure each package declares the tooling required to build and test it.
+
 ## 5.0.4
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @cfworker/cosmos
 
+## 4.0.7
+
+### Patch Changes
+
+- ffe1cbb: Remove unused dependencies, correct development dependency classifications, and
+  ensure each package declares the tooling required to build and test it.
+
 ## 4.0.6
 
 ### Patch Changes
