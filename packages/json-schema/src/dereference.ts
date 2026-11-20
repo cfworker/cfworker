@@ -124,11 +124,12 @@ export function dereference(
   schema: Schema | boolean,
   lookup: Record<string, Schema | boolean> = Object.create(null),
   baseURI: URL = initialBaseURI,
-  basePointer = ''
+  basePointer = '',
+  registerIdentifiers = true
 ): Record<string, Schema | boolean> {
   if (schema && typeof schema === 'object' && !Array.isArray(schema)) {
     const id: string = schema.$id || schema['id'];
-    if (id) {
+    if (id && registerIdentifiers) {
       const url = resolveURI(id, baseURI);
       if (url.hash.length > 1) {
         lookup[url.href] = schema;
@@ -137,7 +138,13 @@ export function dereference(
         if (basePointer === '') {
           baseURI = url;
         } else {
+          // An embedded schema resource: index it under its own base URI.
           dereference(schema, lookup, baseURI);
+          // Then only add its JSON pointer URIs below the enclosing resource.
+          // Its anchors and ids were resolved against its own base above;
+          // resolving them again against the enclosing base would point the
+          // enclosing resource's anchors at this schema.
+          registerIdentifiers = false;
         }
       }
     }
@@ -184,7 +191,7 @@ export function dereference(
   }
 
   // if an $anchor is found, compute it's URI and add it to the mapping.
-  if (schema.$anchor) {
+  if (schema.$anchor && registerIdentifiers) {
     const url = resolveURI('#' + schema.$anchor, baseURI);
     lookup[url.href] = schema;
   }
@@ -200,7 +207,13 @@ export function dereference(
       if (schemaArrayKeyword[key]) {
         const length = subSchema.length;
         for (let i = 0; i < length; i++) {
-          dereference(subSchema[i], lookup, baseURI, `${keyBase}/${i}`);
+          dereference(
+            subSchema[i],
+            lookup,
+            baseURI,
+            `${keyBase}/${i}`,
+            registerIdentifiers
+          );
         }
       }
     } else if (schemaMapKeyword[key]) {
@@ -209,11 +222,12 @@ export function dereference(
           subSchema[subKey],
           lookup,
           baseURI,
-          `${keyBase}/${encodePointer(subKey)}`
+          `${keyBase}/${encodePointer(subKey)}`,
+          registerIdentifiers
         );
       }
     } else {
-      dereference(subSchema, lookup, baseURI, keyBase);
+      dereference(subSchema, lookup, baseURI, keyBase, registerIdentifiers);
     }
   }
 

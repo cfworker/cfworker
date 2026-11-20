@@ -33,6 +33,46 @@ describe('Validator', () => {
     expect(validator.validate('hello world').valid).to.equal(false);
   });
 
+  it('keeps anchors of an embedded resource out of the enclosing resource', () => {
+    const validator = new Validator(
+      {
+        $id: 'https://example.com/root.json',
+        $ref: '#num',
+        $defs: {
+          num: { $anchor: 'num', type: 'number' },
+          other: {
+            $id: 'other.json',
+            $defs: { str: { $anchor: 'num', type: 'string' } }
+          }
+        }
+      },
+      '2020-12'
+    );
+
+    expect(validator.validate(1).valid).to.equal(true);
+    expect(validator.validate('a').valid).to.equal(false);
+  });
+
+  it('keeps fragment ids of an embedded resource out of the enclosing resource', () => {
+    const validator = new Validator(
+      {
+        $id: 'https://example.com/root.json',
+        $ref: '#num',
+        definitions: {
+          num: { $id: '#num', type: 'number' },
+          other: {
+            $id: 'other.json',
+            definitions: { str: { $id: '#num', type: 'string' } }
+          }
+        }
+      },
+      '7'
+    );
+
+    expect(validator.validate(1).valid).to.equal(true);
+    expect(validator.validate('a').valid).to.equal(false);
+  });
+
   it('validate all array entries with nested errors', () => {
     const validator = new Validator(
       {

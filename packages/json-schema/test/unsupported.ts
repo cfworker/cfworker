@@ -317,11 +317,6 @@ export const unsupportedTests: Record<
       'a trailing newline after a valid IRI is invalid': true
     }
   },
-  'draft2020-12/ref': {
-    'order of evaluation: $id and $anchor and $ref': {
-      'data is valid against first definition': true
-    }
-  },
   'draft4/optional/zeroTerminatedFloats': {
     'some languages do not distinguish between different types of numeric value':
       {
@@ -494,11 +489,6 @@ export const unsupportedTests: Record<
     'reference internals of known non-applicator': {
       match: true,
       mismatch: true
-    }
-  },
-  'draft2019-09/ref': {
-    'order of evaluation: $id and $anchor and $ref': {
-      'data is valid against first definition': true
     }
   },
   'draft2019-09/refRemote': {
